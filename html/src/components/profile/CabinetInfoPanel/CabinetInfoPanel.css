@@ -24,6 +24,16 @@
             }
         }
 
+        .v-suggestions {
+            input {
+                font-size: 16px;
+            }
+
+            .suggestions {
+                top: calc(100% - calc(var(--gs) * 3) - 1px);
+            }
+        }
+
         &-btn {
             margin-left: calc(var(--gs) * 2);
 
@@ -83,15 +93,15 @@
     }
 
     &__required-footnote {
-        display: flex; 
+        display: flex;
         margin-top: 8px;
 
         &-spacer {
-            width: calc(100% / 3); 
+            width: calc(100% / 3);
             margin-right: 24px;
 
             @media (--tablet) {
-                width: 0; 
+                width: 0;
                 margin-right: 0;
             }
         }

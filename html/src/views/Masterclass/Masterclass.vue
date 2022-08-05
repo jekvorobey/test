@@ -325,7 +325,7 @@
                                     </div>
 
                                     <div class="master-class-view__panel-right" :style="{ order: 1 }">
-                                        <p class="text-bold master-class-view__panel-right-hl">Что взять с собой</p>
+                                        <p v-if="stages[0].raider" class="text-bold master-class-view__panel-right-hl">Что взять с собой</p>
                                         <v-html v-html="stages[0].raider" />
                                     </div>
                                 </div>

@@ -20,6 +20,7 @@
                     :rating="item.rating"
                     :is-price-hidden="item.isPriceHidden"
                     :show-buy-btn="item.stock.qty > 0"
+                    :in-cart="isInCart(cartItemTypes.PRODUCT, item.id)"
                     @add-item="onAddToCart(item)"
                     @preview="onPreview(item.code)"
                     @toggle-favorite-item="onToggleFavorite(item)"
@@ -68,7 +69,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import CatalogProductCard from '@components/CatalogProductCard/CatalogProductCard.vue';
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 
-import { mapActions } from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
@@ -82,6 +83,8 @@ import { fileExtension, modalName } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
 import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 import './ProductsSection.css';
+import {cartItemTypes} from "@enums/product";
+import {IS_IN_CART} from "@store/modules/Cart/getters";
 
 export default {
     name: 'products-section',
@@ -89,6 +92,12 @@ export default {
         VButton,
         CatalogProductCard,
         CatalogBannerCard,
+    },
+
+    data() {
+        return {
+            cartItemTypes,
+        };
     },
 
     props: {
@@ -128,6 +137,10 @@ export default {
     },
 
     computed: {
+        ...mapGetters(CART_MODULE, {
+            isInCart: IS_IN_CART,
+        }),
+
         mobileImage() {
             const image = this.banner.mobileImage || this.banner.tabletImage || this.banner.desktopImage;
             const imageRetina = this.banner.mobileImageRetina || this.banner.tabletImage;
@@ -202,20 +215,66 @@ export default {
     },
 
     methods: {
-        ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
+        ...mapActions(CART_MODULE, {
+            addToCart: ADD_CART_ITEM,
+        }),
 
-        onAddToCart(item) {
+        async onAddToCart(item) {
+            const { referralCode } = this;
             const { code, type, stock, id, variantGroups } = item;
 
-            if (variantGroups) this.onPreview(code);
-            else
+            if (this.$mq.tablet && this.isInCart(cartItemTypes.PRODUCT, id) && !variantGroups) {
                 this[CHANGE_MODAL_STATE]({
-                    name: modalName.general.ADD_TO_CART,
+                    name: modalName.general.SNACK_NOTIFICATION,
                     open: true,
-                    state: { offerId: id, storeId: stock && stock.storeId, type },
+                    state: {
+                        closeTimeout: 1500,
+                        message: 'Товар уже в корзине',
+                    },
                 });
+            } else {
+                if (variantGroups) {
+                    this.onPreview(code);
+                } else {
+                    if (this.$mq.tablet) {
+                        try {
+                            this.$progress.start();
+                            await this.addToCart({
+                                offerId: id,
+                                storeId: stock && stock.storeId,
+                                type,
+                                referralCode,
+                            });
+                            this.$progress.finish();
+
+                            this[CHANGE_MODAL_STATE]({
+                                name: modalName.general.SNACK_NOTIFICATION,
+                                open: true,
+                                state: {
+                                    closeTimeout: 1500,
+                                    message: 'Товар добавлен в корзину',
+                                },
+                            });
+                        } catch (error) {
+                            this.$progress.fail();
+                            console.error(error);
+                        }
+                    } else {
+                        this[CHANGE_MODAL_STATE]({
+                            name: modalName.general.ADD_TO_CART,
+                            open: true,
+                            state: {
+                                offerId: id,
+                                storeId: stock && stock.storeId,
+                                type,
+                                referralCode,
+                            },
+                        });
+                    }
+                }
+            }
         },
 
         onPreview(code) {

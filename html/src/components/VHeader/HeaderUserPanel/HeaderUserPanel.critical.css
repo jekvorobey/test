@@ -72,6 +72,9 @@
             font-size: 13px;
             line-height: 15px;
             color: inherit;
+            &-small {
+                 font-size: .5125rem;
+             }
         }
 
         &-cart {

@@ -139,6 +139,7 @@
                     <v-input
                         v-model="address.block"
                         class="address-edit-modal__form-column address-edit-modal__form-column--30"
+                        customValid="no-symbols"
                     >
                         Строение
                     </v-input>
@@ -146,6 +147,7 @@
                     <v-input
                         v-model="address.flat"
                         class="address-edit-modal__form-column address-edit-modal__form-column--30"
+                        customValid="no-symbols"
                     >
                         {{ !isDesktop || isTabletLg ? 'Квартира/офис' : 'Кв./офис' }}
                     </v-input>

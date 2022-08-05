@@ -1,4 +1,6 @@
 .slider-banners-section {
+    --slider-banners-section-controls-color: #000000;
+
     display: flex;
     margin-bottom: calc(var(--gs) * 8);
     transition: background-color 0.2s;
@@ -88,9 +90,8 @@
         .v-slider__controls {
             left: 50%;
             bottom: var(--gs);
-            height: 44px;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(3px);
+            height: 37px;
+            background: rgba(0, 0, 0, 0.1);
             border-radius: 22px;
             transform: translateX(-50%);
 
@@ -99,7 +100,7 @@
             }
 
             svg {
-                fill: white;
+                fill: var(--slider-banners-section-controls-color);
             }
 
             .swiper-pagination {
@@ -110,7 +111,7 @@
             }
 
             .swiper-pagination-bullet {
-                background: white;
+                background: var(--slider-banners-section-controls-color);
                 opacity: 1;
                 margin: 0 var(--gs);
 
@@ -121,15 +122,14 @@
 
             .swiper-button-next,
             .swiper-button-prev {
-                fill: var(--cl-black);
+                fill: var(--slider-banners-section-controls-color);
                 height: 44px;
                 width: 44px;
                 border-radius: 50%;
                 transition: all 0.2s ease-in;
 
                 &:hover {
-                    opacity: 0.8;
-                    fill: var(--cl-global);
+                    background: transparent;
                 }
             }
         }

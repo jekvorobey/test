@@ -1,5 +1,11 @@
 <template>
-    <component v-if="banner" :is="bannerComponent" class="remote-banner" v-bind="bannerProperties">
+    <component
+        v-if="banner"
+        :is="bannerComponent"
+        class="remote-banner"
+        :style="cssVariables"
+        v-bind="bannerProperties"
+    >
         <div class="remote-banner__img">
             <v-picture :key="banner.id">
                 <template v-if="desktopImage">
@@ -50,7 +56,7 @@
             @leave="expandAnimationLeave"
         >
             <div v-if="isDescriptionOpen">
-                <div v-html="banner.additional_text"></div>
+                <div class="remote-banner__description" v-html="banner.additional_text"></div>
             </div>
         </transition>
     </component>
@@ -97,7 +103,7 @@ export default {
     data() {
         return {
             isMounted: false,
-            isDescriptionOpen: false,
+            isDescriptionOpen: this.$route.query.isOpen === 'true',
             fileExtension,
         };
     },
@@ -168,6 +174,20 @@ export default {
 
         hasUrl() {
             return this.banner.url && this.banner.url.length > 0;
+        },
+
+        bannerControlsColor() {
+            if (typeof this.banner.controls_color !== 'undefined' && this.banner.controls_color) {
+                return this.banner.controls_color;
+            }
+
+            return '#000000';
+        },
+
+        cssVariables() {
+            return {
+                '--remote-banner-controls-color': this.bannerControlsColor,
+            };
         },
     },
 
@@ -259,10 +279,6 @@ export default {
 .remote-banner {
   flex-flow: column;
   cursor: auto;
-}
-
-.remote-banner .remote-banner__img {
-  cursor: pointer;
 }
 
 .expand-enter-active,

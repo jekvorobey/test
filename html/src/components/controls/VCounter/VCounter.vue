@@ -5,13 +5,13 @@
             ref="decrement"
             type="button"
             @click="onBtnClick($event, 'decrement')"
-            :disabled="isMinDisabled"
+            :disabled="disableForMin"
         >
             <slot name="decrement">
                 <v-svg name="minus-small" width="16" height="16" />
             </slot>
         </button>
-        <input
+        <input v-if="!isAddingToBasket"
             ref="input"
             class="v-counter__input"
             type="number"
@@ -21,14 +21,15 @@
             :step="step"
             v-bind="$attrs"
             @change="onChange"
-            :disabled="disabled"
+            :disabled="disableForInput"
         />
+        <v-spinner v-else width="32" height="30" show class="v-counter__input-cart"/>
         <button
             class="v-counter__btn"
             ref="increment"
             type="button"
             @click="onBtnClick($event, 'increment')"
-            :disabled="isMaxDisabled"
+            :disabled="disableForMax"
         >
             <slot name="increment">
                 <v-svg name="plus-small" width="16" height="16" />
@@ -43,7 +44,14 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 import '@images/sprites/minus-small.svg';
 import '@images/sprites/plus-small.svg';
 import './VCounter.css';
-
+import {mapGetters, mapState} from "vuex";
+import {NAME as FAVORITES_MODULE} from "@store/modules/Favorites";
+import {IS_IN_FAVORITES} from "@store/modules/Favorites/getters";
+import {NAME as AUTH_MODULE, REFERRAL_PARTNER, USER} from "@store/modules/Auth";
+import { NAME as CART_MODULE } from '@store/modules/Cart';
+import {IS_ADDING_TO_BASKET} from "@store/modules/Cart";
+import {LOCALE, LOCALIZATIONS} from "@store";
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 const actionType = {
     DECREMENT: 'decrement',
     INCREMENT: 'increment',
@@ -58,6 +66,7 @@ export default {
 
     components: {
         VSvg,
+        VSpinner,
     },
 
     model: {
@@ -109,6 +118,10 @@ export default {
     },
 
     computed: {
+        ...mapState(CART_MODULE, {
+            isAddingToBasket: (state) => state[IS_ADDING_TO_BASKET]
+        }),
+
         isMinDisabled() {
             const { disabled } = this;
             return disabled || Number(this.value_internal) === Number(this.min);
@@ -117,6 +130,18 @@ export default {
         isMaxDisabled() {
             const { disabled } = this;
             return disabled || Number(this.value_internal) === Number(this.max);
+        },
+
+        disableForMin() {
+            return this.isMinDisabled || this.isAddingToBasket;
+        },
+
+        disableForMax() {
+            return this.isMaxDisabled || this.isAddingToBasket;
+        },
+
+        disableForInput() {
+            return this.disable || this.isAddingToBasket;
         },
     },
 
@@ -152,6 +177,7 @@ export default {
                         if (nextValue <= max) this.value_internal = nextValue;
                         break;
                 }
+                this.$forceUpdate();
                 this.$emit('input', this.value_internal);
             }
         },

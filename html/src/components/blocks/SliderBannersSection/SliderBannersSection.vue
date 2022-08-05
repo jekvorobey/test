@@ -2,7 +2,7 @@
     <section
         v-if="banners.length > 0"
         class="section slider-banners-section"
-        :style="{ 'background-color': sectionBackgroundColor }"
+        :style="[{ 'background-color': sectionBackgroundColor }, cssVariables]"
     >
         <v-slider
             v-model="currentSlideIndex"
@@ -151,6 +151,24 @@ export default {
             }
 
             return '#E6E6F0';
+        },
+
+        bannerControlsColor() {
+            if (
+                this.currentImage &&
+                typeof this.currentImage.controlsColor !== 'undefined' &&
+                this.currentImage.controlsColor
+            ) {
+                return this.currentImage.controlsColor;
+            }
+
+            return '#000000';
+        },
+
+        cssVariables() {
+            return {
+                '--slider-banners-section-controls-color': this.bannerControlsColor,
+            };
         },
     },
 

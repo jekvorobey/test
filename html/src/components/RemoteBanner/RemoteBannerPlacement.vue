@@ -13,6 +13,7 @@
                 ref="slider"
                 v-model="slideIndex"
                 class="container remote-banner-placement__slider"
+                :style="cssVariables"
                 :options="sliderOptions"
                 name="banners"
             >
@@ -112,6 +113,28 @@ export default {
                         }, 1000);
                     },
                 },
+            };
+        },
+
+        currentBanner() {
+            return this.banners[this.slideIndex];
+        },
+
+        bannerControlsColor() {
+            if (
+                this.currentBanner &&
+                typeof this.currentBanner.controls_color !== 'undefined' &&
+                this.currentBanner.controls_color
+            ) {
+                return this.currentBanner.controls_color;
+            }
+
+            return '#000000';
+        },
+
+        cssVariables() {
+            return {
+                '--remote-banner-placement-controls-color': this.bannerControlsColor,
             };
         },
     },

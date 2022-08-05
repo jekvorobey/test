@@ -375,6 +375,16 @@ import {
     FETCH_CERTIFICATES,
 } from '@store/modules/Certificate/actions';
 
+import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
+import {
+    EMAIL,
+    FIRST_NAME,
+    LAST_NAME,
+    MIDDLE_NAME,
+    NAME as CABINET_MODULE,
+} from '@store/modules/Profile/modules/Cabinet';
+import { FETCH_CABINET_DATA, SEND_CODE, UPDATE_PERSONAL } from '@store/modules/Profile/modules/Cabinet/actions';
+
 import {
     ACTIVE_CERTIFICATES,
     ACTIVE_CERTIFICATE_STATUS,
@@ -388,6 +398,7 @@ import _isEqual from 'lodash/isEqual';
 import _debounce from 'lodash/debounce';
 
 import { cartItemTypes } from '@enums/product';
+import { verificationCodeType } from '@enums/auth';
 
 import { SCROLL_DEBOUNCE_TIME } from '@constants';
 import { requestStatus, agreementTypes, fileExtension, modalName } from '@enums';
@@ -407,6 +418,8 @@ import '@images/sprites/payment/google.svg';
 import '@images/sprites/payment/yandex.svg';
 import '@images/sprites/plus.svg';
 import './CheckoutMasterClassPanel.css';
+
+const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
 
 export default {
     name: 'checkout-master-class-panel',
@@ -498,6 +511,8 @@ export default {
             isTicketModalOpen: (state) =>
                 state[MODALS][modalName.checkout.TICKET_EDIT] && state[MODALS][modalName.checkout.TICKET_EDIT].open,
         }),
+
+        ...mapState(CABINET_MODULE_PATH, [FIRST_NAME, MIDDLE_NAME, LAST_NAME, EMAIL]),
 
         ...mapGetters(CHECKOUT_MODULE, [
             PROFESSIONS_MAP,
@@ -728,6 +743,8 @@ export default {
             SET_PUBLIC_EVENT_PAYMENT_METHOD,
         ]),
 
+        ...mapActions(CABINET_MODULE_PATH, [UPDATE_PERSONAL, SEND_CODE, FETCH_CABINET_DATA]),
+
         ...mapActions(CERTIFICATE_MODULE, [FETCH_CERTIFICATES, ACTIVATE_CERTIFICATE]),
 
         formatPhoneNumber(phone) {
@@ -759,6 +776,31 @@ export default {
             if (this.recipientIndexToChange !== null)
                 this[CHANGE_RECIPIENT]({ index: this.recipientIndexToChange, recipient });
             else this[ADD_RECIPIENT](recipient);
+
+            if (!this[FIRST_NAME] && !this[LAST_NAME] && !this[MIDDLE_NAME] && recipient.name) {
+                try {
+                    const [lastName, firstName, middleName] = recipient.name.split(' ');
+
+                    this[UPDATE_PERSONAL]({
+                        lastName,
+                        firstName,
+                        middleName,
+                    });
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            if (!this[EMAIL] && recipient.email) {
+                try {
+                    this[SEND_CODE]({
+                        destination: recipient.email,
+                        type: verificationCodeType.PROFILE_EMAIL,
+                    });
+                } catch (error) {
+                    console.error(error);
+                }
+            }
         },
 
         onCloseRecipientModal() {
@@ -911,6 +953,10 @@ export default {
 
     created() {
         this.agreementTypes = agreementTypes;
+    },
+
+    beforeMount() {
+        this[FETCH_CABINET_DATA](this.$isServer);
     },
 
     mounted() {

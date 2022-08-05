@@ -365,6 +365,8 @@
 
             @media (--tablet) {
                 flex-wrap: wrap;
+                flex-direction: column;
+                align-content: flex-start;
             }
 
             &-title {
@@ -401,7 +403,9 @@
             }
 
             &-list--w-full {
-                width: 100%;
+                max-width: 276px;
+                @media (max-width: 1023px){max-width: 100%;}
+                @media (max-width: 500px){max-width: 267px;}
             }
         }
 

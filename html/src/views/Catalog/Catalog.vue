@@ -253,7 +253,7 @@
                             >
                                 Очистить
                             </v-button>
-                            <v-button class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal">
+                            <v-button :loading="isFiltersLoading" class="catalog-view__modal-filter-close-btn" @click="filterModal = !filterModal">
                                 Показать {{ rangeWithoutUnion }}
                             </v-button>
                         </div>
@@ -433,6 +433,7 @@ export default {
             sortOptions: sortOptions,
             filterModal: false,
             showMore: false,
+            isFiltersLoading: false,
 
             bannerType: bannerType,
             professionalDisclaimerInterval: null,
@@ -868,6 +869,7 @@ export default {
                         behavior: 'smooth',
                     });
 
+                this.isFiltersLoading = true;
                 this.$progress.start();
                 await this[FETCH_CATALOG_DATA]({
                     type: toType,
@@ -889,11 +891,13 @@ export default {
                 next();
                 this.setSortValue(orderField, orderDirection);
                 this.$progress.finish();
+                this.isFiltersLoading = false;
 
                 if (showMore) setTimeout(() => (this.showMore = false), 200);
             } catch (thrown) {
                 if (thrown && thrown.isCancel === true) return;
                 this.$progress.fail();
+                this.isFiltersLoading = false;
                 if (thrown && thrown.status === httpCodes.NOT_FOUND) return next(createNotFoundRoute(to));
                 else next();
             }
@@ -910,7 +914,12 @@ export default {
 
             if (this.professionalDisclaimerModalShowCount === 0) {
                 this.professionalDisclaimerInterval = setInterval(async () => {
-                    const priceHiddenItemIndex = this[ITEMS].findIndex((item) => item.isPriceHidden === true);
+                    const priceHiddenItemIndex = this[ITEMS].findIndex((item) => {
+                        return (
+                            item.isPriceHidden === true &&
+                            (item.price === null || item.price.value === null || item.price.value === 0)
+                        );
+                    });
 
                     if (priceHiddenItemIndex >= 0) {
                         await this[CHANGE_MODAL_STATE]({
@@ -924,7 +933,12 @@ export default {
                 }, 60000);
             } else if (this.professionalDisclaimerModalShowCount === 1) {
                 this.professionalDisclaimerInterval = setInterval(async () => {
-                    const priceHiddenItemIndex = this[ITEMS].findIndex((item) => item.isPriceHidden === true);
+                    const priceHiddenItemIndex = this[ITEMS].findIndex((item) => {
+                        return (
+                            item.isPriceHidden === true &&
+                            (item.price === null || item.price.value === null || item.price.value === 0)
+                        );
+                    });
 
                     if (priceHiddenItemIndex >= 0) {
                         await this[CHANGE_MODAL_STATE]({
@@ -1045,7 +1059,8 @@ export default {
         // будет использован повторно, и этот хук будет вызван когда это случится.
         // Также имеется доступ в `this` к экземпляру компонента.
 
-        this.filterModal = false;
+        // Закрыть модальное окно с фильтрами после выбора фильтра
+        // this.filterModal = false;
 
         const {
             params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch: toPathMatch },

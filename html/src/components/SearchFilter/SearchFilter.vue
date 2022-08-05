@@ -15,6 +15,7 @@
             @focus="isFocus = true"
             @blur="isFocus = false"
             @keyup.enter="onSearch"
+            :maxlength="limit"
         />
 
         <button class="search-filter__clear" @click="onClearClick">
@@ -54,6 +55,7 @@ export default {
         return {
             searchString: '',
             isFocus: false,
+            limit: 150,
         };
     },
 
