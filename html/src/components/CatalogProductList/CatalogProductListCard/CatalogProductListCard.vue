@@ -61,8 +61,8 @@
                     class="catalog-product-list-card__mobile-cart-btn"
                     @click.prevent.stop="onBuyButtonClick"
                 >
-                    <v-spinner v-if="this.isBuyButtonClicked && !inCart" width="24" height="24" show/>
-                    <v-link tag="button">
+                    <v-spinner width="24" height="24" :show="this.isBuyButtonClicked && !inCart"/>
+                    <v-link tag="button" :disabled="this.isAddingToBasket">
                         <transition name="fade-absolute">
                             <v-svg v-if="inCart" name="cart-filled" key="cart-filled" width="24" height="24" />
                             <v-svg v-else name="cart" key="cart" width="24" height="24" />
@@ -83,7 +83,7 @@
                         "
                         :item-prop="itemProp"
                         has-articles
-                    />
+                    />link
                     <price
                         class="text-sm text-grey catalog-product-list-card__price"
                         v-if="item.oldPrice && !isEqPrices(modifiedPrice, modifiedOldPrice)"
@@ -137,11 +137,11 @@ import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 import NoPhotoStub from '@components/NoPhotoStub/NoPhotoStub.vue';
 
-import { mapGetters } from 'vuex';
+import {mapGetters, mapState} from 'vuex';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
-
+import {IS_ADDING_TO_BASKET, NAME as CART_MODULE} from "@store/modules/Cart";
 import { generateAbsoluteProductUrl, generateProductUrl, prepareProductImage } from '@util/catalog';
 
 import '@images/sprites/star-empty-small.svg';
@@ -220,6 +220,10 @@ export default {
 
     computed: {
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
+
+        ...mapState(CART_MODULE, {
+            isAddingToBasket: (state) => state[IS_ADDING_TO_BASKET]
+        }),
 
         inFavorites() {
             return this[IS_IN_FAVORITES](this.item.productId);
@@ -393,13 +397,19 @@ export default {
 
     methods: {
         onBuyButtonClick() {
-            this.isBuyButtonClicked = true;
+            // костыль инвалида по требованию, убрать после доработки
+            if (!this.isAddingToBasket) {
+                this.isBuyButtonClicked = true;
 
-            this.$emit('add-item', {
-                id: this.item.id,
-                storeId: this.item.stock.storeId,
-                type: this.item.type,
-            });
+                this.$emit('add-item', {
+                    id: this.item.id,
+                    storeId: this.item.stock.storeId,
+                    type: this.item.type,
+                });
+            }
+            setTimeout(() => {
+                this.isBuyButtonClicked = false;
+            }, 4000);
         },
 
         onToggleFavorite() {
