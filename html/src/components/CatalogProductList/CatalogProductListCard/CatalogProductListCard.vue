@@ -83,7 +83,7 @@
                         "
                         :item-prop="itemProp"
                         has-articles
-                    />link
+                    />
                     <price
                         class="text-sm text-grey catalog-product-list-card__price"
                         v-if="item.oldPrice && !isEqPrices(modifiedPrice, modifiedOldPrice)"
