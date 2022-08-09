@@ -234,6 +234,7 @@ export default {
 
                 const suggestion = suggestions[0];
                 this.form.name = suggestion.data.name.short_with_opf;
+                this.form.address = suggestion.data.address.unrestricted_value;
             } catch (error) {
                 $logger.error(error);
             }
