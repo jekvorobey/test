@@ -130,6 +130,8 @@ export default {
         urlWithParams() {
             const { url } = this.item;
 
+            if( url.match(/isOpen/) ) return url
+
             return url.includes('?') ? url + '&isOpen=true' : url + '?isOpen=true';
         },
 
