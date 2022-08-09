@@ -56,7 +56,7 @@
             @leave="expandAnimationLeave"
         >
             <div v-if="isDescriptionOpen">
-                <div class="remote-banner__description" v-html="banner.additional_text"></div>
+                <div class="remote-banner__description typo" v-html="banner.additional_text"></div>
             </div>
         </transition>
     </component>
