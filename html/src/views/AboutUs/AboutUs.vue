@@ -150,6 +150,8 @@
                         placeholder="Вашe имя"
                         v-model="form.name"
                         :error="nameError"
+                        customValid="fio"
+                        maxlength="20"
                     >
                         Ваше имя
                     </v-input>
@@ -159,6 +161,8 @@
                         placeholder="Ваш email"
                         v-model="form.email"
                         :error="emailError"
+                        customValid="email"
+                        maxlength="40"
                     >
                         Email
                     </v-input>

@@ -68,7 +68,7 @@ import './VInput.css';
 const inputTypes = { text: 'text', number: 'number' };
 const validTags = ['input', 'textarea'];
 
-import {fioClean, noSymbols} from "@util/custom-validations";
+import {fioClean, noSymbols, validateEmail} from "@util/custom-validations";
 
 export default {
     name: 'v-input',
@@ -175,6 +175,12 @@ export default {
                 } else this.internal_value = value;
 
                 switch (this.customValid) {
+                    case 'email':
+                        if(validateEmail(this.internal_value)) {
+                            this.error = '';
+                            this.$emit('input', this.internal_value);
+                        } else this.error = 'Не корректный email';
+                        break;
                     case 'fio':
                         this.internal_value = fioClean(this.internal_value);
                         this.$emit('input', this.internal_value);
