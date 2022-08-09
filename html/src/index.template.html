@@ -144,55 +144,46 @@
         * */
         window.onload = function () {
             try {
-                // Получаем все src элементов script на странице
-                let scriptSrcArray = [];
-                document.querySelectorAll('script').forEach(script => scriptSrcArray.push(script.src));
+                // Ожидаем прогрузки всех скриптов LiveTex
+                setTimeout(function () {
+                    // Открываем окно чата
+                    document.querySelector('.lt-label').addEventListener('click', function () {
+                        // Закзать звонок
+                        document.querySelector('.call-request').addEventListener('click', function () {
+                            // Получаем все label относящиеся к вводу телефона на странице
+                            let phoneLabels = document.querySelectorAll('.lt-i-label.lt-i-label-phone')
 
-                // Если LiveTex скрипт есть на странице
-                if (scriptSrcArray.includes('http://cs15.livetex.ru/js/client.js')) {
-
-                    // Ожидаем прогрузки всех скриптов LiveTex
-                    setTimeout(function () {
-
-                        // Открываем окно чата
-                        document.querySelector('.lt-label').addEventListener('click', function () {
-                            // Закзать звонок
-                            document.querySelector('.call-request').addEventListener('click', function () {
-                                // Получаем все label относящиеся к вводу телефона на странице
-                                let phoneLabels = document.querySelectorAll('.lt-i-label.lt-i-label-phone')
-
-                                // На каждый input телефона вешаем слушатель
-                                document.querySelectorAll('.lt-i-label__input.lt-complaint-phone-input').forEach(input => {
-                                    /*
-                                    * Проверяем если есть ошибка и инпут не пустой то label скрываем
-                                    * если e.target.value.length === 18 (введен правильный телефон) то label так же скрываем
-                                    * */
-                                    input.addEventListener('blur', function (e) {
-                                        phoneLabels.forEach(label => {
-                                            if (e.target.value.length > 0 && label.classList.contains('lt-error') || e.target.value.length === 18) {
-                                                document.querySelectorAll('div[title="Телефон"]').forEach(phone => phone.style.display = 'none')
-                                            } else {
-                                                document.querySelectorAll('div[title="Телефон"]').forEach(phone => phone.style.display = 'block')
-                                            }
-                                        })
-                                    })
-
-                                    // На каждый label телефона вешаем событие - скрыть при клике
+                            // На каждый input телефона вешаем слушатель
+                            document.querySelectorAll('.lt-i-label__input.lt-complaint-phone-input').forEach(input => {
+                                /*
+                                * Проверяем если есть ошибка и инпут не пустой то label скрываем
+                                * если e.target.value.length === 18 (введен правильный телефон) то label так же скрываем
+                                * */
+                                input.addEventListener('blur', function (e) {
                                     phoneLabels.forEach(label => {
-                                        label.addEventListener('click', function () {
+                                        if (e.target.value.length > 0 && label.classList.contains('lt-error') || e.target.value.length === 18) {
                                             document.querySelectorAll('div[title="Телефон"]').forEach(phone => phone.style.display = 'none')
-                                        })
+                                        } else {
+                                            document.querySelectorAll('div[title="Телефон"]').forEach(phone => phone.style.display = 'block')
+                                        }
                                     })
                                 })
 
-                                // При открытие календаря скрываем левую стрелку
-                                document.querySelector('.lt-datepicker').addEventListener('click', function () {
-                                    document.querySelector('.lt-ui-icon-circle-triangle-w').style.display = 'none';
+                                // На каждый label телефона вешаем событие - скрыть при клике
+                                phoneLabels.forEach(label => {
+                                    label.addEventListener('click', function () {
+                                        document.querySelectorAll('div[title="Телефон"]').forEach(phone => phone.style.display = 'none')
+                                    })
                                 })
                             })
+
+                            // При открытие календаря скрываем левую стрелку
+                            document.querySelector('.lt-datepicker').addEventListener('click', function () {
+                                document.querySelector('.lt-ui-icon-circle-triangle-w').style.display = 'none';
+                            })
                         })
-                    }, 4000)
-                }
+                    })
+                }, 4000)
             } catch (error) {
                 console.log('liveTex error: ', error)
             }
