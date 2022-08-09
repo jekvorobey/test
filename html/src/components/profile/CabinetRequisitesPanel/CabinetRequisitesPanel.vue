@@ -137,9 +137,9 @@ export default {
                 required,
             },
 
-            // address: {
-            //     required,
-            // },
+            address: {
+                 required,
+            },
 
             payment_city: {
                 required,
@@ -217,11 +217,11 @@ export default {
 
         resetCompany() {
             this.form.name = null;
+            this.form.address = null;
         },
 
         resetBank() {
             this.form.correspondentAccount = null;
-            // this.form.address = null;
             this.form.payment_city = null;
             this.form.b = null;
         },
@@ -255,7 +255,6 @@ export default {
                 }
 
                 this.form.correspondentAccount = suggestion.data.correspondent_account;
-                // this.form.address = suggestion.data.address.unrestricted_value;
                 this.form.payment_city = suggestion.data.payment_city;
             } catch (error) {
                 $logger.error(error);
