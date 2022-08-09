@@ -161,8 +161,8 @@
                         placeholder="Ваш email"
                         v-model="form.email"
                         :error="emailError"
-                        customValid="email"
                         maxlength="40"
+                        @input="onInput"
                     >
                         Email
                     </v-input>
@@ -386,6 +386,10 @@ export default {
     },
 
     methods: {
+        onInput() {
+            this.$v.form.email.$touch();
+        },
+
         onSubmit(e) {
             this.$v.$touch();
             if (this.$v.$invalid) e.preventDefault();
