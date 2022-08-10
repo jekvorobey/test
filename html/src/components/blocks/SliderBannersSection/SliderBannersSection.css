@@ -1,6 +1,10 @@
 .slider-banners-section {
     --slider-banners-section-controls-color: #000000;
-
+    &:hover {
+        .v-slider__controls {
+            background: rgba(0, 0, 0, 0.1);
+        }
+     }
     display: flex;
     margin-bottom: calc(var(--gs) * 8);
     transition: background-color 0.2s;
@@ -88,10 +92,10 @@
         padding: 0;
 
         .v-slider__controls {
+            transition: all 0.2s ease-in;
             left: 50%;
             bottom: var(--gs);
             height: 37px;
-            background: rgba(0, 0, 0, 0.1);
             border-radius: 22px;
             transform: translateX(-50%);
 
