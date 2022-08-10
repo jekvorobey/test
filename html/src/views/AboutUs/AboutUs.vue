@@ -150,6 +150,8 @@
                         placeholder="Вашe имя"
                         v-model="form.name"
                         :error="nameError"
+                        customValid="fio"
+                        maxlength="20"
                     >
                         Ваше имя
                     </v-input>
@@ -159,6 +161,8 @@
                         placeholder="Ваш email"
                         v-model="form.email"
                         :error="emailError"
+                        maxlength="40"
+                        @input="onInput"
                     >
                         Email
                     </v-input>
@@ -382,6 +386,10 @@ export default {
     },
 
     methods: {
+        onInput() {
+            this.$v.form.email.$touch();
+        },
+
         onSubmit(e) {
             this.$v.$touch();
             if (this.$v.$invalid) e.preventDefault();
