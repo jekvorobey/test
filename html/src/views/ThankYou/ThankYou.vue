@@ -46,11 +46,9 @@
                                     name="Номер заказа"
                                     :value="order.number"
                                 />
-                                <info-row
-                                    class="thank-you-view__panel-item"
-                                    name="Счет оферта"
-                                    :value="order.invoiceOfferLink"
-                                />
+                                <info-row class="thank-you-view__panel-item" name="Счёт-оферта">
+                                    <a class="document-card__bottom-link" :href="order.invoiceOfferLink" download>Скачать</a>
+                                </info-row>
                                 <info-row class="thank-you-view__panel-item" name="Получатель" :value="fullUserInfo" />
                                 <info-row
                                     class="thank-you-view__panel-item"
