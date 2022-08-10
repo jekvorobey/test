@@ -75,6 +75,17 @@ class VScrollLock {
  */
 function disableScroll(targetElement, options) {
     options.reserveScrollBarGap = false;
+    options.allowTouchMove = (targetElement) => {
+        let allow = false;
+
+        // Для селектов скролл должен быть разрешён всегда
+        if (targetElement.closest('.multiselect__container') !== null) {
+            allow = true;
+        }
+
+        return allow;
+    };
+
     disableBodyScroll(targetElement, options);
 }
 
