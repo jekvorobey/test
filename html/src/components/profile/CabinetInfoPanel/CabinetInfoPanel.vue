@@ -3,16 +3,21 @@
         <div class="container container--tablet-lg">
             <ul class="cabinet-view__panel-list">
                 <info-row class="cabinet-info-panel__item" name="Фамилия и имя*">
-                    <v-input
+                    <v-suggestion
                         class="cabinet-info-panel__item-input"
-                        v-model="personal.fullName"
                         placeholder="Введите свою фамилию и имя"
-                        :show-error="false"
-                        :error="$v.personal.fullName.$dirty && $v.personal.fullName.$invalid"
-                        @keydown="onKeyDown"
-                        @paste="onPaste"
-                    />
+                        :value="internalFullName"
+                        :items="suggestFioItems"
+                        :error="fioError"
+                        @input="debounce_suggestFio"
+                        @selected="onFioSuggestSelect"
+                    >
+                        <template v-slot:item="{ item }">
+                            {{ item.value }}
+                        </template>
+                    </v-suggestion>
                 </info-row>
+
                 <info-row class="cabinet-info-panel__item" name="Дата рождения">
                     <v-datepicker
                         class="cabinet-info-panel__item-input"
@@ -126,6 +131,7 @@ import VInputMask from '@controls/VInput/VInputMask.vue';
 import VCheck from '@controls/VCheck/VCheck.vue';
 import VDatepicker from '@controls/VDatepicker/VDatepicker.vue';
 import VSelect from '@controls/VSelect/VSelect.vue';
+import VSuggestion from '@controls/VSuggestion/VSuggestion.vue';
 
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
@@ -133,6 +139,7 @@ import PhoneEditModal from '@components/profile/PhoneEditModal/PhoneEditModal.vu
 import EmailEditModal from '@components/profile/EmailEditModal/EmailEditModal.vue';
 
 import _debounce from 'lodash/debounce';
+import { $dadata } from '@services';
 import { mapActions, mapState, mapGetters } from 'vuex';
 import { LOCALE, LOCALIZATIONS } from '@store';
 
@@ -175,6 +182,7 @@ export default {
     mixins: [validationMixin],
 
     components: {
+        VSuggestion,
         VButton,
         VInput,
         VInputMask,
@@ -190,10 +198,6 @@ export default {
 
     validations: {
         personal: {
-            [FULL_NAME]: {
-                required,
-            },
-
             [BIRTHDAY]: {
                 required,
             },
@@ -218,8 +222,9 @@ export default {
 
     data() {
         return {
+            internalFullName: '',
+
             personal: {
-                [FULL_NAME]: null,
                 [BIRTHDAY]: null,
                 [GENDER]: null,
             },
@@ -230,6 +235,9 @@ export default {
             },
 
             selectedActivities: [],
+            suggestFioItems: [],
+
+            fioError: null,
 
             maskOptions: {
                 ...phoneMaskOptions,
@@ -293,8 +301,8 @@ export default {
                     lastName,
                     firstName,
                     middleName,
-                    birthday,
-                    gender,
+                    // birthday,
+                    // gender,
                 });
             } catch (error) {
                 if (error.status === httpCodes.FORBIDDEN) this[CHECK_SESSION](true);
@@ -360,23 +368,56 @@ export default {
 
         onSubmitInfo() {
             this.$v.personal.$touch();
-            const { fullName, birthday, gender } = this.personal;
-            const names = fullName.replace(/\s\s+/g, ' ').split(' ');
+
+            const { birthday, gender } = this.personal;
             const birth = birthday[0] && birthday[0].split(' ')[0];
-            this.updatePersonal(names[0], names[1], names[2], birth, gender);
+
+            this.updatePersonal(this[LAST_NAME], this[FIRST_NAME], this[MIDDLE_NAME], birth, gender);
         },
 
         onSubmitActivities() {
             this.updateActivities(this.selectedActivities);
+        },
+
+        onFioSuggestSelect(item) {
+            const {
+                data: { name, surname, patronymic },
+            } = item;
+
+            if (name && surname && patronymic) {
+                this.fioError = null;
+
+                const { birthday, gender } = this.personal;
+                const birth = birthday[0] && birthday[0].split(' ')[0];
+
+                this.internalFullName = `${surname} ${name} ${patronymic}`;
+                this.updatePersonal(surname, name, patronymic, birth, gender);
+            } else {
+                this.internalFullName = item.value;
+                this.fioError = 'Укажите полностью фамилию, имя и отчество';
+            }
+        },
+
+        async onNameInputChange(value) {
+            const { suggestions } = await $dadata.post(
+                'suggest/fio',
+                {
+                    query: value,
+                },
+                {}
+            );
+
+            this.suggestFioItems = suggestions ? suggestions : [];
         },
     },
 
     created() {
         this.debounce_submitInfo = _debounce(this.onSubmitInfo, interval.TWO_SECONDS);
         this.debounce_submitActivities = _debounce(this.onSubmitActivities, interval.TWO_SECONDS);
+        this.debounce_suggestFio = _debounce(this.onNameInputChange, 400);
 
         this.genderType = genderType;
-        this.personal[FULL_NAME] = this[FULL_NAME];
+        this.internalFullName = this[FULL_NAME];
         this.personal[BIRTHDAY] = [this[BIRTHDAY]];
         this.personal[GENDER] = this[GENDER];
         this.credential[PHONE] = this[PHONE];

@@ -1,5 +1,8 @@
 <template>
-    <div @click="onClose" class="modal-mask" @touchstart.self.prevent="onClose" @touchmove.self.prevent>
+    <div class="modal-mask" @touchstart.self.prevent="onClose" @touchmove.self.prevent
+         @mousedown="closing = $event.target === $el"
+         @mouseup.self="closing && onClose()"
+    >
         <div
             v-scroll-lock="lock"
             ref="wrapper"
@@ -99,6 +102,7 @@ export default {
         return {
             clickInside: false,
             lock: false,
+            closing: false,
         };
     },
     methods: {
@@ -108,12 +112,8 @@ export default {
         onPopupMouseLeave() {
             this.clickInside = false;
         },
-        onClose(e) {
-            const { popup } = this.$refs;
-            if (popup && popup !== e.target && !popup.contains(e.target)) {
-                if (!this.clickInside) this.$emit('close');
-                else this.clickInside = false;
-            }
+        onClose() {
+            this.$emit('close');
         },
         keyDown(e) {
             switch (e.key) {

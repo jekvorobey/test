@@ -1,3 +1,4 @@
 .v-spinner {
     position: relative;
+    user-select: none;
 }

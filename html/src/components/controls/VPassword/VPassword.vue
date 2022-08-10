@@ -1,5 +1,5 @@
 <template>
-    <div class="v-password" :class="[{ 'is-disabled': $attrs.disabled }, { 'v-password--invalid': error }]">
+    <div class="v-password" :class="[{ 'is-disabled': $attrs.disabled }, { 'v-password--invalid': error || phoneError}]">
         <label class="v-password__label" :for="inputId">
             <slot />
         </label>
@@ -15,15 +15,14 @@
                 :autocomplete="autocomplete"
                 :aria-describedby="`${inputId}-alert`"
             />
-            <button
+            <div
                 v-if="!$attrs.disabled"
                 class="v-password__btn-show"
-                type="button"
                 @mousedown.prevent
                 @click.prevent="changePasswordState"
             >
                 <v-svg :name="showPassword ? 'eye-crossed' : 'eye'" width="16" height="16" />
-            </button>
+            </div>
         </div>
 
         <div v-if="showError" :id="`${inputId}-alert`" class="error-message v-password__error" role="alert">
@@ -55,6 +54,10 @@ export default {
 
     props: {
         value: {},
+        phoneError: {
+            type: String,
+            required: false,
+        },
     },
 
     data() {

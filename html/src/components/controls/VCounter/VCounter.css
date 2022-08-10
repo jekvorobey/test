@@ -2,6 +2,9 @@
     display: inline-flex;
     align-items: center;
     height: calc(var(--gs) * 5);
+    &__input-cart{
+         margin: 0 calc(var(--gs) / 2);
+    }
 
     &__input,
     &__btn {

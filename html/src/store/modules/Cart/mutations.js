@@ -3,6 +3,7 @@ export const SET_FEATURED_PRODUCTS = 'SET_FEATURED_PRODUCTS';
 export const SET_RELATIVE_PRODUCTS = 'SET_RELATIVE_PRODUCTS';
 export const SET_STATUS = 'SET_STATUS';
 export const SET_LOAD = 'SET_LOAD';
+export const SET_LOADING_ADDING_TO_BASKET = 'SET_LOADING_ADDING_TO_BASKET';
 
 export default {
     [SET_LOAD](state, payload = false) {
@@ -23,5 +24,9 @@ export default {
 
     [SET_STATUS](state, payload = {}) {
         state.cartStatus[payload.name] = payload.value;
+    },
+
+    [SET_LOADING_ADDING_TO_BASKET](state, payload) {
+        state.isAddingToBasket = payload;
     },
 };

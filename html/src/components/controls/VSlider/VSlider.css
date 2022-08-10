@@ -74,8 +74,9 @@
         margin: 0 var(--gs);
         width: calc(var(--gs) / 2);
         height: calc(var(--gs) / 2);
-        background-color: var(--cl-grey);
+        background-color: var(--cl-global);
         transition: all var(--time) ease-in;
+        opacity: 1;
 
         &-active {
             background-color: var(--cl-global);

@@ -264,18 +264,35 @@
                         </span>
                     </div>
                     <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
-                        <span>
-                            Будет использовано <strong class="text-bold">{{ bonus }}</strong
-                            >&nbsp;из&nbsp;{{ availableBonus }} бонусных баллов&nbsp;
-                        </span>
-                        <div class="checkout-product-panel__item-card-panel">
-                            <div v-if="isTablet" class="text-sm text-normal text-grey">
-                                (1 бонус = {{ bonusPerRub }} рубль)
+                        <template v-if="maxAmountBonus > 0">
+                            <span>
+                                Будет использовано <strong class="text-bold">{{ bonus }}</strong
+                                >&nbsp;из&nbsp;{{ availableBonus }} бонусных баллов&nbsp;
+                            </span>
+                            <div class="checkout-product-panel__item-card-panel">
+                                <div v-if="isTablet" class="text-sm text-normal text-grey">
+                                    (1 бонус = {{ bonusPerRub }} рубль)
+                                </div>
+                                <v-link
+                                    class="checkout-product-panel__item-card-link"
+                                    tag="button"
+                                    @click="onEditBonus"
+                                >
+                                    Изменить
+                                </v-link>
                             </div>
-                            <v-link class="checkout-product-panel__item-card-link" tag="button" @click="onEditBonus">
-                                Изменить
-                            </v-link>
-                        </div>
+                        </template>
+                        <template v-else>
+                            <span>
+                                Доступно <strong class="text-bold">0</strong>&nbsp;из&nbsp;{{ availableBonus }} бонусных
+                                баллов,&nbsp;т.к. товары уже со скидкой
+                            </span>
+                            <div class="checkout-product-panel__item-card-panel">
+                                <div v-if="isTablet" class="text-sm text-normal text-grey">
+                                    (1 бонус = {{ bonusPerRub }} рубль)
+                                </div>
+                            </div>
+                        </template>
                     </div>
                 </div>
 
@@ -613,6 +630,11 @@ import '@images/sprites/payment/apple.svg';
 import '@images/sprites/payment/google.svg';
 import '@images/sprites/payment/yandex.svg';
 import '@images/sprites/payment/b2b-sberbank.svg';
+import '@images/sprites/payment/alfa.svg';
+import '@images/sprites/payment/sber-pay.svg';
+import '@images/sprites/payment/sbp.svg';
+import '@images/sprites/payment/tinkoff.svg';
+import '@images/sprites/payment/ukassa.svg';
 import '@images/sprites/plus.svg';
 import '@images/sprites/edit.svg';
 import '@images/sprites/gift.svg';

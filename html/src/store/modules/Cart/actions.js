@@ -19,7 +19,7 @@ import {
     deleteCartBundle,
 } from '@api';
 
-import { SET_CART_DATA, SET_FEATURED_PRODUCTS, SET_RELATIVE_PRODUCTS, SET_STATUS } from './mutations';
+import { SET_CART_DATA, SET_FEATURED_PRODUCTS, SET_RELATIVE_PRODUCTS, SET_STATUS, SET_LOADING_ADDING_TO_BASKET } from './mutations';
 import { PROMOCODE_STATUS } from './getters';
 
 export const SET_LOAD = 'SET_LOAD';
@@ -101,6 +101,7 @@ export default {
         try {
             $retailRocket.addProductToBasket(offerId);
             const code = referrerCode || (cookieName && $cookie.get(cookieName));
+            commit(SET_LOADING_ADDING_TO_BASKET, true);
             const data = await addCartItem(offerId, storeId, count, code);
 
             let addedItem;
@@ -121,6 +122,7 @@ export default {
             }
 
             commit(SET_CART_DATA, data);
+            commit(SET_LOADING_ADDING_TO_BASKET, false);
         } catch (error) {
             storeErrorHandler(ADD_CART_ITEM)(error);
         }

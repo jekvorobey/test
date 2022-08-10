@@ -19,6 +19,7 @@ import routeResolve from './middleware/routeResolve';
 import redirectResolve from '@router/middleware/redirectResolve';
 import urlShortenerRedirectResolve from '@router/middleware/urlShortenerRedirectResolve';
 import pipeline from './pipeline';
+import UTMParserCookie from "@router/middleware/UTMParserCookie";
 
 /*
  * Preventing errors in console in Vue-router >= 3.1.0
@@ -95,7 +96,7 @@ export default function createRouter(container) {
     router.beforeEach((to, from, next) => {
         const { matched } = to;
 
-        const middlewares = [redirectResolve, urlShortenerRedirectResolve, routeResolve, referalLink, registration, setGeolocation];
+        const middlewares = [redirectResolve, urlShortenerRedirectResolve, routeResolve, referalLink, registration, setGeolocation, UTMParserCookie];
 
         for (let i = 0; i < matched.length; i++) {
             const {

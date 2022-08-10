@@ -113,19 +113,26 @@ export default {
 
         bannerProps() {
             const { isExternal } = this;
-            const { url } = this.item;
 
             if (isExternal)
                 return {
-                    href: url,
+                    href: this.urlWithParams,
                     target: '_blank',
                     rel: 'noopener noreferrer',
                 };
 
             return {
                 tag: 'a',
-                to: url || this.$route.fullPath,
+                to: this.urlWithParams || this.$route.fullPath,
             };
+        },
+
+        urlWithParams() {
+            const { url } = this.item;
+
+            if( url.match(/isOpen/) ) return url
+
+            return url.includes('?') ? url + '&isOpen=true' : url + '?isOpen=true';
         },
 
         buttonProps() {

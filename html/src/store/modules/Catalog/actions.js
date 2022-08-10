@@ -239,10 +239,14 @@ export default {
                     data.filtersStateMap = {};
                     // eslint-disable-next-line no-restricted-syntax
                     for (const dataFilter of data.filters)
-                        data.filtersStateMap[dataFilter.name] = state.filtersStateMap[dataFilter.name] || {
-                            isExpanded: true,
-                            showMore: false,
-                        };
+                        if (dataFilter.name === 'brand') {
+                            data.filtersStateMap[dataFilter.name] = { isExpanded: true, showMore: false };
+                        } else {
+                            data.filtersStateMap[dataFilter.name] = state.filtersStateMap[dataFilter.name] || {
+                                isExpanded: false,
+                                showMore: false,
+                            };
+                        }
                     break;
                 case FETCH_ITEMS:
                     {

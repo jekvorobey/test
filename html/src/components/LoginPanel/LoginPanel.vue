@@ -19,6 +19,7 @@
             <v-password
                 v-model="password"
                 :error="passwordError"
+                :phoneError="phoneError"
                 name="password"
                 class="login-panel__form-password-input"
             >
