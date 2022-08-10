@@ -19,6 +19,7 @@ const isProd = mode === 'production';
 module.exports = merge(base, {
     entry: {
         page502: './src/pages/Page502/Page502.js',
+        page403: './src/pages/Page403/Page403.js',
     },
     module: {
         rules: [
@@ -139,6 +140,13 @@ module.exports = merge(base, {
                   chunks: ['vendors~page502', 'page502'],
                   removeComments: true,
               }),
+              new HtmlWebpackPlugin({
+                  title: 'Custom template',
+                  template: './src/pages/template.html',
+                  filename: '../page403.html',
+                  chunks: ['vendors~page403', 'page403'],
+                  removeComments: true,
+              }),
           ]
         : [
               new webpack.HashedModuleIdsPlugin(),
@@ -153,6 +161,14 @@ module.exports = merge(base, {
                   template: './src/pages/template.html',
                   filename: '../page502.html',
                   chunks: ['vendors~page502', 'page502'],
+                  removeComments: true,
+              }),
+
+              new HtmlWebpackPlugin({
+                  title: 'Custom template',
+                  template: './src/pages/template.html',
+                  filename: '../page403.html',
+                  chunks: ['vendors~page403', 'page403'],
                   removeComments: true,
               }),
           ],
