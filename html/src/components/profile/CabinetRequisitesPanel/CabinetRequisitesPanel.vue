@@ -21,6 +21,16 @@
                         disabled
                     />
                 </info-row>
+                <info-row class="cabinet-requisites-panel__item" name="КПП">
+                    <v-input
+                        class="cabinet-requisites-panel__item-input"
+                        placeholder="Введите КПП"
+                        :value="$v.form.kpp.$model"
+                        maxLength="9"
+                        :show-error="false"
+                        @input="onKppChange"
+                    />
+                </info-row>
                 <info-row class="cabinet-requisites-panel__item" name="Расчетный счет">
                     <v-input
                         class="cabinet-requisites-panel__item-input"
@@ -126,9 +136,9 @@ export default {
                 required,
             },
 
-            // address: {
-            //     required,
-            // },
+            address: {
+                 required,
+            },
 
             payment_city: {
                 required,
@@ -153,6 +163,8 @@ export default {
                 bik,
             },
 
+            kpp: {},
+
             correspondentAccount: {
                 required,
             },
@@ -168,6 +180,7 @@ export default {
                 account: null,
                 bank: null,
                 bik: null,
+                kpp: null,
                 correspondentAccount: null,
                 payment_city: null,
             },
@@ -201,11 +214,11 @@ export default {
 
         resetCompany() {
             this.form.name = null;
+            this.form.address = null;
         },
 
         resetBank() {
             this.form.correspondentAccount = null;
-            // this.form.address = null;
             this.form.payment_city = null;
             this.form.b = null;
         },
@@ -218,6 +231,7 @@ export default {
 
                 const suggestion = suggestions[0];
                 this.form.name = suggestion.data.name.short_with_opf;
+                this.form.address = suggestion.data.address.unrestricted_value;
             } catch (error) {
                 $logger.error(error);
             }
@@ -238,7 +252,6 @@ export default {
                 }
 
                 this.form.correspondentAccount = suggestion.data.correspondent_account;
-                // this.form.address = suggestion.data.address.unrestricted_value;
                 this.form.payment_city = suggestion.data.payment_city;
             } catch (error) {
                 $logger.error(error);
@@ -249,6 +262,10 @@ export default {
             this.form.inn = value;
             if (!this.$v.form.inn.$invalid) this.findCompany(value);
             else this.resetCompany();
+        },
+
+        onKppChange(value) {
+            this.form.kpp = value;
         },
 
         onBikChange(value) {
