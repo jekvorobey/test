@@ -21,6 +21,16 @@
                         disabled
                     />
                 </info-row>
+                <info-row class="cabinet-requisites-panel__item" name="КПП">
+                    <v-input
+                        class="cabinet-requisites-panel__item-input"
+                        placeholder="Введите КПП"
+                        :value="$v.form.kpp.$model"
+                        maxLength="9"
+                        :show-error="false"
+                        @input="onKppChange"
+                    />
+                </info-row>
                 <info-row class="cabinet-requisites-panel__item" name="Расчетный счет">
                     <v-input
                         class="cabinet-requisites-panel__item-input"
@@ -37,17 +47,6 @@
                         :error="$v.form.bik.$invalid"
                         :show-error="false"
                         @input="onBikChange"
-                    />
-                </info-row>
-                <info-row class="cabinet-requisites-panel__item" name="КПП">
-                    <v-input
-                        class="cabinet-requisites-panel__item-input"
-                        placeholder="Введите КПП"
-                        :value="$v.form.kpp.$model"
-                        :error="$v.form.kpp.$invalid"
-                        maxLength="9"
-                        :show-error="false"
-                        @input="onKppChange"
                     />
                 </info-row>
                 <info-row class="cabinet-requisites-panel__item" name="Банк">
@@ -114,7 +113,7 @@ import { $dadata } from '@services';
 import { httpCodes, modalName } from '@enums';
 import { genderType } from '@enums/profile';
 import { phoneMaskOptions } from '@settings';
-import validationMixin, { required, inn, rs, bik, kpp } from '@plugins/validation';
+import validationMixin, { required, inn, rs, bik } from '@plugins/validation';
 import './CabinetRequisitesPanel.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
@@ -164,9 +163,7 @@ export default {
                 bik,
             },
 
-            kpp: {
-                kpp,
-            },
+            kpp: {},
 
             correspondentAccount: {
                 required,
