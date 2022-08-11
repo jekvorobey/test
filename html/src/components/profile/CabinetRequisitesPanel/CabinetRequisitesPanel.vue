@@ -21,6 +21,14 @@
                         disabled
                     />
                 </info-row>
+                <info-row class="cabinet-requisites-panel__item" name="Юридический адрес">
+                    <v-input
+                        class="cabinet-requisites-panel__item-input"
+                        :value="$v.form.address.$model"
+                        :show-error="false"
+                        disabled
+                    />
+                </info-row>
                 <info-row class="cabinet-requisites-panel__item" name="КПП">
                     <v-input
                         class="cabinet-requisites-panel__item-input"
@@ -85,9 +93,8 @@
             </ul>
         </div>
         <div class="cabinet-requisites-panel__controls">
-            <v-button class="cabinet-requisites-panel__save-btn" :disabled="saveDisabled" @click="onSave"
-                >Сохранить реквизиты</v-button
-            >
+            <v-button class="cabinet-requisites-panel__save-btn" :disabled="saveDisabled" @click="onSave">
+                Сохранить реквизиты</v-button>
         </div>
     </info-panel>
 </template>
@@ -99,10 +106,9 @@ import VButton from '@controls/VButton/VButton.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 
-import _debounce from 'lodash/debounce';
-import { mapActions, mapState, mapGetters } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
-import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
@@ -110,9 +116,7 @@ import { NAME as CABINET_MODULE, REQUISITES } from '@store/modules/Profile/modul
 import { UPDATE_REQUISITES } from '@store/modules/Profile/modules/Cabinet/actions';
 
 import { $dadata } from '@services';
-import { httpCodes, modalName } from '@enums';
-import { genderType } from '@enums/profile';
-import { phoneMaskOptions } from '@settings';
+import { modalName } from '@enums';
 import validationMixin, { required, inn, rs, bik } from '@plugins/validation';
 import './CabinetRequisitesPanel.css';
 
@@ -137,7 +141,7 @@ export default {
             },
 
             address: {
-                 required,
+                required,
             },
 
             payment_city: {
