@@ -278,7 +278,7 @@ import {
 } from '@store/modules/Profile/modules/Orders/actions';
 
 import { fileExtension, modalName } from '@enums';
-import { receiveMethods } from '@enums/checkout';
+import { receiveMethods, paymentTypes } from '@enums/checkout';
 import { deliveryStatus, orderPaymentStatus } from '@enums/order';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { orderDateLocaleOptions } from '@settings/profile';
@@ -336,6 +336,7 @@ export default {
         return {
             isDisabled: false,
             creditWidgetIsInitialized: false,
+            paymentTypes: paymentTypes,
         };
     },
 

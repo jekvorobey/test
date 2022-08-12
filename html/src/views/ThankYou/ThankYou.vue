@@ -205,13 +205,12 @@ import VCartHeader from '@components/VCartHeader/VCartHeader.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
-import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue';
 
 import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
 import CartBundleProductCard from '@components/CartBundleProductCard/CartBundleProductCard.vue';
 import CartMasterClassCard from '@components/cart/CartMasterClassCard/CartMasterClassCard.vue';
 
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import { LOCALE } from '@store';
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
@@ -232,7 +231,7 @@ import { $store, $progress, $retailRocket } from '@services';
 import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 import { getProfileOrder } from '@api';
 import { fileExtension, httpCodes } from '@enums';
-import { receiveMethods } from '@enums/checkout';
+import { receiveMethods, paymentTypes } from '@enums/checkout';
 import { orderPaymentStatus } from '@enums/order';
 import { cartItemTypes } from '@enums/product';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings, cancelRoute } from '@settings';
@@ -277,6 +276,7 @@ export default {
     data() {
         return {
             creditWidgetIsInitialized: false,
+            paymentTypes: paymentTypes,
         };
     },
 
