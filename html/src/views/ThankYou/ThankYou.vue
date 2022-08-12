@@ -33,6 +33,9 @@
                                         name="Получатель"
                                         :value="order.email"
                                     />
+                                    <info-row v-if="order.payment_method === paymentTypes.BANK_TRANSFER_FOR_LEGAL" class="thank-you-view__panel-item" name="Счёт-оферта">
+                                        <a class="document-card__bottom-link" :href="invoiceOfferLink(order.invoiceOfferFileId)" download>Скачать</a>
+                                    </info-row>
                                 </ul>
                                 <attention-panel class="thank-you-view__panel-attention">
                                     Посмотреть информацию о дате и месте проведения мастер-классов можно в письме,
@@ -46,8 +49,8 @@
                                     name="Номер заказа"
                                     :value="order.number"
                                 />
-                                <info-row class="thank-you-view__panel-item" name="Счёт-оферта">
-                                    <a class="document-card__bottom-link" :href="order.invoiceOfferLink" download>Скачать</a>
+                                <info-row v-if="order.payment_method === paymentTypes.BANK_TRANSFER_FOR_LEGAL" class="thank-you-view__panel-item" name="Счёт-оферта">
+                                    <a class="document-card__bottom-link" :href="invoiceOfferLink(order.invoiceOfferFileId)" download>Скачать</a>
                                 </info-row>
                                 <info-row class="thank-you-view__panel-item" name="Получатель" :value="fullUserInfo" />
                                 <info-row
@@ -236,7 +239,7 @@ import { dayMonthLongDateSettings, hourMinuteTimeSettings, cancelRoute } from '@
 import { formatPhoneNumber, getDate } from '@util';
 import { createNotFoundRoute } from '@util/router';
 import { toAddressString, toPointAddressString } from '@util/address';
-import { generatePictureSourcePath } from '@util/file';
+import { generatePictureSourcePath, generateFileOriginalPath } from '@util/file';
 import { generateMasterclassUrl, generateProductUrl } from '@util/catalog';
 import metaMixin from '@plugins/meta';
 import './ThankYou.css';
@@ -536,6 +539,10 @@ export default {
 
                 this.$refs.buyCreditButton.click();
             });
+        },
+
+        invoiceOfferLink(file_id) {
+            return generateFileOriginalPath(file_id);
         },
     },
 

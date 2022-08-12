@@ -12,6 +12,10 @@
 
             <div class="order-details-view__details">
                 <div class="order-details-view__details-info">
+                    <info-row v-if="order.payment_method === paymentTypes.BANK_TRANSFER_FOR_LEGAL" class="thank-you-view__panel-item" name="Счёт-оферта">
+                        <a class="document-card__bottom-link" :href="invoiceOfferLink(order.invoiceOfferFileId)" download>Скачать</a>
+                    </info-row>
+
                     <info-row class="order-details-view__details-row" name="Сумма">
                         <price class="text-medium" v-bind="order.price" />
                     </info-row>
@@ -280,7 +284,7 @@ import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { orderDateLocaleOptions } from '@settings/profile';
 import { toAddressString } from '@util/address';
 import { generateMasterclassUrl, generateTicketDownloadUrl, generateProductUrl } from '@util/catalog';
-import { generatePictureSourcePath } from '@util/file';
+import { generateFileOriginalPath, generatePictureSourcePath } from '@util/file';
 import {
     getOrderStatusColorClass,
     getDeliveryStatusColorClass,
@@ -627,6 +631,10 @@ export default {
                     elm: 'buy-credit',
                 });
             });
+        },
+
+        invoiceOfferLink(file_id) {
+            return generateFileOriginalPath(file_id);
         },
     },
 
