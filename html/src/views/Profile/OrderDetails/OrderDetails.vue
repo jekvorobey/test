@@ -12,10 +12,6 @@
 
             <div class="order-details-view__details">
                 <div class="order-details-view__details-info">
-                    <info-row v-if="order.payment_method === paymentTypes.BANK_TRANSFER_FOR_LEGAL" class="thank-you-view__panel-item" name="Счёт-оферта">
-                        <a class="document-card__bottom-link" :href="invoiceOfferLink(order.invoiceOfferFileId)" download>Скачать</a>
-                    </info-row>
-
                     <info-row class="order-details-view__details-row" name="Сумма">
                         <price class="text-medium" v-bind="order.price" />
                     </info-row>
@@ -89,6 +85,14 @@
                         name="Email"
                         :value="receiverEmail"
                     />
+
+                    <info-row
+                        v-if="order.payment_method === paymentTypes.BANK_TRANSFER_FOR_LEGAL"
+                        class="order-details-view__details-row"
+                        name="Счёт-оферта"
+                    >
+                        <a class="document-card__bottom-link" :href="invoiceOfferLink(order.invoiceOfferFileId)" download>Скачать</a>
+                    </info-row>
                 </div>
                 <div class="order-details-view__details-controls">
                     <template v-if="canPay">
