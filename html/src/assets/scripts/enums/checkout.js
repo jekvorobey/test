@@ -67,4 +67,5 @@ export const paymentTypes = Object.freeze({
     POST_PAYMENT: 2,
     CREDIT: 3,
     B2B_SBERBANK: 4,
+    BANK_TRANSFER_FOR_LEGAL: 5,
 });

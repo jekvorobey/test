@@ -306,10 +306,6 @@
                 min-height: calc(var(--gs) * 11);
                 height: calc(var(--gs) * 15);
                 margin-bottom: calc(var(--gs) * 2);
-
-                .v-input__container {
-                    height: 100%;
-                }
             }
 
             &-submit {
