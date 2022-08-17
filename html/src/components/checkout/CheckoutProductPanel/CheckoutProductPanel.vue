@@ -24,17 +24,20 @@
                             isEqualObject(recipient, selectedRecipient) &&
                             recipientError &&
                             recipientError.length > 0
+                            || !recipient.phone
+                            || !recipient.name
                         "
                         @cardClick="onSetRecipient(recipient)"
                         @btnClick="onChangeRecipient(recipient, index)"
                     >
-                        <p v-if="recipient.name">{{ recipient.name }}</p>
-                        <p v-if="recipient.phone">{{ formatPhoneNumber(recipient.phone) }}</p>
-                        <p v-if="recipient.email">{{ recipient.email }}</p>
-
                         <p v-if="recipientError">
                             <span class="status-color-error">{{ recipientError }}</span>
                         </p>
+                        <p v-if="recipient.name">{{ recipient.name }}</p>
+                        <p v-else>Укажите пожалуйста ваше имя</p>
+                        <p v-if="recipient.phone">{{ formatPhoneNumber(recipient.phone) }}</p>
+                        <p v-else>Укажите пожалуйста ваш телефон</p>
+                        <p v-if="recipient.email">{{ recipient.email }}</p>
                     </checkout-option-card>
                 </ul>
 
@@ -917,7 +920,7 @@ export default {
             }
 
             if (!this.$v.selectedRecipient.hasName) {
-                message = 'Пожалуйста, добавьте фамилию и имя получателя';
+                message = 'Пожалуйста, добавьте данные получателя';
             }
 
             if (message.length > 0) {
