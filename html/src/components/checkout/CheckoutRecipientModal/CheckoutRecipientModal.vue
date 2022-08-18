@@ -11,21 +11,20 @@
             <div class="checkout-recipient-modal__body">
                 <h3 v-if="!isTablet" class="checkout-recipient-modal__hl">{{ header }}</h3>
                 <form class="checkout-recipient-modal__form" @submit.prevent="onSubmit">
-                    <v-input
-                        class="checkout-recipient-modal__form-row"
-                        v-model="form.name"
-                        :placeholder="
-                            strongFullNameValidation ? 'Введите фамилию, имя и отчество' : 'Введите имя и фамилию'
-                        "
-                        :error="nameError"
+                    <label class="v-input__label">Фамилия, Имя и Отчество</label>
+                    <v-suggestion
+                            class="cabinet-info-panel__item-input"
+                            placeholder="Введите свою фамилию и имя"
+                            :value="form.name"
+                            :items="suggestFioItems"
+                            :error="fioError"
+                            @input="debounce_suggestFio"
+                            @selected="onFioSuggestSelect"
                     >
-                        {{ strongFullNameValidation ? 'Фамилия, Имя и Отчество' : 'Имя и Фамилия' }}
-                        <template v-slot:error="{ error }">
-                            <transition name="slide-in-bottom" mode="out-in">
-                                <div :key="error" v-if="error">{{ error }}</div>
-                            </transition>
+                        <template v-slot:item="{ item }">
+                            {{ item.value }}
                         </template>
-                    </v-input>
+                    </v-suggestion>
 
                     <v-input-mask
                         class="checkout-recipient-modal__form-row"
@@ -70,6 +69,8 @@
 import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VInputMask from '@controls/VInput/VInputMask.vue';
+import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
+import VSuggestion from '@controls/VSuggestion/VSuggestion.vue';
 
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
@@ -81,11 +82,19 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import validationMixin, { required, minLength, email, nameRu, fio } from '@plugins/validation';
 import { getRandomIntInclusive } from '@util';
-import { modalName } from '@enums';
+import {httpCodes, modalName} from '@enums';
 import { phoneMaskOptions } from '@settings';
 import './CheckoutRecipientModal.css';
+import _debounce from "lodash/debounce";
+import {
+    UPDATE_PERSONAL
+} from "@store/modules/Profile/modules/Cabinet/actions";
+import {$dadata} from "@services";
+import {NAME as PROFILE_MODULE} from "@store/modules/Profile";
+import {NAME as CABINET_MODULE} from "@store/modules/Profile/modules/Cabinet";
 
 const NAME = modalName.checkout.RECIPIENT_EDIT;
+const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
 
 export default {
     name: NAME,
@@ -95,6 +104,8 @@ export default {
         VButton,
         VInput,
         VInputMask,
+        InfoRow,
+        VSuggestion,
 
         GeneralModal,
         AttentionPanel,
@@ -142,6 +153,9 @@ export default {
 
     data() {
         return {
+            internalFullName: '',
+            suggestFioItems: [],
+            fioError: null,
             form: {
                 id: getRandomIntInclusive(0, 100000),
                 name: null,
@@ -207,21 +221,66 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(CABINET_MODULE_PATH, [UPDATE_PERSONAL]),
 
-        onSubmit() {
-            this.$v.$touch();
-            if (this.$v.$invalid) return;
-
+        emitSaveFioBySuggestion() {
             let recipient = { ...this.form };
-
+            console.log(recipient);
             if (this.strongFullNameValidation) {
                 recipient.name = recipient.name
                     .split(' ')
                     .filter((chunk) => chunk !== '')
                     .join(' ');
             }
-
             this.$emit('save', recipient);
+        },
+
+        async onNameInputChange(value) {
+            const { suggestions } = await $dadata.post(
+                'suggest/fio',
+                {
+                    query: value,
+                },
+                {}
+            );
+            this.suggestFioItems = suggestions ? suggestions : [];
+        },
+
+        onFioSuggestSelect(item) {
+            const {
+                data: { name, surname, patronymic },
+            } = item;
+
+            if (name && surname && patronymic) {
+                this.fioError = null;
+                this.internalFullName = `${surname} ${name} ${patronymic}`;
+                this.form.name = `${surname} ${name} ${patronymic}`;
+                // this.emitSaveFioBySuggestion();
+                // this.updatePersonal(surname, name, patronymic);
+            } else {
+                this.internalFullName = item.value;
+                this.form.name = item.value;
+                // this.emitSaveFioBySuggestion();
+                this.fioError = 'Укажите полностью фамилию, имя и отчество';
+            }
+        },
+
+        async updatePersonal(lastName, firstName, middleName) {
+            try {
+                await this[UPDATE_PERSONAL]({
+                    lastName,
+                    firstName,
+                    middleName,
+                });
+            } catch (error) {
+                if (error.status === httpCodes.FORBIDDEN) this[CHECK_SESSION](true);
+            }
+        },
+
+        onSubmit() {
+            this.$v.$touch();
+            if (this.$v.$invalid) return;
+            this.emitSaveFioBySuggestion();
             this.onClose();
         },
 
@@ -233,6 +292,10 @@ export default {
         init() {
             if (this.modalState.recipient) this.form = Object.assign({}, this.form, this.modalState.recipient);
         },
+    },
+
+    created(){
+        this.debounce_suggestFio = _debounce(this.onNameInputChange, 400);
     },
 
     beforeMount() {
