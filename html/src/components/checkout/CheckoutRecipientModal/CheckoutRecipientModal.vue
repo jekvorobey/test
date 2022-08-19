@@ -12,6 +12,8 @@
                 <h3 v-if="!isTablet" class="checkout-recipient-modal__hl">{{ header }}</h3>
                 <form class="checkout-recipient-modal__form" @submit.prevent="onSubmit">
                     <label class="v-input__label">Фамилия, Имя и Отчество</label>
+                    {{recipients}}
+                    isPhoneEditOpen: {{isPhoneEditOpen}}
                     <v-suggestion
                             class="cabinet-info-panel__item-input"
                             placeholder="Введите свою фамилию и имя"
@@ -20,6 +22,7 @@
                             :error="fioError"
                             @input="debounce_suggestFio"
                             @selected="onFioSuggestSelect"
+                            style="max-width: 100%;"
                     >
                         <template v-slot:item="{ item }">
                             {{ item.value }}
@@ -62,6 +65,9 @@
                     Добавить получателя
                 </v-button>
             </div>
+            <transition name="fade">
+                <phone-edit-modal v-if="$isServer || isPhoneEditOpen && isMainRecipient" :phone="form.phone" @successfulSavePhone="successfulSavePhone"/>
+            </transition>
         </template>
     </general-modal>
 </template>
@@ -75,7 +81,7 @@ import VSuggestion from '@controls/VSuggestion/VSuggestion.vue';
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -86,13 +92,14 @@ import {httpCodes, modalName} from '@enums';
 import { phoneMaskOptions } from '@settings';
 import './CheckoutRecipientModal.css';
 import _debounce from "lodash/debounce";
-import {
-    UPDATE_PERSONAL
-} from "@store/modules/Profile/modules/Cabinet/actions";
+import {SEND_CODE, UPDATE_PERSONAL} from "@store/modules/Profile/modules/Cabinet/actions";
 import {$dadata} from "@services";
 import {NAME as PROFILE_MODULE} from "@store/modules/Profile";
 import {NAME as CABINET_MODULE} from "@store/modules/Profile/modules/Cabinet";
-
+import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
+import {RECIPIENTS} from '@store/modules/Checkout/getters';
+import {verificationCodeType} from "@enums/auth";
+import PhoneEditModal from '@components/profile/PhoneEditModal/PhoneEditModal.vue';
 const NAME = modalName.checkout.RECIPIENT_EDIT;
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
 
@@ -109,6 +116,7 @@ export default {
 
         GeneralModal,
         AttentionPanel,
+        PhoneEditModal,
     },
 
     props: {
@@ -171,7 +179,15 @@ export default {
         ...mapState(MODAL_MODULE, {
             isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
             modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isPhoneEditOpen: (state) =>
+                state[MODALS][modalName.profile.PHONE_EDIT] && state[MODALS][modalName.profile.PHONE_EDIT].open,
         }),
+
+         ...mapGetters(CHECKOUT_MODULE, [RECIPIENTS,]),
+
+        isMainRecipient() {
+            return this[RECIPIENTS][0].name === null || this[RECIPIENTS][0].phone === null;
+        },
 
         isTablet() {
             return this.$mq.tablet;
@@ -221,17 +237,30 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(CABINET_MODULE_PATH, [UPDATE_PERSONAL]),
+        ...mapActions(CABINET_MODULE_PATH, [UPDATE_PERSONAL, SEND_CODE]),
+
+        successfulSavePhone() {
+            console.log('save successfulSavePhone');
+            this.emitSaveFioBySuggestion();
+            this.onClose();
+        },
 
         emitSaveFioBySuggestion() {
             let recipient = { ...this.form };
-            console.log(recipient);
+
+            if (this.isMainRecipient){
+                // Парсим ФИО как для strongFullNameValidation и сохраняем в БД как имя пользователя
+                let fio = recipient.name.split(' ').filter((chunk) => chunk !== '').join(' ').split(' ');
+                this.updatePersonal(fio[0], fio[1], fio[2]);
+            }
+
             if (this.strongFullNameValidation) {
                 recipient.name = recipient.name
                     .split(' ')
                     .filter((chunk) => chunk !== '')
                     .join(' ');
             }
+
             this.$emit('save', recipient);
         },
 
@@ -255,8 +284,11 @@ export default {
                 this.fioError = null;
                 this.internalFullName = `${surname} ${name} ${patronymic}`;
                 this.form.name = `${surname} ${name} ${patronymic}`;
-                // this.emitSaveFioBySuggestion();
-                // this.updatePersonal(surname, name, patronymic);
+
+                // if (this.isMainRecipientEmpty) {
+                //     this.updatePersonal(surname, name, patronymic);
+                //     this.emitSaveFioBySuggestion();
+                // }
             } else {
                 this.internalFullName = item.value;
                 this.form.name = item.value;
@@ -277,11 +309,37 @@ export default {
             }
         },
 
-        onSubmit() {
+        async onSubmit() {
             this.$v.$touch();
             if (this.$v.$invalid) return;
-            this.emitSaveFioBySuggestion();
-            this.onClose();
+
+            if (this.isMainRecipient) {
+                // Подтверждение мобильного телефона
+                const { phone } = { ...this.form };
+                console.log(phone)
+                try {
+                    await this[SEND_CODE]({
+                        destination: phone,
+                        type: verificationCodeType.PROFILE_PHONE,
+                    });
+                    this[CHANGE_MODAL_STATE]({ name: modalName.profile.PHONE_EDIT, open: true });
+                } catch (error) {
+                    const { data, message } = error;
+                    const { message: dataMessage } = data || {};
+
+                    this[CHANGE_MODAL_STATE]({
+                        name: modalName.general.NOTIFICATION,
+                        open: true,
+                        state: {
+                            title: 'Уведомление',
+                            message: dataMessage || message,
+                        },
+                    });
+                }
+            } else {
+                this.emitSaveFioBySuggestion();
+                this.onClose();
+            }
         },
 
         onClose() {

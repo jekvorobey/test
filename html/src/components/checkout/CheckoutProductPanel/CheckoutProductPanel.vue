@@ -11,7 +11,7 @@
                 >
                     <h2 class="checkout-product-panel__item-header-hl">Получатель</h2>
                 </div>
-
+                {{isMainRecipient}}
                 <ul class="checkout-product-panel__item-list">
                     <checkout-option-card
                         class="checkout-product-panel__item-card"
@@ -19,6 +19,7 @@
                         :key="recipient.id"
                         :selected="selectedRecipient && isEqualObject(recipient, selectedRecipient)"
                         :show-check="recipients.length > 1"
+                        :can-change="!isMainRecipient || index !== 0"
                         :error="
                             selectedRecipient &&
                             isEqualObject(recipient, selectedRecipient) &&
@@ -27,7 +28,8 @@
                             || !recipient.phone
                             || !recipient.name
                         "
-                        @cardClick="onSetRecipient(recipient)"
+                        :btn-text="isMainRecipient ? 'Изменить' : 'Добавить'"
+                        @cardClick="isMainRecipient ? onSetRecipient(recipient) : onChangeRecipient(recipient, index)"
                         @btnClick="onChangeRecipient(recipient, index)"
                     >
                         <p v-if="recipientError">
@@ -41,450 +43,453 @@
                     </checkout-option-card>
                 </ul>
 
-                <v-link class="checkout-product-panel__item-header-link" tag="button" @click="onAddRecipient">
+                <v-link v-if="isMainRecipient" class="checkout-product-panel__item-header-link" tag="button" @click="onAddRecipient">
                     <v-svg name="plus" width="24" height="24" />&nbsp;Добавить нового получателя
                 </v-link>
             </div>
 
-            <div class="checkout-product-panel__item checkout-product-panel__item--receive-method">
-                <div class="checkout-product-panel__item-header">
-                    <h2 class="checkout-product-panel__item-header-hl">
-                        Способ получения&nbsp;<v-spinner width="24" height="24" :show="isReceiveMethodPending" />
-                    </h2>
-                </div>
+            <transition name="fade">
+                <div v-if="isMainRecipient">
+                    <div class="checkout-product-panel__item checkout-product-panel__item--receive-method">
+                        <div class="checkout-product-panel__item-header">
+                            <h2 class="checkout-product-panel__item-header-hl">
+                                Способ получения&nbsp;<v-spinner width="24" height="24" :show="isReceiveMethodPending" />
+                            </h2>
+                        </div>
 
-                <ul class="checkout-product-panel__item-list">
-                    <checkout-option-card
-                        class="checkout-product-panel__item-card"
-                        v-for="method in receiveMethods"
-                        :key="method.id"
-                        :selected="method.id === selectedReceiveMethodID"
-                        :disabled="!method.isAvailable"
-                        :loading="!method.isLoaded"
-                        readonly
-                        @cardClick="onSetReceiveMethod(method)"
-                    >
-                        <p class="text-bold">{{ method.title }}</p>
-                        <p>
-                            <template v-if="method.price !== null"><price v-bind="method.price" />&nbsp;</template>
-                            <template v-if="method.cost">
-                                <price class="text-grey text-sm text-strike" v-bind="method.cost" />
-                            </template>
-                        </p>
-                        <p v-if="method.description" class="text-grey text-sm">{{ method.description }}</p>
-                    </checkout-option-card>
-                </ul>
-            </div>
-
-            <div class="checkout-product-panel__item">
-                <div
-                    class="checkout-product-panel__item-header"
-                    :class="{ 'checkout-product-panel__item-header--error': addressError }"
-                    ref="address"
-                >
-                    <h2 class="checkout-product-panel__item-header-hl">
-                        {{ isDelivery ? 'Адрес доставки' : 'Пункт самовывоза' }}&nbsp;
-                        <v-spinner width="24" height="24" :show="isAddressPending" />
-                    </h2>
-                </div>
-
-                <transition name="fade-in">
-                    <checkout-address-panel
-                        v-if="isDelivery"
-                        :error="addressError && addressError.length > 0"
-                        @change-address="onChangeAddress"
-                        @set-address="onSetAddress"
-                    />
-
-                    <checkout-pickup-point-panel
-                        v-else
-                        :error="addressError && addressError.length > 0"
-                        @change-address="onChangePickupPoint"
-                    />
-                </transition>
-
-                <v-link
-                    v-if="isDelivery"
-                    class="checkout-product-panel__item-header-link"
-                    tag="button"
-                    @click="onAddAddress"
-                >
-                    <v-svg name="plus" width="24" height="24" />&nbsp;Добавить новый адрес
-                </v-link>
-
-                <v-link
-                    v-else-if="selectedPickupPoint"
-                    class="checkout-product-panel__item-header-link"
-                    tag="button"
-                    @click="onChangePickupPoint"
-                >
-                    <v-svg name="pin" width="16" height="16" />&nbsp;&nbsp;Выбрать другой
-                </v-link>
-            </div>
-
-            <div class="checkout-product-panel__item checkout-product-panel__item--delivery">
-                <div class="checkout-product-panel__item-header" ref="date">
-                    <h2 class="checkout-product-panel__item-header-hl">Дата и время доставки</h2>
-                </div>
-
-                <transition name="fade-in" mode="out-in">
-                    <div key="not-empty" v-if="showPanels">
-                        <ul
-                            class="checkout-product-panel__item-list"
-                            v-if="computedDeliveryTypes && computedDeliveryTypes.length > 1"
-                        >
+                        <ul class="checkout-product-panel__item-list">
                             <checkout-option-card
-                                class="checkout-product-panel__item-card"
-                                v-for="deliveryType in computedDeliveryTypes"
-                                :key="`delivery-type-${deliveryType.id}-${deliveryType.methodID}`"
-                                :selected="deliveryType.id === selectedDeliveryType.id"
-                                readonly
-                                @cardClick="onSetDeliveryType(deliveryType.id)"
+                                    class="checkout-product-panel__item-card"
+                                    v-for="method in receiveMethods"
+                                    :key="method.id"
+                                    :selected="method.id === selectedReceiveMethodID"
+                                    :disabled="!method.isAvailable"
+                                    :loading="!method.isLoaded"
+                                    readonly
+                                    @cardClick="onSetReceiveMethod(method)"
                             >
-                                <p class="text-bold">{{ deliveryType.title }}</p>
-                                <p>{{ deliveryType.description }}</p>
-                                <p class="text-grey text-sm">{{ generatePackageNote(deliveryType) }}</p>
+                                <p class="text-bold">{{ method.title }}</p>
+                                <p>
+                                    <template v-if="method.price !== null"><price v-bind="method.price" />&nbsp;</template>
+                                    <template v-if="method.cost">
+                                        <price class="text-grey text-sm text-strike" v-bind="method.cost" />
+                                    </template>
+                                </p>
+                                <p v-if="method.description" class="text-grey text-sm">{{ method.description }}</p>
                             </checkout-option-card>
                         </ul>
+                    </div>
+                    <div class="checkout-product-panel__item">
+                        <div
+                                class="checkout-product-panel__item-header"
+                                :class="{ 'checkout-product-panel__item-header--error': addressError }"
+                                ref="address"
+                        >
+                            <h2 class="checkout-product-panel__item-header-hl">
+                                {{ isDelivery ? 'Адрес доставки' : 'Пункт самовывоза' }}&nbsp;
+                                <v-spinner width="24" height="24" :show="isAddressPending" />
+                            </h2>
+                        </div>
 
-                        <transition-group v-if="selectedDeliveryType" tag="ul" name="chunk-item">
-                            <li
-                                class="checkout-product-panel__item checkout-product-panel__item--child"
-                                v-for="chunkItem in computedSelectedDeliveryType.items"
-                                :key="chunkItem.id"
-                            >
-                                <div class="checkout-product-panel__item-header">
-                                    <h3 class="checkout-product-panel__item-header-hl">
-                                        {{ generateChunkNote(chunkItem) }}
-                                    </h3>
+                        <transition name="fade-in">
+                            <checkout-address-panel
+                                    v-if="isDelivery"
+                                    :error="addressError && addressError.length > 0"
+                                    @change-address="onChangeAddress"
+                                    @set-address="onSetAddress"
+                            />
 
-                                    <v-link
-                                        v-if="
+                            <checkout-pickup-point-panel
+                                    v-else
+                                    :error="addressError && addressError.length > 0"
+                                    @change-address="onChangePickupPoint"
+                            />
+                        </transition>
+
+                        <v-link
+                                v-if="isDelivery"
+                                class="checkout-product-panel__item-header-link"
+                                tag="button"
+                                @click="onAddAddress"
+                        >
+                            <v-svg name="plus" width="24" height="24" />&nbsp;Добавить новый адрес
+                        </v-link>
+
+                        <v-link
+                                v-else-if="selectedPickupPoint"
+                                class="checkout-product-panel__item-header-link"
+                                tag="button"
+                                @click="onChangePickupPoint"
+                        >
+                            <v-svg name="pin" width="16" height="16" />&nbsp;&nbsp;Выбрать другой
+                        </v-link>
+                    </div>
+                    <div class="checkout-product-panel__item checkout-product-panel__item--delivery">
+                        <div class="checkout-product-panel__item-header" ref="date">
+                            <h2 class="checkout-product-panel__item-header-hl">Дата и время доставки</h2>
+                        </div>
+
+                        <transition name="fade-in" mode="out-in">
+                            <div key="not-empty" v-if="showPanels">
+                                <ul
+                                        class="checkout-product-panel__item-list"
+                                        v-if="computedDeliveryTypes && computedDeliveryTypes.length > 1"
+                                >
+                                    <checkout-option-card
+                                            class="checkout-product-panel__item-card"
+                                            v-for="deliveryType in computedDeliveryTypes"
+                                            :key="`delivery-type-${deliveryType.id}-${deliveryType.methodID}`"
+                                            :selected="deliveryType.id === selectedDeliveryType.id"
+                                            readonly
+                                            @cardClick="onSetDeliveryType(deliveryType.id)"
+                                    >
+                                        <p class="text-bold">{{ deliveryType.title }}</p>
+                                        <p>{{ deliveryType.description }}</p>
+                                        <p class="text-grey text-sm">{{ generatePackageNote(deliveryType) }}</p>
+                                    </checkout-option-card>
+                                </ul>
+
+                                <transition-group v-if="selectedDeliveryType" tag="ul" name="chunk-item">
+                                    <li
+                                            class="checkout-product-panel__item checkout-product-panel__item--child"
+                                            v-for="chunkItem in computedSelectedDeliveryType.items"
+                                            :key="chunkItem.id"
+                                    >
+                                        <div class="checkout-product-panel__item-header">
+                                            <h3 class="checkout-product-panel__item-header-hl">
+                                                {{ generateChunkNote(chunkItem) }}
+                                            </h3>
+
+                                            <v-link
+                                                    v-if="
                                             chunkItem.availableDateTimes &&
                                             Object.keys(chunkItem.availableDateTimes).length > 1
                                         "
-                                        class="checkout-product-panel__item-header-link"
-                                        tag="button"
-                                        @click="onChangeDate(chunkItem.id)"
-                                    >
-                                        <v-svg name="edit" width="16" height="16" />
-                                        <template v-if="!isTablet">&nbsp;&nbsp;Изменить дату и время</template>
-                                    </v-link>
-                                </div>
-                                <ul class="checkout-product-panel__item-list">
-                                    <checkout-product-card
-                                        class="checkout-product-panel__item-card"
-                                        v-for="item in chunkItem.items"
-                                        :key="item.id"
-                                        :name="item.name"
-                                        :image="item.image"
-                                        :href="generateItemProductUrl(item)"
-                                    />
-                                </ul>
-                            </li>
-                        </transition-group>
-                    </div>
+                                                    class="checkout-product-panel__item-header-link"
+                                                    tag="button"
+                                                    @click="onChangeDate(chunkItem.id)"
+                                            >
+                                                <v-svg name="edit" width="16" height="16" />
+                                                <template v-if="!isTablet">&nbsp;&nbsp;Изменить дату и время</template>
+                                            </v-link>
+                                        </div>
+                                        <ul class="checkout-product-panel__item-list">
+                                            <checkout-product-card
+                                                    class="checkout-product-panel__item-card"
+                                                    v-for="item in chunkItem.items"
+                                                    :key="item.id"
+                                                    :name="item.name"
+                                                    :image="item.image"
+                                                    :href="generateItemProductUrl(item)"
+                                            />
+                                        </ul>
+                                    </li>
+                                </transition-group>
+                            </div>
 
-                    <div key="empty" v-else class="checkout-product-panel__item-empty">
-                        <h3 class="text-bold">Выберите адрес</h3>
+                            <div key="empty" v-else class="checkout-product-panel__item-empty">
+                                <h3 class="text-bold">Выберите адрес</h3>
+                            </div>
+                        </transition>
                     </div>
-                </transition>
-            </div>
-            <div class="checkout-product-panel__item checkout-product-panel__item--payment">
-                <div class="checkout-product-panel__item-header">
-                    <h2 class="checkout-product-panel__item-header-hl">
-                        Способ оплаты <v-spinner width="24" height="24" :show="isPaymentMethodPending" />
-                    </h2>
-                </div>
-
-                <ul class="checkout-product-panel__item-list">
-                    <checkout-option-card
-                        class="checkout-product-panel__item-card"
-                        v-for="method in filteredPaymentMethods"
-                        :key="method.id"
-                        :selected="method.id === selectedPaymentMethodID"
-                        readonly
-                        :disabled="!method.is_available"
-                        @cardClick="onSetPaymentMethod(method)"
-                    >
-                        <div v-html="method.button_text" class="checkout-product-panel__item-payment"></div>
-                        <div v-if="method.deficiency_price && method.deficiency_price > 0">
-                            {{ paymentMethodDeficiencyPriceTitle(method) }}
+                    <div class="checkout-product-panel__item checkout-product-panel__item--payment">
+                        <div class="checkout-product-panel__item-header">
+                            <h2 class="checkout-product-panel__item-header-hl">
+                                Способ оплаты <v-spinner width="24" height="24" :show="isPaymentMethodPending" />
+                            </h2>
                         </div>
-                    </checkout-option-card>
-                </ul>
 
-                <div
-                    v-if="(referralPartner && availableBonus > 0) || (!referralPartner && maxAmountBonus)"
-                    class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--bonus"
-                >
-                    <div class="checkout-product-panel__item-header">
-                        <v-check
-                            class="checkout-product-panel__item-panel-check checkout-paytype-container"
-                            type="radio"
-                            id="check-paytype-bonus"
-                            :model-value="selectedPayTypeID"
-                            :value="1"
-                            name="paytype"
-                            @change="onAddBonus(bonusAmount != 0 ? bonusAmount : maxAmountBonus)"
+                        <ul class="checkout-product-panel__item-list">
+                            <checkout-option-card
+                                    class="checkout-product-panel__item-card"
+                                    v-for="method in filteredPaymentMethods"
+                                    :key="method.id"
+                                    :selected="method.id === selectedPaymentMethodID"
+                                    readonly
+                                    :disabled="!method.is_available"
+                                    @cardClick="onSetPaymentMethod(method)"
+                            >
+                                <div v-html="method.button_text" class="checkout-product-panel__item-payment"></div>
+                                <div v-if="method.deficiency_price && method.deficiency_price > 0">
+                                    {{ paymentMethodDeficiencyPriceTitle(method) }}
+                                </div>
+                            </checkout-option-card>
+                        </ul>
+
+                        <div
+                                v-if="(referralPartner && availableBonus > 0) || (!referralPartner && maxAmountBonus)"
+                                class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--bonus"
                         >
-                            <h3 class="checkout-product-panel__item-header-hl checkout-paytype-content">
-                                <v-svg name="bonus" width="24" height="24" />&nbsp;Оплата бонусами&nbsp;
-                                <span v-if="!isTablet" class="text-sm text-normal text-grey">
+                            <div class="checkout-product-panel__item-header">
+                                <v-check
+                                        class="checkout-product-panel__item-panel-check checkout-paytype-container"
+                                        type="radio"
+                                        id="check-paytype-bonus"
+                                        :model-value="selectedPayTypeID"
+                                        :value="1"
+                                        name="paytype"
+                                        @change="onAddBonus(bonusAmount != 0 ? bonusAmount : maxAmountBonus)"
+                                >
+                                    <h3 class="checkout-product-panel__item-header-hl checkout-paytype-content">
+                                        <v-svg name="bonus" width="24" height="24" />&nbsp;Оплата бонусами&nbsp;
+                                        <span v-if="!isTablet" class="text-sm text-normal text-grey">
                                     (1 бонус = {{ bonusPerRub }} рубль)
                                 </span>
-                                &nbsp;
-                                <v-spinner width="24" height="24" :show="isBonusPending" />
-                            </h3>
-                        </v-check>
-                    </div>
+                                        &nbsp;
+                                        <v-spinner width="24" height="24" :show="isBonusPending" />
+                                    </h3>
+                                </v-check>
+                            </div>
 
-                    <div v-if="isBonusEdit" class="checkout-product-panel__item-controls">
-                        <template v-if="availableBonus > 0">
-                            <v-input
-                                class="checkout-product-panel__item-controls-input"
-                                type="number"
-                                min="0"
-                                placeholder="Сколько списать?"
-                                v-model="bonusAmount"
-                                v-focus
-                                :max="maxAmountBonus"
-                                :disabled="isBonusPending"
-                                @keydown.enter.prevent="onAddBonus(bonusAmount)"
-                            />
-                            <v-button
-                                class="btn--outline checkout-product-panel__item-controls-btn"
-                                @click="onAddBonus(bonusAmount)"
-                                :disabled="isBonusPending"
-                            >
-                                Применить
-                            </v-button>
-                        </template>
-                        <span class="checkout-product-panel__item-controls-text">
+                            <div v-if="isBonusEdit" class="checkout-product-panel__item-controls">
+                                <template v-if="availableBonus > 0">
+                                    <v-input
+                                            class="checkout-product-panel__item-controls-input"
+                                            type="number"
+                                            min="0"
+                                            placeholder="Сколько списать?"
+                                            v-model="bonusAmount"
+                                            v-focus
+                                            :max="maxAmountBonus"
+                                            :disabled="isBonusPending"
+                                            @keydown.enter.prevent="onAddBonus(bonusAmount)"
+                                    />
+                                    <v-button
+                                            class="btn--outline checkout-product-panel__item-controls-btn"
+                                            @click="onAddBonus(bonusAmount)"
+                                            :disabled="isBonusPending"
+                                    >
+                                        Применить
+                                    </v-button>
+                                </template>
+                                <span class="checkout-product-panel__item-controls-text">
                             Доступно для оплаты:&nbsp;
                             <strong class="text-bold">{{ maxAmountBonus }}</strong
                             >&nbsp;из&nbsp;{{ availableBonus }} бонусов
                         </span>
-                    </div>
-                    <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
-                        <template v-if="maxAmountBonus > 0">
+                            </div>
+                            <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
+                                <template v-if="maxAmountBonus > 0">
                             <span>
                                 Будет использовано <strong class="text-bold">{{ bonus }}</strong
-                                >&nbsp;из&nbsp;{{ availableBonus }} бонусных баллов&nbsp;
+                            >&nbsp;из&nbsp;{{ availableBonus }} бонусных баллов&nbsp;
                             </span>
-                            <div class="checkout-product-panel__item-card-panel">
-                                <div v-if="isTablet" class="text-sm text-normal text-grey">
-                                    (1 бонус = {{ bonusPerRub }} рубль)
-                                </div>
-                                <v-link
-                                    class="checkout-product-panel__item-card-link"
-                                    tag="button"
-                                    @click="onEditBonus"
-                                >
-                                    Изменить
-                                </v-link>
-                            </div>
-                        </template>
-                        <template v-else>
+                                    <div class="checkout-product-panel__item-card-panel">
+                                        <div v-if="isTablet" class="text-sm text-normal text-grey">
+                                            (1 бонус = {{ bonusPerRub }} рубль)
+                                        </div>
+                                        <v-link
+                                                class="checkout-product-panel__item-card-link"
+                                                tag="button"
+                                                @click="onEditBonus"
+                                        >
+                                            Изменить
+                                        </v-link>
+                                    </div>
+                                </template>
+                                <template v-else>
                             <span>
                                 Доступно <strong class="text-bold">0</strong>&nbsp;из&nbsp;{{ availableBonus }} бонусных
                                 баллов,&nbsp;т.к. товары уже со скидкой
                             </span>
-                            <div class="checkout-product-panel__item-card-panel">
-                                <div v-if="isTablet" class="text-sm text-normal text-grey">
-                                    (1 бонус = {{ bonusPerRub }} рубль)
-                                </div>
+                                    <div class="checkout-product-panel__item-card-panel">
+                                        <div v-if="isTablet" class="text-sm text-normal text-grey">
+                                            (1 бонус = {{ bonusPerRub }} рубль)
+                                        </div>
+                                    </div>
+                                </template>
                             </div>
-                        </template>
-                    </div>
-                </div>
+                        </div>
 
-                <div
-                    class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--sertificate"
-                >
-                    <div class="checkout-product-panel__item-header">
-                        <v-check
-                            class="checkout-product-panel__item-panel-check checkout-paytype-container"
-                            type="radio"
-                            id="check-paytype-certificate"
-                            :model-value="selectedPayTypeID"
-                            :value="2"
-                            name="paytype"
-                            @change="applyCertificate"
+                        <div
+                                class="checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--sertificate"
                         >
-                            <h3 class="checkout-product-panel__item-header-hl checkout-paytype-content">
-                                <v-svg name="gift" width="24" height="24" />&nbsp;Оплата подарочным сертификатом&nbsp;
-                                <v-spinner width="24" height="24" :show="isCertificatePending" />
-                            </h3>
-                        </v-check>
-                    </div>
+                            <div class="checkout-product-panel__item-header">
+                                <v-check
+                                        class="checkout-product-panel__item-panel-check checkout-paytype-container"
+                                        type="radio"
+                                        id="check-paytype-certificate"
+                                        :model-value="selectedPayTypeID"
+                                        :value="2"
+                                        name="paytype"
+                                        @change="applyCertificate"
+                                >
+                                    <h3 class="checkout-product-panel__item-header-hl checkout-paytype-content">
+                                        <v-svg name="gift" width="24" height="24" />&nbsp;Оплата подарочным сертификатом&nbsp;
+                                        <v-spinner width="24" height="24" :show="isCertificatePending" />
+                                    </h3>
+                                </v-check>
+                            </div>
 
-                    <div
-                        v-if="isСertAmountEdit"
-                        class="checkout-product-panel__item-controls checkout-product-panel__item"
-                    >
-                        <template v-if="isCertificateEdit">
-                            <v-input
-                                class="checkout-product-panel__item-controls-input"
-                                type="number"
-                                min="0"
-                                placeholder="Сколько списать?"
-                                v-model="customCertAmount"
-                                v-focus
-                                :max="maxCertificateDiscount"
-                                :disabled="isCertAmountPending"
-                                @keydown.enter.prevent="applyCertificate"
-                            />
-                            <v-button
-                                class="btn--outline checkout-product-panel__item-controls-btn"
-                                @click="applyCertificate"
-                                :disabled="isCertAmountPending"
+                            <div
+                                    v-if="isСertAmountEdit"
+                                    class="checkout-product-panel__item-controls checkout-product-panel__item"
                             >
-                                Применить
-                            </v-button>
-                            <span class="checkout-product-panel__item-controls-text checkout-product-panel__item">
+                                <template v-if="isCertificateEdit">
+                                    <v-input
+                                            class="checkout-product-panel__item-controls-input"
+                                            type="number"
+                                            min="0"
+                                            placeholder="Сколько списать?"
+                                            v-model="customCertAmount"
+                                            v-focus
+                                            :max="maxCertificateDiscount"
+                                            :disabled="isCertAmountPending"
+                                            @keydown.enter.prevent="applyCertificate"
+                                    />
+                                    <v-button
+                                            class="btn--outline checkout-product-panel__item-controls-btn"
+                                            @click="applyCertificate"
+                                            :disabled="isCertAmountPending"
+                                    >
+                                        Применить
+                                    </v-button>
+                                    <span class="checkout-product-panel__item-controls-text checkout-product-panel__item">
                                 Доступно для оплаты&nbsp;
                                 <strong class="text-bold">{{ maxCertificateDiscount }}</strong> ₽
                             </span>
-                        </template>
-                        <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
+                                </template>
+                                <div v-else class="checkout-product-panel__item-card checkout-product-panel__item-card--bonus">
                             <span
-                                v-if="!certificatePayment"
-                                class="checkout-product-panel__item-controls-text checkout-product-panel__item"
+                                    v-if="!certificatePayment"
+                                    class="checkout-product-panel__item-controls-text checkout-product-panel__item"
                             >
                                 Доступно для оплаты&nbsp;
                                 <strong class="text-bold">{{ maxCertificateDiscount }}</strong> ₽
                             </span>
-                            <span
-                                v-if="certificatePayment"
-                                class="checkout-product-panel__item-controls-text checkout-product-panel__item"
-                            >
+                                    <span
+                                            v-if="certificatePayment"
+                                            class="checkout-product-panel__item-controls-text checkout-product-panel__item"
+                                    >
                                 Будет использовано&nbsp;
                                 <strong class="text-bold">{{ certificatePayment }}</strong> ₽ с сертификатов —
                                 {{ aggCertNames }}
                             </span>
-                            <div class="checkout-product-panel__item-card-panel">
-                                <!-- <div v-if="isTablet" class="text-sm text-normal text-grey">
-                                    (1 бонус = {{ bonusPerRub }} рубль)
-                                </div> -->
-                                <v-link
-                                    class="checkout-product-panel__item-card-link"
-                                    tag="button"
-                                    @click="onEditCertificate"
+                                    <div class="checkout-product-panel__item-card-panel">
+                                        <!-- <div v-if="isTablet" class="text-sm text-normal text-grey">
+                                            (1 бонус = {{ bonusPerRub }} рубль)
+                                        </div> -->
+                                        <v-link
+                                                class="checkout-product-panel__item-card-link"
+                                                tag="button"
+                                                @click="onEditCertificate"
+                                        >
+                                            Изменить
+                                        </v-link>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                    v-if="isСertAmountEdit"
+                                    @click="onToggleActivateCert"
+                                    @mousedown.prevent
+                                    class="checkout-activate-toggle checkout-product-panel__item-header-hl"
+                            >
+                                <span>Активировать ещё один сертификат</span>
+                                <v-svg
+                                        v-if="!isVisibleActivateCert"
+                                        name="arrow-down"
+                                        width="24"
+                                        height="24"
+                                        @click="onToggleActivateCert"
+                                />
+                                <v-svg
+                                        v-if="isVisibleActivateCert"
+                                        name="arrow-up"
+                                        width="24"
+                                        height="24"
+                                        @click="onToggleActivateCert"
+                                />
+                            </div>
+                            <div
+                                    v-if="isVisibleActivateCert || !isСertAmountEdit"
+                                    class="checkout-product-panel__item-controls checkout-activate-baseline"
+                            >
+                                <v-input
+                                        v-model="certificateCode"
+                                        class="checkout-product-panel__item-controls-input"
+                                        placeholder="Введите номер сертификата"
+                                        @keydown.enter.prevent="activateCertificate"
+                                        :error="activateError"
+                                        :success="activateSuccess"
+                                        :show-error="!!activateError"
+                                        :show-success="!!activateSuccess"
+                                        @input="onActivateInput"
+                                />
+                                <v-button
+                                        class="btn--outline checkout-product-panel__item-controls-btn"
+                                        :disabled="!certificateCode"
+                                        @click="activateCertificate"
+                                        @mousedown.prevent
                                 >
-                                    Изменить
-                                </v-link>
+                                    Активировать
+                                </v-button>
+                            </div>
+                        </div>
+
+                        <div
+                                class="checkout-product-panel__item checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--settings"
+                        >
+                            <div class="checkout-product-panel__item-panel" ref="agreement">
+                                <!-- #58436 -->
+                                <!-- <v-check
+                                    id="check-promo"
+                                    :checked="subscribe"
+                                    class="checkout-product-panel__item-panel-check"
+                                    name="promo"
+                                    @change="SET_SUBSCRIBE(Number($event))"
+                                    >
+                                    Сообщать мне об акциях, скидках и специальных предложениях
+                                </v-check> -->
+                                <v-check
+                                        id="check-agreement"
+                                        :checked="agreement"
+                                        class="checkout-product-panel__item-panel-check"
+                                        name="agreement"
+                                        @change="onSetAgreement($event)"
+                                >
+                                    Я согласен с
+                                    <router-link
+                                            :to="{ name: 'InfoPageAgreement', params: { code: agreementTypes.PUBLIC_OFFER } }"
+                                            target="_blank"
+                                    >
+                                        условиями оферты
+                                    </router-link>
+                                    и
+                                    <router-link
+                                            :to="{ name: 'InfoPageAgreement', params: { code: agreementTypes.PERSONAL_POLICY } }"
+                                            target="_blank"
+                                    >
+                                        политикой конфиденциальности
+                                    </router-link>
+                                </v-check>
+                                <transition name="slide-in-bottom" mode="out-in">
+                                    <div class="status-color-error" :key="agreementError" v-if="agreementError">
+                                        {{ agreementError }}
+                                    </div>
+                                </transition>
+                            </div>
+
+                            <div class="checkout-product-panel__item-panel">
+                                <v-check
+                                        class="checkout-product-panel__item-panel-check"
+                                        type="radio"
+                                        v-for="confirmation in confirmationTypes"
+                                        :key="confirmation.id"
+                                        :id="`check-accept-${confirmation.id}`"
+                                        :model-value="selectedConfirmationTypeID"
+                                        :value="confirmation.id"
+                                        :name="confirmation.type"
+                                        @change="onSetConfirmationType"
+                                >
+                                    {{ confirmation.title }}
+                                </v-check>
                             </div>
                         </div>
                     </div>
-                    <div
-                        v-if="isСertAmountEdit"
-                        @click="onToggleActivateCert"
-                        @mousedown.prevent
-                        class="checkout-activate-toggle checkout-product-panel__item-header-hl"
-                    >
-                        <span>Активировать ещё один сертификат</span>
-                        <v-svg
-                            v-if="!isVisibleActivateCert"
-                            name="arrow-down"
-                            width="24"
-                            height="24"
-                            @click="onToggleActivateCert"
-                        />
-                        <v-svg
-                            v-if="isVisibleActivateCert"
-                            name="arrow-up"
-                            width="24"
-                            height="24"
-                            @click="onToggleActivateCert"
-                        />
-                    </div>
-                    <div
-                        v-if="isVisibleActivateCert || !isСertAmountEdit"
-                        class="checkout-product-panel__item-controls checkout-activate-baseline"
-                    >
-                        <v-input
-                            v-model="certificateCode"
-                            class="checkout-product-panel__item-controls-input"
-                            placeholder="Введите номер сертификата"
-                            @keydown.enter.prevent="activateCertificate"
-                            :error="activateError"
-                            :success="activateSuccess"
-                            :show-error="!!activateError"
-                            :show-success="!!activateSuccess"
-                            @input="onActivateInput"
-                        />
-                        <v-button
-                            class="btn--outline checkout-product-panel__item-controls-btn"
-                            :disabled="!certificateCode"
-                            @click="activateCertificate"
-                            @mousedown.prevent
-                        >
-                            Активировать
-                        </v-button>
-                    </div>
                 </div>
+            </transition>
 
-                <div
-                    class="checkout-product-panel__item checkout-product-panel__item checkout-product-panel__item--child checkout-product-panel__item--settings"
-                >
-                    <div class="checkout-product-panel__item-panel" ref="agreement">
-                        <!-- #58436 -->
-                        <!-- <v-check
-                            id="check-promo"
-                            :checked="subscribe"
-                            class="checkout-product-panel__item-panel-check"
-                            name="promo"
-                            @change="SET_SUBSCRIBE(Number($event))"
-                            >
-                            Сообщать мне об акциях, скидках и специальных предложениях
-                        </v-check> -->
-                        <v-check
-                            id="check-agreement"
-                            :checked="agreement"
-                            class="checkout-product-panel__item-panel-check"
-                            name="agreement"
-                            @change="onSetAgreement($event)"
-                        >
-                            Я согласен с
-                            <router-link
-                                :to="{ name: 'InfoPageAgreement', params: { code: agreementTypes.PUBLIC_OFFER } }"
-                                target="_blank"
-                            >
-                                условиями оферты
-                            </router-link>
-                            и
-                            <router-link
-                                :to="{ name: 'InfoPageAgreement', params: { code: agreementTypes.PERSONAL_POLICY } }"
-                                target="_blank"
-                            >
-                                политикой конфиденциальности
-                            </router-link>
-                        </v-check>
-                        <transition name="slide-in-bottom" mode="out-in">
-                            <div class="status-color-error" :key="agreementError" v-if="agreementError">
-                                {{ agreementError }}
-                            </div>
-                        </transition>
-                    </div>
-
-                    <div class="checkout-product-panel__item-panel">
-                        <v-check
-                            class="checkout-product-panel__item-panel-check"
-                            type="radio"
-                            v-for="confirmation in confirmationTypes"
-                            :key="confirmation.id"
-                            :id="`check-accept-${confirmation.id}`"
-                            :model-value="selectedConfirmationTypeID"
-                            :value="confirmation.id"
-                            :name="confirmation.type"
-                            @change="onSetConfirmationType"
-                        >
-                            {{ confirmation.title }}
-                        </v-check>
-                    </div>
-                </div>
-            </div>
         </template>
         <attention-panel class="checkout-product-panel__attention" v-else>
             К сожалению, по данным параметрам заказа доставка не может быть реализована. <br />
@@ -822,6 +827,10 @@ export default {
 
         isReceiveMethodPending() {
             return this[RECEIVE_METHOD_STATUS] === requestStatus.PENDING;
+        },
+
+        isMainRecipient() {
+            return this[RECIPIENTS][0].name !== null && this[RECIPIENTS][0].phone !== null;
         },
 
         filteredPaymentMethods() {

@@ -63,6 +63,7 @@
 import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
 import { mapState, mapActions } from 'vuex';
 
@@ -92,6 +93,7 @@ export default {
         VButton,
         VInput,
         GeneralModal,
+        VLink
     },
 
     validations: {
@@ -119,6 +121,8 @@ export default {
             isDisabledGetCodeBtn: false,
         };
     },
+
+    emits: ['successfulSavePhone'],
 
     computed: {
         ...mapState(MODAL_MODULE, {
@@ -182,8 +186,11 @@ export default {
                     code,
                     type: verificationCodeType.PROFILE_PHONE,
                 });
+                console.log('value - ', value, 'code - ', code)
+                this.$emit('successfulSavePhone');
                 this.onClose();
             } catch (error) {
+                this.$emit('successfulSavePhone');
                 const { data } = error;
                 const { message } = data || {};
                 this.error = message;
