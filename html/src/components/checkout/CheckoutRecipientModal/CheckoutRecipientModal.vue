@@ -12,8 +12,6 @@
                 <h3 v-if="!isTablet" class="checkout-recipient-modal__hl">{{ header }}</h3>
                 <form class="checkout-recipient-modal__form" @submit.prevent="onSubmit">
                     <label class="v-input__label">Фамилия, Имя и Отчество</label>
-                    {{recipients}}
-                    isPhoneEditOpen: {{isPhoneEditOpen}}
                     <v-suggestion
                             class="cabinet-info-panel__item-input"
                             placeholder="Введите свою фамилию и имя"
@@ -22,7 +20,7 @@
                             :error="fioError"
                             @input="debounce_suggestFio"
                             @selected="onFioSuggestSelect"
-                            style="max-width: 100%;"
+                            style="max-width: 100%; height: 39px;"
                     >
                         <template v-slot:item="{ item }">
                             {{ item.value }}
@@ -240,7 +238,7 @@ export default {
         ...mapActions(CABINET_MODULE_PATH, [UPDATE_PERSONAL, SEND_CODE]),
 
         successfulSavePhone() {
-            console.log('save successfulSavePhone');
+            // Сохраняем ФИО и закрываем модалку
             this.emitSaveFioBySuggestion();
             this.onClose();
         },
@@ -249,8 +247,9 @@ export default {
             let recipient = { ...this.form };
 
             if (this.isMainRecipient){
-                // Парсим ФИО как для strongFullNameValidation и сохраняем в БД как имя пользователя
+                // Парсим ФИО как для strongFullNameValidation
                 let fio = recipient.name.split(' ').filter((chunk) => chunk !== '').join(' ').split(' ');
+                // сохраняем в БД как имя пользователя
                 this.updatePersonal(fio[0], fio[1], fio[2]);
             }
 
@@ -260,7 +259,7 @@ export default {
                     .filter((chunk) => chunk !== '')
                     .join(' ');
             }
-
+            // Сохраняет получателя без сохранения в БД (скорее всего)
             this.$emit('save', recipient);
         },
 
@@ -284,15 +283,9 @@ export default {
                 this.fioError = null;
                 this.internalFullName = `${surname} ${name} ${patronymic}`;
                 this.form.name = `${surname} ${name} ${patronymic}`;
-
-                // if (this.isMainRecipientEmpty) {
-                //     this.updatePersonal(surname, name, patronymic);
-                //     this.emitSaveFioBySuggestion();
-                // }
             } else {
                 this.internalFullName = item.value;
                 this.form.name = item.value;
-                // this.emitSaveFioBySuggestion();
                 this.fioError = 'Укажите полностью фамилию, имя и отчество';
             }
         },
@@ -313,10 +306,10 @@ export default {
             this.$v.$touch();
             if (this.$v.$invalid) return;
 
+            // Только для основного пользователя (если вошел без ФИО или телефона)
             if (this.isMainRecipient) {
                 // Подтверждение мобильного телефона
                 const { phone } = { ...this.form };
-                console.log(phone)
                 try {
                     await this[SEND_CODE]({
                         destination: phone,

@@ -186,11 +186,11 @@ export default {
                     code,
                     type: verificationCodeType.PROFILE_PHONE,
                 });
-                console.log('value - ', value, 'code - ', code)
+
+                // При правильном коде пробрасываем наверх success
                 this.$emit('successfulSavePhone');
                 this.onClose();
             } catch (error) {
-                this.$emit('successfulSavePhone');
                 const { data } = error;
                 const { message } = data || {};
                 this.error = message;

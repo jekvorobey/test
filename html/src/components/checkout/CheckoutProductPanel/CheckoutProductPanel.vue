@@ -11,7 +11,7 @@
                 >
                     <h2 class="checkout-product-panel__item-header-hl">Получатель</h2>
                 </div>
-                {{isMainRecipient}}
+
                 <ul class="checkout-product-panel__item-list">
                     <checkout-option-card
                         class="checkout-product-panel__item-card"
@@ -36,7 +36,7 @@
                             <span class="status-color-error">{{ recipientError }}</span>
                         </p>
                         <p v-if="recipient.name">{{ recipient.name }}</p>
-                        <p v-else>Укажите пожалуйста ваше имя</p>
+                        <p v-else>Укажите пожалуйста ваше ФИО</p>
                         <p v-if="recipient.phone">{{ formatPhoneNumber(recipient.phone) }}</p>
                         <p v-else>Укажите пожалуйста ваш телефон</p>
                         <p v-if="recipient.email">{{ recipient.email }}</p>
