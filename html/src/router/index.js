@@ -133,6 +133,14 @@ export default function createRouter(container) {
             });
     });
 
+    // После спящего режима или разрыва соединения, возможная ошибка - "loading chunk ... failed"
+    // В таком случае принудительно перезагружаем страницу
+    router.onError((error) => {
+        if (/loading chunk \d* failed./i.test(error.message)) {
+            window.location.reload();
+        }
+    });
+
     container.bind(injectionType.ROUTER).toConstantValue(router);
     return router;
 }
