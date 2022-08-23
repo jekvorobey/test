@@ -1,0 +1,14 @@
+services:
+    container_name: ibt-front
+    image: registry.ibt.ru:5050/ibt.studio/ibt-front/ibt-front:v1.20.0
+    restart: always
+    volumes:
+      - ./svc/ibt-front/.env.json:/var/www/html/.env.json
+      - ./svc/ibt-front/robots.txt:/var/www/public/robots.txt
+    hostname: ibt-front
+    networks:
+      prod.svc.cluster.local:
+        aliases:
+          - ibt-front.prod.svc.cluster.local
+    extra_hosts:
+      - "mysql-master:host-gateway"
