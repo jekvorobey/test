@@ -3,8 +3,8 @@ services:
     image: registry.ibt.ru:5050/ibt.studio/ibt-front/ibt-front:v1.20.0
     restart: always
     volumes:
-      - ./svc/ibt-front/.env.json:/var/www/html/.env.json
-      - ./svc/ibt-front/robots.txt:/var/www/public/robots.txt
+      - /home/iBT.studio/svc/ibt-front/.env.json:/var/www/html/.env.json
+      - /home/iBT.studio/svc/ibt-front/robots.txt:/var/www/public/robots.txt
     hostname: ibt-front
     networks:
       prod.svc.cluster.local:
