@@ -1,4 +1,5 @@
 services:
+  ibt-front:
     container_name: ibt-front
     image: registry.ibt.ru:5050/ibt.studio/ibt-front/ibt-front:v1.20.0
     restart: always
