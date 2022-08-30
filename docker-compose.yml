@@ -1,15 +1,15 @@
 services:
   ENV-ibt-front:
     container_name: ENV-ibt-front
-    image: registry.ibt.ru:5050/ibt-admin:${TAG}
+    image: registry.ibt.ru:5050/ibt-front:${TAG}
     restart: always
     env_file:
-      - /home/iBT.studio/ENV/svc/ibt-admin/.env
+      - /home/iBT.studio/ENV/svc/ibt-front/.env
     environment:
-      - PHP_SOCK_FILE=/sockets/ENV-ibt-admin_php
+      - PHP_SOCK_FILE=/sockets/ENV-ibt-front_php
     volumes:
       - /sockets/:/sockets/
-      - /home/iBT.studio/ENV/svc/ibt-admin/.env:/var/www/.env
+      - /home/iBT.studio/ENV/svc/ibt-front/.env:/var/www/.env
     hostname: ibt-front.ENV
     networks:
       ENV.svc.cluster.local:
