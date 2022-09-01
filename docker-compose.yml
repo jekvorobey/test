@@ -9,7 +9,7 @@ services:
       - PHP_SOCK_FILE=/sockets/ENV-ibt-front_php
     volumes:
       - /sockets/:/sockets/
-      - /home/iBT.studio/ENV/svc/ibt-front/.env:/var/www/.env
+      - /home/iBT.studio/ENV/svc/ibt-front/html/.env.json:/var/www/html/.env.json
     hostname: ibt-front.ENV
     networks:
       ENV.svc.cluster.local:
