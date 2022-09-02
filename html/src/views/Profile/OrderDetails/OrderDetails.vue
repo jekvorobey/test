@@ -605,15 +605,13 @@ export default {
         },
 
         prepareProduct(p) {
-            console.log('p --- ', p)
             const { category_code, code, variantGroup } = p;
             let values = null;
 
             if (variantGroup) {
-                console.log('variantGroup ---- ', variantGroup)
                 const { characteristics = [], combinations = [] } = variantGroup;
 
-                if(combinations.length > 0){
+                if (combinations.length > 0) {
                     try {
                         const { props } = combinations.find((c) => c.code === code);
                         if (props) {
@@ -624,8 +622,8 @@ export default {
                                 return `${name}: ${option.name}`;
                             });
                         }
-                    }catch(e) {
-                        console.log(e)
+                    } catch (e) {
+                        console.log(e);
                     }
                 }
             }
