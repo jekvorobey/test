@@ -605,18 +605,29 @@ export default {
         },
 
         prepareProduct(p) {
+            console.log('p --- ', p)
             const { category_code, code, variantGroup } = p;
             let values = null;
 
             if (variantGroup) {
+                console.log('variantGroup ---- ', variantGroup)
                 const { characteristics = [], combinations = [] } = variantGroup;
-                const { props } = combinations.find((c) => c.code === code);
-                const keys = Object.keys(props);
-                values = keys.map((k) => {
-                    const { options, name } = characteristics.find((c) => c.code === k);
-                    const option = options.find((o) => o.value === props[k]);
-                    return `${name}: ${option.name}`;
-                });
+
+                if(combinations.length > 0){
+                    try {
+                        const { props } = combinations.find((c) => c.code === code);
+                        if (props) {
+                            const keys = Object.keys(props);
+                            values = keys.map((k) => {
+                                const { options, name } = characteristics.find((c) => c.code === k);
+                                const option = options.find((o) => o.value === props[k]);
+                                return `${name}: ${option.name}`;
+                            });
+                        }
+                    }catch(e) {
+                        console.log(e)
+                    }
+                }
             }
 
             const note = values && values.join(', ');
