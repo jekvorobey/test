@@ -157,6 +157,7 @@ export default {
                         { name: 'Bonuses', exact: true, hidden: this[REFERRAL_PARTNER] },
                         { name: 'Orders' },
                         { name: 'Certificates' },
+                        { name: 'Documents' },
                     ],
                 },
             ];
@@ -172,7 +173,6 @@ export default {
                         { name: 'Seo' },
                         { name: 'Promocodes' },
                         { name: 'Account' },
-                        { name: 'Documents', exact: true },
                     ],
                 });
 

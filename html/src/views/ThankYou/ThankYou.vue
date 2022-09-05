@@ -33,6 +33,9 @@
                                         name="Получатель"
                                         :value="order.email"
                                     />
+                                    <info-row v-if="order.payment_method === paymentTypes.BANK_TRANSFER_FOR_LEGAL" class="thank-you-view__panel-item" name="Счёт-оферта">
+                                        <a class="document-card__bottom-link" :href="invoiceOfferLink(order.invoiceOfferFileId)" download>Скачать</a>
+                                    </info-row>
                                 </ul>
                                 <attention-panel class="thank-you-view__panel-attention">
                                     Посмотреть информацию о дате и месте проведения мастер-классов можно в письме,
@@ -46,6 +49,9 @@
                                     name="Номер заказа"
                                     :value="order.number"
                                 />
+                                <info-row v-if="order.payment_method === paymentTypes.BANK_TRANSFER_FOR_LEGAL" class="thank-you-view__panel-item" name="Счёт-оферта">
+                                    <a class="document-card__bottom-link" :href="invoiceOfferLink(order.invoiceOfferFileId)" download>Скачать</a>
+                                </info-row>
                                 <info-row class="thank-you-view__panel-item" name="Получатель" :value="fullUserInfo" />
                                 <info-row
                                     class="thank-you-view__panel-item"
@@ -199,13 +205,12 @@ import VCartHeader from '@components/VCartHeader/VCartHeader.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
-import PackageProductCard from '@components/PackageProductCard/PackageProductCard.vue';
 
 import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
 import CartBundleProductCard from '@components/CartBundleProductCard/CartBundleProductCard.vue';
 import CartMasterClassCard from '@components/cart/CartMasterClassCard/CartMasterClassCard.vue';
 
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import { LOCALE } from '@store';
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
 
@@ -226,14 +231,14 @@ import { $store, $progress, $retailRocket } from '@services';
 import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 import { getProfileOrder } from '@api';
 import { fileExtension, httpCodes } from '@enums';
-import { receiveMethods } from '@enums/checkout';
+import { receiveMethods, paymentTypes } from '@enums/checkout';
 import { orderPaymentStatus } from '@enums/order';
 import { cartItemTypes } from '@enums/product';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings, cancelRoute } from '@settings';
 import { formatPhoneNumber, getDate } from '@util';
 import { createNotFoundRoute } from '@util/router';
 import { toAddressString, toPointAddressString } from '@util/address';
-import { generatePictureSourcePath } from '@util/file';
+import { generatePictureSourcePath, generateFileOriginalPath } from '@util/file';
 import { generateMasterclassUrl, generateProductUrl } from '@util/catalog';
 import metaMixin from '@plugins/meta';
 import './ThankYou.css';
@@ -271,6 +276,7 @@ export default {
     data() {
         return {
             creditWidgetIsInitialized: false,
+            paymentTypes: paymentTypes,
         };
     },
 
@@ -533,6 +539,10 @@ export default {
 
                 this.$refs.buyCreditButton.click();
             });
+        },
+
+        invoiceOfferLink(file_id) {
+            return generateFileOriginalPath(file_id);
         },
     },
 

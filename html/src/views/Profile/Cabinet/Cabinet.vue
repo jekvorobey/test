@@ -106,7 +106,7 @@
             </div>
         </info-panel>
 
-        <cabinet-requisites-panel v-if="referralPartner" class="cabinet-view__panel" />
+        <cabinet-requisites-panel class="cabinet-view__panel" />
 
         <transition name="fade">
             <password-edit-modal v-if="$isServer || (hasPhone && isPasswordEditOpen)" />

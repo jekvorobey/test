@@ -85,6 +85,14 @@
                         name="Email"
                         :value="receiverEmail"
                     />
+
+                    <info-row
+                        v-if="order.payment_method === paymentTypes.BANK_TRANSFER_FOR_LEGAL"
+                        class="order-details-view__details-row"
+                        name="Счёт-оферта"
+                    >
+                        <a class="document-card__bottom-link" :href="invoiceOfferLink(order.invoiceOfferFileId)" download>Скачать</a>
+                    </info-row>
                 </div>
                 <div class="order-details-view__details-controls">
                     <template v-if="canPay">
@@ -274,13 +282,13 @@ import {
 } from '@store/modules/Profile/modules/Orders/actions';
 
 import { fileExtension, modalName } from '@enums';
-import { receiveMethods } from '@enums/checkout';
+import { receiveMethods, paymentTypes } from '@enums/checkout';
 import { deliveryStatus, orderPaymentStatus } from '@enums/order';
 import { dayMonthLongDateSettings, hourMinuteTimeSettings } from '@settings';
 import { orderDateLocaleOptions } from '@settings/profile';
 import { toAddressString } from '@util/address';
 import { generateMasterclassUrl, generateTicketDownloadUrl, generateProductUrl } from '@util/catalog';
-import { generatePictureSourcePath } from '@util/file';
+import { generateFileOriginalPath, generatePictureSourcePath } from '@util/file';
 import {
     getOrderStatusColorClass,
     getDeliveryStatusColorClass,
@@ -332,6 +340,7 @@ export default {
         return {
             isDisabled: false,
             creditWidgetIsInitialized: false,
+            paymentTypes: paymentTypes,
         };
     },
 
@@ -627,6 +636,10 @@ export default {
                     elm: 'buy-credit',
                 });
             });
+        },
+
+        invoiceOfferLink(file_id) {
+            return generateFileOriginalPath(file_id);
         },
     },
 

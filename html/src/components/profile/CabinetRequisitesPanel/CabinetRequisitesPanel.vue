@@ -21,6 +21,24 @@
                         disabled
                     />
                 </info-row>
+                <info-row class="cabinet-requisites-panel__item" name="Юридический адрес">
+                    <v-input
+                        class="cabinet-requisites-panel__item-input"
+                        :value="$v.form.address.$model"
+                        :show-error="false"
+                        disabled
+                    />
+                </info-row>
+                <info-row class="cabinet-requisites-panel__item" name="КПП">
+                    <v-input
+                        class="cabinet-requisites-panel__item-input"
+                        placeholder="Введите КПП"
+                        :value="$v.form.kpp.$model"
+                        maxLength="9"
+                        :show-error="false"
+                        @input="onKppChange"
+                    />
+                </info-row>
                 <info-row class="cabinet-requisites-panel__item" name="Расчетный счет">
                     <v-input
                         class="cabinet-requisites-panel__item-input"
@@ -75,9 +93,8 @@
             </ul>
         </div>
         <div class="cabinet-requisites-panel__controls">
-            <v-button class="cabinet-requisites-panel__save-btn" :disabled="saveDisabled" @click="onSave"
-                >Сохранить реквизиты</v-button
-            >
+            <v-button class="cabinet-requisites-panel__save-btn" :disabled="saveDisabled" @click="onSave">
+                Сохранить реквизиты</v-button>
         </div>
     </info-panel>
 </template>
@@ -89,10 +106,9 @@ import VButton from '@controls/VButton/VButton.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
 
-import _debounce from 'lodash/debounce';
-import { mapActions, mapState, mapGetters } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
-import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
+import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import { NAME as PROFILE_MODULE } from '@store/modules/Profile';
@@ -100,9 +116,7 @@ import { NAME as CABINET_MODULE, REQUISITES } from '@store/modules/Profile/modul
 import { UPDATE_REQUISITES } from '@store/modules/Profile/modules/Cabinet/actions';
 
 import { $dadata } from '@services';
-import { httpCodes, modalName } from '@enums';
-import { genderType } from '@enums/profile';
-import { phoneMaskOptions } from '@settings';
+import { modalName } from '@enums';
 import validationMixin, { required, inn, rs, bik } from '@plugins/validation';
 import './CabinetRequisitesPanel.css';
 
@@ -126,9 +140,9 @@ export default {
                 required,
             },
 
-            // address: {
-            //     required,
-            // },
+            address: {
+                required,
+            },
 
             payment_city: {
                 required,
@@ -153,6 +167,8 @@ export default {
                 bik,
             },
 
+            kpp: {},
+
             correspondentAccount: {
                 required,
             },
@@ -168,6 +184,7 @@ export default {
                 account: null,
                 bank: null,
                 bik: null,
+                kpp: null,
                 correspondentAccount: null,
                 payment_city: null,
             },
@@ -201,11 +218,11 @@ export default {
 
         resetCompany() {
             this.form.name = null;
+            this.form.address = null;
         },
 
         resetBank() {
             this.form.correspondentAccount = null;
-            // this.form.address = null;
             this.form.payment_city = null;
             this.form.b = null;
         },
@@ -218,6 +235,7 @@ export default {
 
                 const suggestion = suggestions[0];
                 this.form.name = suggestion.data.name.short_with_opf;
+                this.form.address = suggestion.data.address.unrestricted_value;
             } catch (error) {
                 $logger.error(error);
             }
@@ -238,7 +256,6 @@ export default {
                 }
 
                 this.form.correspondentAccount = suggestion.data.correspondent_account;
-                // this.form.address = suggestion.data.address.unrestricted_value;
                 this.form.payment_city = suggestion.data.payment_city;
             } catch (error) {
                 $logger.error(error);
@@ -249,6 +266,10 @@ export default {
             this.form.inn = value;
             if (!this.$v.form.inn.$invalid) this.findCompany(value);
             else this.resetCompany();
+        },
+
+        onKppChange(value) {
+            this.form.kpp = value;
         },
 
         onBikChange(value) {

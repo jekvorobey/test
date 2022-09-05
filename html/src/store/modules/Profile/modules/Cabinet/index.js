@@ -59,6 +59,7 @@ export default function createModule() {
                 name: null,
                 address: null,
                 inn: null,
+                kpp: null,
                 account: null,
                 bank: null,
                 bik: null,
