@@ -1,0 +1,82 @@
+.cookie-alert{
+    background: #000000;
+    color: #ffffff;
+    &__wrapper{
+         max-width: 1440px;
+         margin: 0 auto;
+         overflow: hidden;
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         padding: 6px 108px;
+         font-size: .775rem;
+         line-height: 1.5rem;
+         font-weight: 400;
+         letter-spacing: .04em;
+     }
+
+    &_btn {
+         height: 23px;
+     }
+}
+.fixed-cookie-alert {
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+}
+@media (max-width: 1023px) {
+    .fixed-cookie-alert {
+        top: 64px;
+    }
+    .cookie-alert {
+        &__wrapper {
+             padding: 6px 24px;
+         }
+     }
+}
+@media (max-width: 767px){
+    .fixed-cookie-alert {
+        top: 48px;
+    }
+}
+
+@media (max-width: 425px) {
+    .cookie-alert {
+        &__wrapper {
+             line-height: 1rem;
+         }
+    }
+}
+.cookie-alert-close{
+    fill: #F46325;
+}
+
+.slip-enter-active {
+    animation: slipIn .3s;
+}
+
+.slip-leave-active {
+    animation: slipOut .3s;
+}
+
+@keyframes slipIn {
+    from {
+        max-height: 0;
+        visibility: hidden;
+    }
+    to {
+        max-height: 500px;
+        visibility: visible;
+    }
+}
+
+@keyframes slipOut {
+    from {
+        max-height: 500px;
+        visibility: visible;
+    }
+    to {
+        max-height: 0;
+        visibility: hidden;
+    }
+}
