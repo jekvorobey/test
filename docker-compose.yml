@@ -1,0 +1,20 @@
+services:
+  ENV-ibt-front:
+    container_name: ENV-ibt-front
+    image: registry.ibt.ru:5050/ibt-front:${TAG}
+    restart: always
+    env_file:
+      - /home/iBT.studio/ENV/svc/ibt-front/.env
+    environment:
+      - PHP_SOCK_FILE=/sockets/ENV-ibt-front_php
+    volumes:
+      - /sockets/:/sockets/
+      - /home/iBT.studio/ENV/svc/ibt-front/html/.env.json:/var/www/html/.env.json
+    hostname: ibt-front.ENV
+    networks:
+      ENV.svc.cluster.local:
+        aliases:
+          - ibt-front.ENV.svc.cluster.local
+    extra_hosts:
+      - "mysql-master:host-gateway"
+      - "redis-ENV:host-gateway"
