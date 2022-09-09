@@ -18,3 +18,4 @@ services:
     extra_hosts:
       - "mysql-master:host-gateway"
       - "redis-ENV:host-gateway"
+      - "front.stage.ibt.ru:77.223.118.180"
