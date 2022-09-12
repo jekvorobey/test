@@ -19,3 +19,5 @@ services:
       - "mysql-master:host-gateway"
       - "redis-ENV:host-gateway"
       - "front.stage.ibt.ru:77.223.118.180"
+      - "ibt.ru:77.223.118.180"
+      - "front.prod.ibt.ru:77.223.118.180"
