@@ -18,6 +18,6 @@ services:
     extra_hosts:
       - "mysql-master:host-gateway"
       - "redis-ENV:host-gateway"
-      - "front.stage.ibt.ru:ibt-front.stage.svc.cluster.local"
-      - "ibt.ru:ibt-front.prod.svc.cluster.local"
-      - "front.prod.ibt.ru:ibt-front.prod.svc.cluster.local"
+      - "front.stage.ibt.ru:77.223.118.180"
+      - "ibt.ru:77.223.118.180"
+      - "front.prod.ibt.ru:77.223.118.180"
