@@ -37,6 +37,7 @@
 <script>
 import Cleave from 'cleave.js';
 import inputMixin from './inputMixin';
+import telPaste from '@plugins/validation';
 import './VInput.css';
 
 export default {
@@ -138,16 +139,19 @@ export default {
          * @param newValue
          */
         value(newValue) {
+
+            let cleanValue = '+7' + newValue.slice(0, newValue.length).replace(/^[+,7,8]+/, '');
+            
             /* istanbul ignore if */
             if (!this.engine) return;
 
             // when v-model is not masked (raw)
-            if (this.raw && newValue === this.engine.getRawValue()) return;
+            if (this.raw && cleanValue === this.engine.getRawValue()) return;
             //  when v-model is masked (NOT raw)
-            if (!this.raw && newValue === this.$refs.input.value) return;
+            if (!this.raw && cleanValue === this.$refs.input.value) return;
 
             // Lastly set newValue
-            this.engine.setRawValue(newValue);
+            this.engine.setRawValue(cleanValue);
         },
     },
 
@@ -168,8 +172,10 @@ export default {
          */
         onValueChanged(event) {
             if (!this.isInitialized) return;
-            let value = this.raw ? event.target.rawValue : event.target.value;
-            this.$emit('input', value);
+            let value = this.raw ? event.target.rawValue: event.target.value;
+
+            // this.$emit('input', '+7' + value.slice(0, value.length).replace(/^[+,7,8]+/, ''));
+            this.$emit('input', value)
 
             // Call original callback method
             if (typeof this.onValueChangedFn === 'function') this.onValueChangedFn.call(this, event);
@@ -189,6 +195,7 @@ export default {
                 this.$refs.input.focus();
             }, 400);
         }
+        console.log(this.$refs)
     },
 
     /**
