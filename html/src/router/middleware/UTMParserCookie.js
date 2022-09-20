@@ -3,10 +3,11 @@ import {injectionType} from "@enums";
 let used = false;
 
 export default async function UTMParserCookie({to, nextMiddleware, container}) {
+    const logger = container.get(injectionType.LOGGER);
+
     if (!used) {
         try {
             used = true
-
             const cookies = container.get(injectionType.COOKIE);
             const {query} = to,
                 UTMArray = ['utm_campaign', 'utm_source', 'utm_medium', 'utm_content', 'utm_term'];
@@ -18,7 +19,7 @@ export default async function UTMParserCookie({to, nextMiddleware, container}) {
 
             nextMiddleware();
         } catch (e) {
-            console.log(`Error in UTMParserCookie: ${e}`);
+            logger.error(`Error in UTMParserCookie: ${e}`);
             nextMiddleware();
         }
     }
