@@ -195,7 +195,6 @@ export default {
                 this.$refs.input.focus();
             }, 400);
         }
-        console.log(this.$refs)
     },
 
     /**
