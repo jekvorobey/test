@@ -16,13 +16,12 @@
                 <v-input-mask
                     class="registration-panel__form-input"
                     v-model="rawPhone"
-                    placeholder="+7 ___ ___-__-__"
-                    :raw="false"
+                    name="phone"
+                    v-focus
                     :options="maskOptions"
                     :error="phoneError"
-                    :autofocus="true"
                 >
-                    Номер телефона
+                    Номер телефона penis
                     <template v-if="!isTablet" v-slot:after>
                         <v-button class="registration-panel__form-btn" type="submit" :disabled="isDisabledGetCodeBtn">
                             Получить код
