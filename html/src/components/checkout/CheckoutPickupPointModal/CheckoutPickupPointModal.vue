@@ -202,6 +202,10 @@
                     </checkout-option-card>
                 </ul>
 
+                <div class="checkout-pickup-point-modal__filter" v-else-if="isLoadingFilteredPickupPoints">
+                    <v-spinner show/>
+                </div>
+
                 <div class="checkout-pickup-point-modal__filter" v-else>
                     <span class="checkout-pickup-point-modal__filter-empty-text">
                         Не найдено ни одного пункта самовывоза.
@@ -221,6 +225,7 @@ import VButton from '@controls/VButton/VButton.vue';
 import VSelect from '@controls/VSelect/VSelect.vue';
 import VScroll from '@controls/VScroll/VScroll.vue';
 import VInput from '@controls/VInput/VInput.vue';
+import VSpinner from "@controls/VSpinner/VSpinner.vue";
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
@@ -258,7 +263,7 @@ export default {
         VButton,
         VSelect,
         VScroll,
-
+        VSpinner,
         CheckoutOptionCard,
         GeneralModal,
     },
@@ -273,6 +278,7 @@ export default {
             showMap: false,
             coords: [55.755814, 37.617635],
             currentMapBounds: [],
+            isLoadingFilteredPickupPoints: true,
 
             markerIcon: {
                 layout: 'default#image',
@@ -420,6 +426,7 @@ export default {
     watch: {
         filteredPickupPoints() {
             this.page = 1;
+            this.isLoadingFilteredPickupPoints = false;
         },
 
         search(value) {
