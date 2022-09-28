@@ -32,10 +32,10 @@
         }
 
         &--prev &-link {
-            margin-right: calc(var(--gs) * 2.5);
+            margin-right: calc(var(--gs) * 2);
             margin-left: 0;
             padding: calc(var(--gs) / 2);
-            @media(max-width: 350px){margin-right:0;}
+            @media(max-width: 355px){margin-right:0;}
             &::after {
                 display: block;
                 content: '';
