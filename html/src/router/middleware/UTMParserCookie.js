@@ -4,7 +4,6 @@ let used = false;
 
 export default async function UTMParserCookie({to, nextMiddleware, container}) {
     const logger = container.get(injectionType.LOGGER);
-
     if (!used) {
         try {
             used = true
