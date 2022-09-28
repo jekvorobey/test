@@ -2,7 +2,7 @@
     <info-panel class="cabinet-info-panel" header="Личные данные">
         <div class="container container--tablet-lg">
             <ul class="cabinet-view__panel-list">
-                <info-row class="cabinet-info-panel__item" name="Фамилия и имя*">
+                <info-row class="cabinet-info-panel__item" name="Фамилия, Имя и Отчество">
                     <v-suggestion
                         class="cabinet-info-panel__item-input"
                         placeholder="Введите свою фамилию и имя"

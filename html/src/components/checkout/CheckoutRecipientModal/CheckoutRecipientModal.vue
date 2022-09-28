@@ -11,21 +11,21 @@
             <div class="checkout-recipient-modal__body">
                 <h3 v-if="!isTablet" class="checkout-recipient-modal__hl">{{ header }}</h3>
                 <form class="checkout-recipient-modal__form" @submit.prevent="onSubmit">
-                    <v-input
-                        class="checkout-recipient-modal__form-row"
-                        v-model="form.name"
-                        :placeholder="
-                            strongFullNameValidation ? 'Введите фамилию, имя и отчество' : 'Введите имя и фамилию'
-                        "
-                        :error="nameError"
+                    <label class="v-input__label">Фамилия, Имя и Отчество</label>
+                    <v-suggestion
+                            class="cabinet-info-panel__item-input"
+                            placeholder="Введите свою фамилию и имя"
+                            :value="form.name"
+                            :items="suggestFioItems"
+                            :error="fioError"
+                            @input="debounce_suggestFio"
+                            @selected="onFioSuggestSelect"
+                            style="max-width: 100%; height: 39px;"
                     >
-                        {{ strongFullNameValidation ? 'Фамилия, Имя и Отчество' : 'Имя и Фамилия' }}
-                        <template v-slot:error="{ error }">
-                            <transition name="slide-in-bottom" mode="out-in">
-                                <div :key="error" v-if="error">{{ error }}</div>
-                            </transition>
+                        <template v-slot:item="{ item }">
+                            {{ item.value }}
                         </template>
-                    </v-input>
+                    </v-suggestion>
 
                     <v-input-mask
                         class="checkout-recipient-modal__form-row"
@@ -63,6 +63,9 @@
                     Добавить получателя
                 </v-button>
             </div>
+            <transition name="fade">
+                <phone-edit-modal v-if="$isServer || isPhoneEditOpen && isMainRecipient" :phone="form.phone" @successfulSavePhone="successfulSavePhone"/>
+            </transition>
         </template>
     </general-modal>
 </template>
@@ -70,22 +73,33 @@
 import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VInputMask from '@controls/VInput/VInputMask.vue';
+import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
+import VSuggestion from '@controls/VSuggestion/VSuggestion.vue';
 
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import validationMixin, { required, minLength, email, nameRu, fio } from '@plugins/validation';
 import { getRandomIntInclusive } from '@util';
-import { modalName } from '@enums';
+import {httpCodes, modalName} from '@enums';
 import { phoneMaskOptions } from '@settings';
 import './CheckoutRecipientModal.css';
-
+import _debounce from "lodash/debounce";
+import {SEND_CODE, UPDATE_PERSONAL} from "@store/modules/Profile/modules/Cabinet/actions";
+import {$dadata} from "@services";
+import {NAME as PROFILE_MODULE} from "@store/modules/Profile";
+import {NAME as CABINET_MODULE} from "@store/modules/Profile/modules/Cabinet";
+import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
+import {RECIPIENTS} from '@store/modules/Checkout/getters';
+import {verificationCodeType} from "@enums/auth";
+import PhoneEditModal from '@components/profile/PhoneEditModal/PhoneEditModal.vue';
 const NAME = modalName.checkout.RECIPIENT_EDIT;
+const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
 
 export default {
     name: NAME,
@@ -95,9 +109,12 @@ export default {
         VButton,
         VInput,
         VInputMask,
+        InfoRow,
+        VSuggestion,
 
         GeneralModal,
         AttentionPanel,
+        PhoneEditModal,
     },
 
     props: {
@@ -142,6 +159,9 @@ export default {
 
     data() {
         return {
+            internalFullName: '',
+            suggestFioItems: [],
+            fioError: null,
             form: {
                 id: getRandomIntInclusive(0, 100000),
                 name: null,
@@ -157,7 +177,15 @@ export default {
         ...mapState(MODAL_MODULE, {
             isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
             modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isPhoneEditOpen: (state) =>
+                state[MODALS][modalName.profile.PHONE_EDIT] && state[MODALS][modalName.profile.PHONE_EDIT].open,
         }),
+
+         ...mapGetters(CHECKOUT_MODULE, [RECIPIENTS,]),
+
+        isMainRecipient() {
+            return this[RECIPIENTS][0].name === null || this[RECIPIENTS][0].phone === null;
+        },
 
         isTablet() {
             return this.$mq.tablet;
@@ -207,12 +235,23 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(CABINET_MODULE_PATH, [UPDATE_PERSONAL, SEND_CODE]),
 
-        onSubmit() {
-            this.$v.$touch();
-            if (this.$v.$invalid) return;
+        successfulSavePhone() {
+            // Сохраняем ФИО и закрываем модалку
+            this.emitSaveFioBySuggestion();
+            this.onClose();
+        },
 
+        emitSaveFioBySuggestion() {
             let recipient = { ...this.form };
+
+            if (this.isMainRecipient){
+                // Парсим ФИО как для strongFullNameValidation
+                let fio = recipient.name.split(' ').filter((chunk) => chunk !== '').join(' ').split(' ');
+                // сохраняем в БД как имя пользователя
+                this.updatePersonal(fio[0], fio[1], fio[2]);
+            }
 
             if (this.strongFullNameValidation) {
                 recipient.name = recipient.name
@@ -220,9 +259,80 @@ export default {
                     .filter((chunk) => chunk !== '')
                     .join(' ');
             }
-
+            // Сохраняет получателя без сохранения в БД (скорее всего)
             this.$emit('save', recipient);
-            this.onClose();
+        },
+
+        async onNameInputChange(value) {
+            const { suggestions } = await $dadata.post(
+                'suggest/fio',
+                {
+                    query: value,
+                },
+                {}
+            );
+            this.suggestFioItems = suggestions ? suggestions : [];
+        },
+
+        onFioSuggestSelect(item) {
+            const {
+                data: { name, surname, patronymic },
+            } = item;
+
+            if (name && surname && patronymic) {
+                this.fioError = null;
+                this.internalFullName = `${surname} ${name} ${patronymic}`;
+                this.form.name = `${surname} ${name} ${patronymic}`;
+            } else {
+                this.internalFullName = item.value;
+                this.form.name = item.value;
+                this.fioError = 'Укажите полностью фамилию, имя и отчество';
+            }
+        },
+
+        async updatePersonal(lastName, firstName, middleName) {
+            try {
+                await this[UPDATE_PERSONAL]({
+                    lastName,
+                    firstName,
+                    middleName,
+                });
+            } catch (error) {
+                if (error.status === httpCodes.FORBIDDEN) this[CHECK_SESSION](true);
+            }
+        },
+
+        async onSubmit() {
+            this.$v.$touch();
+            if (this.$v.$invalid) return;
+
+            // Только для основного пользователя (если вошел без ФИО или телефона)
+            if (this.isMainRecipient) {
+                // Подтверждение мобильного телефона
+                const { phone } = { ...this.form };
+                try {
+                    await this[SEND_CODE]({
+                        destination: phone,
+                        type: verificationCodeType.PROFILE_PHONE,
+                    });
+                    this[CHANGE_MODAL_STATE]({ name: modalName.profile.PHONE_EDIT, open: true });
+                } catch (error) {
+                    const { data, message } = error;
+                    const { message: dataMessage } = data || {};
+
+                    this[CHANGE_MODAL_STATE]({
+                        name: modalName.general.NOTIFICATION,
+                        open: true,
+                        state: {
+                            title: 'Уведомление',
+                            message: dataMessage || message,
+                        },
+                    });
+                }
+            } else {
+                this.emitSaveFioBySuggestion();
+                this.onClose();
+            }
         },
 
         onClose() {
@@ -233,6 +343,10 @@ export default {
         init() {
             if (this.modalState.recipient) this.form = Object.assign({}, this.form, this.modalState.recipient);
         },
+    },
+
+    created(){
+        this.debounce_suggestFio = _debounce(this.onNameInputChange, 400);
     },
 
     beforeMount() {

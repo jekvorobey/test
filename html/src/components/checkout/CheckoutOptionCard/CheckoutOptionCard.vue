@@ -23,7 +23,7 @@
                 width="24"
                 height="24"
             />
-            <slot name="controls">
+            <slot name="controls" v-if="canChange">
                 <v-link class="checkout-option-card__right-link" v-if="!readonly" tag="button" @click.stop="onBtnClick">
                     {{ btnText }}
                 </v-link>
@@ -62,6 +62,12 @@ export default {
         btnText: {
             type: String,
             default: 'Изменить',
+        },
+
+        canChange: {
+            type: Boolean,
+            default: true,
+            required: false,
         },
 
         showCheck: {
