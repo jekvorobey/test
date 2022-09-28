@@ -134,7 +134,7 @@
                         item-prop
                     />
 
-                    <div class="container containet--tablet catalog-view__main-controls" v-if="pagesCount > 1">
+                    <div class="container containet--tablet catalog-view__main-controls mobile-pagination-padding" v-if="pagesCount > 1">
                         <show-more-button
                             v-if="activePage < pagesCount"
                             btn-class="btn--outline catalog-view__main-controls-btn"
