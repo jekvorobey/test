@@ -4,7 +4,7 @@
     &__img {
         position: relative;
         display: flex;
-        max-width: 184px;
+        width: 184px;
         height: 100%;
         padding: calc(var(--gs) * 2);
         margin-right: calc(var(--gs) * 3);
