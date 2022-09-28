@@ -53,6 +53,10 @@
 
                 <v-sticky class="cart-view__main-sticky">
                     <template v-slot:sticky>
+                        <div v-if="cartHaveProfessionalProducts && !canOrderProducts" class="cart-view__professional-text">
+                            В вашей корзине товары <strong>только</strong> для профессионалов.
+                            Подтвердите статус, чтобы заказать профессиональные товары.
+                        </div>
                         <div class="cart-view__main-panel">
                             <p class="text-grey cart-view__main-panel-info" v-if="attentionMessage">
                                 {{ attentionMessage }}
@@ -138,10 +142,17 @@
                                     </div>
                                 </div>
                             </template>
-
+                            <v-button
+                                    class="cart-view__main-panel-submit"
+                                    v-if="!isLoad && cartHaveProfessionalProducts && !canOrderProducts"
+                                    @click="loadCheckout"
+                                    :disabled="isPromocodePending"
+                            >
+                                Подтвердить статус
+                            </v-button>
                             <v-button
                                 class="cart-view__main-panel-submit"
-                                v-if="!isLoad"
+                                v-else-if="!isLoad"
                                 @click="loadCheckout"
                                 :disabled="isPromocodePending"
                             >
