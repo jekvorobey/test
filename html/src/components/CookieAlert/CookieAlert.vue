@@ -34,7 +34,7 @@
                 this.show = false;
 
                 $cookie.set('agreeCookie', true, {
-                    maxAge: 5000,
+                    maxAge: 1000 * 60 * 60 * 24 * 30,
                     path: '/',
                 });
             },
