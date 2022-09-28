@@ -14,7 +14,7 @@
                     <a v-else class="v-footer__col-title">{{ col.title }}</a>
 
                     <ul class="v-footer__links">
-                        <li class="v-footer__links-item" :key="link.name" v-for="link in col.items" :title="link.name">
+                        <li class="v-footer__links-item" :key="link.name" v-for="link in col.items">
                             <self-router-link class="v-footer__link" v-if="link.url" :to="link.url" same-disabled>
                                 {{ link.name }}
                             </self-router-link>
@@ -74,7 +74,7 @@
         >
             <template v-slot:content="{ item }">
                 <ul class="v-footer__links">
-                    <li class="v-footer__links-item" :key="link.name" v-for="link in item.items" :title="link.name">
+                    <li class="v-footer__links-item" :key="link.name" v-for="link in item.items">
                         <self-router-link class="v-footer__link" v-if="link.url" :to="link.url" same-disabled>
                             {{ link.name }}
                         </self-router-link>
