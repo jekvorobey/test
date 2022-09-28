@@ -151,6 +151,29 @@
                 <div v-else>
                     Сообщение отправлено
                 </div>
+
+                <div class="university-social">
+                    <div class="university-social__title">Университет в соцсетях:</div>
+                    <div class="university-social__links">
+                        <v-link
+                                class="mobile-menu__menu-socials-icon"
+                                href="https://vk.com/public214714929"
+                                target="_blank"
+                                rel="nofollow noreferrer noopener"
+                        >
+                            <v-svg name="vkontakte" width="24" height="24" />
+                        </v-link>
+                        <v-link
+                                class="mobile-menu__menu-socials-icon"
+                                href="https://t.me/bt_education"
+                                target="_blank"
+                                rel="nofollow noreferrer noopener"
+                        >
+                            <v-svg name="telegram" width="24" height="24" />
+                        </v-link>
+                    </div>
+                </div>
+
             </div>
         </section>
     </section>
@@ -161,7 +184,8 @@ import VButton from '@controls/VButton/VButton.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VInputMask from '@controls/VInput/VInputMask.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
-
+import VLink from '@controls/VLink/VLink.vue';
+import VSvg from '@controls/VSvg/VSvg.vue';
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
@@ -185,6 +209,8 @@ import Univesity2Lg from '@images/mock/Univesity2Lg.png';
 import Univesity2Md from '@images/mock/Univesity2Md.png';
 import Univesity3Md from '@images/mock/Univesity3Md.png';
 
+import '@images/sprites/socials/vkontakte.svg';
+import '@images/sprites/socials/telegram.svg';
 import '@images/sprites/home.svg';
 import './University.css';
 import { sendFeedback } from '@api';
@@ -200,7 +226,8 @@ export default {
         VInputMask,
         VSlider,
         VPicture,
-
+        VLink,
+        VSvg,
         Breadcrumbs,
         BreadcrumbItem,
         SeparatorSection,
