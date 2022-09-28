@@ -66,6 +66,14 @@ export default {
                             ? this.seo.meta_description
                             : 'Бессовестно Талантливый - главная',
                 },
+                {
+                    property: 'og:image',
+                    content: '/assets/images/icons/OG_Image.jpg'
+                },
+                {
+                    property: 'og:image:url',
+                    content: '/assets/images/icons/OG_Image.jpg'
+                }
             ],
         };
     },
