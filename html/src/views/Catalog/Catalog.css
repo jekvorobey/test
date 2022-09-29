@@ -428,3 +428,8 @@
         white-space: pre-line;
     }
 }
+@media (max-width: 425px) {
+    .mobile-pagination-padding {
+        padding: 0 8px !important;
+    }
+}

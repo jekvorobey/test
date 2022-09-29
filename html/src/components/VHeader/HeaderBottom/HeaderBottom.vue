@@ -6,7 +6,7 @@
                     <v-svg name="logo" width="30" height="30" />
                 </router-link>
 
-                <header-navigation-panel class="header-bottom__bottom-nav" />
+                <header-navigation-panel class="header-bottom__bottom-nav" :scroll="scroll"/>
 
                 <self-router-link class="header-bottom__bottom-logo-middle" to="/" same-disabled>
                     <v-svg name="logo-text" width="278" height="28" />

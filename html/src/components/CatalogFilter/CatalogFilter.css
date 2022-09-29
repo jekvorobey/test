@@ -44,6 +44,9 @@
 
         &-range {
             padding: 0 var(--gs) calc(var(--gs) * 2);
+            @media (--tablet) {
+                padding: 0 30px calc(var(--gs) * 2);
+            }
         }
 
         .v-accordion__item-btn {

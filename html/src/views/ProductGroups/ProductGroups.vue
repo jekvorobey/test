@@ -20,7 +20,7 @@
                     <h1 class="product-groups-view__section-hl">
                         {{ catalogTitle }}
                     </h1>
-                    <group-list class="product-groups-view__brands" :items="brandsCatalog" :columns="columns" />
+                    <group-list class="product-groups-view__brands" :items="brandsCatalog" :columns="columns" :count="20"/>
                 </div>
             </section>
         </template>

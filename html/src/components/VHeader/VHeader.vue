@@ -1,24 +1,24 @@
 <template>
-    <header class="v-header" :class="[{ sticky: isSticky }, { 'v-header--search': search }]">
-        <header-top class="v-header__top" />
-        <header-middle class="v-header__middle" ref="middle" />
-        <header-bottom class="v-header__bottom" ref="bottom" />
+        <header class="v-header" :class="[{ sticky: isSticky }, { 'v-header--search': search }]">
+            <cookie-alert/>
+            <header-top class="v-header__top" />
+            <header-middle class="v-header__middle" ref="middle" />
+            <header-bottom class="v-header__bottom" ref="bottom" />
+            <transition name="fade">
+                <mobile-menu class="v-header__modal-menu" v-if="isMenuOpen && isTabletLg" />
+            </transition>
 
-        <transition name="fade">
-            <mobile-menu class="v-header__modal-menu" v-if="isMenuOpen && isTabletLg" />
-        </transition>
-
-        <transition name="fade" appear>
-            <city-confirmation-panel v-if="!isTabletLg && isCityConfirmationOpen" />
-        </transition>
-    </header>
+            <transition name="fade" appear>
+                <city-confirmation-panel v-if="!isTabletLg && isCityConfirmationOpen" />
+            </transition>
+        </header>
 </template>
 
 <script>
 import HeaderTop from './HeaderTop/HeaderTop.vue';
 import HeaderMiddle from './HeaderMiddle/HeaderMiddle.vue';
 import HeaderBottom from './HeaderBottom/HeaderBottom.vue';
-
+import CookieAlert from "@components/CookieAlert/CookieAlert.vue";
 import NavPanel from '@components/NavPanel/NavPanel.vue';
 import MobileMenu from '@components/MobileMenu/MobileMenu.vue';
 import SearchPanel from '@components/SearchPanel/SearchPanel.vue';
@@ -44,7 +44,7 @@ export default {
         HeaderTop,
         HeaderMiddle,
         HeaderBottom,
-
+        CookieAlert,
         SearchPanel,
         NavPanel,
         MobileMenu,

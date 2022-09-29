@@ -58,15 +58,21 @@
         }
 
         @media (--tablet) {
-            font-size: 12px;
+            font-size: 8px;
+            bottom: 22px;
+            left: 34px;
         }
 
         @media (--tablet-min) {
-            left: 6%;
+            font-size: 10px;
+            left: 76px;
+            bottom: 31px;
         }
 
         @media (--tablet-lg-min) {
-            left: 3%;
+            font-size: 10px;
+            left: 113px;
+            bottom: 11px;
         }
     }
 }
