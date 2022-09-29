@@ -187,6 +187,10 @@ export default {
             return this[RECIPIENTS][0].name === null || this[RECIPIENTS][0].phone === null;
         },
 
+        mainRecipientNoPhone() {
+            return this[RECIPIENTS][0].phone === null;
+        },
+
         isTablet() {
             return this.$mq.tablet;
         },
@@ -307,7 +311,7 @@ export default {
             if (this.$v.$invalid) return;
 
             // Только для основного пользователя (если вошел без ФИО или телефона)
-            if (this.isMainRecipient) {
+            if (this.isMainRecipient && this.mainRecipientNoPhone) {
                 // Подтверждение мобильного телефона
                 const { phone } = { ...this.form };
                 try {
