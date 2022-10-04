@@ -20,7 +20,12 @@
             height: 100%;
         }
     }
-
+    &__spinner-block {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         height: 25%;
+    }
     &__header {
         &-btn {
             display: flex;
