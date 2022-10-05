@@ -202,7 +202,7 @@
                     </checkout-option-card>
                 </ul>
 
-                <div class="checkout-pickup-point-modal__filter" v-else-if="isLoadingFilteredPickupPoints">
+                <div class="checkout-pickup-point-modal__spinner-block" v-else-if="isLoadingFilteredPickupPoints">
                     <v-spinner show/>
                 </div>
 
