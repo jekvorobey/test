@@ -90,7 +90,11 @@
                         v-bind="concretePrice(modifiedOldPrice)"
                         has-articles
                     />
-                    <installment-price v-if="+item.price.value > 30000" :value="item.price.value" installment-period="12"/>
+                    <installment-price
+                            v-if="item.installment && item.installment.isInstallmentAvailable"
+                            :value="item.price.value"
+                            :installment-period="item.installment.installmentPeriod"
+                    />
                 </div>
 
                 <div class="link--sm catalog-product-list-card__link" v-bind="itemPropSettings.name">
