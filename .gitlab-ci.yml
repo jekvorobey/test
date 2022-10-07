@@ -77,7 +77,7 @@ Stage:
         - echo "deploy to $DEV_SERVER"
         - echo "$CONTAINER_IMAGE:$CONTAINER_IMAGE_TAG @ $LOCAL_PATH"
         - ssh -o StrictHostKeyChecking=no root@$DEV_SERVER "mkdir -p $LOCAL_PATH/"
-        - sed -r "s|(image:.).*:.*|\1$CONTAINER_IMAGE:$CONTAINER_IMAGE_TAG|;s|ENV|$ENV|g" -i docker-compose.yml
+        - sed -r 's|(image:.).*:.*|\1$CONTAINER_IMAGE:$CONTAINER_IMAGE_TAG|;s|ENV|$ENV|g;s|#command:|command:|g' -i docker-compose.yml
         - scp -o StrictHostKeyChecking=no docker-compose.yml root@$DEV_SERVER:$LOCAL_PATH/docker-compose.yml
         - ssh -o StrictHostKeyChecking=no root@$DEV_SERVER "cd $LOCAL_PATH; docker-compose -f ../../../docker-compose.yml -f docker-compose.yml up -d; docker exec ibt-ingress nginx -s reload"
 #    only:
