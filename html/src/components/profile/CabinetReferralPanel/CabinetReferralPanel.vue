@@ -21,6 +21,18 @@
                         {{ referralCode }}
                     </template>
                 </info-row>
+
+                <info-row class="cabinet-referral-panel__item" name="Ваш QR код">
+                    <template>
+                        <span
+                            @click="QRDownload"
+                            v-if="qrImage"
+                            v-html="qrImage"
+                            class="cabinet-referral-panel__qr-code"
+                        ></span>
+                    </template>
+                </info-row>
+
                 <info-row class="cabinet-referral-panel__item" name="Реферальная ссылка">
                     <v-link class="cabinet-referral-panel__link" tag="button" @click="onCopyToClipboard($event)">
                         <v-svg name="link" :width="iconSize" :height="iconSize"/>
@@ -38,39 +50,36 @@
 </template>
 
 <script>
-import VLink from '@controls/VLink/VLink.vue';
-import VButton from '@controls/VButton/VButton.vue';
-import VInput from '@controls/VInput/VInput.vue';
-import VInputMask from '@controls/VInput/VInputMask.vue';
+    import VLink from '@controls/VLink/VLink.vue';
+    import VButton from '@controls/VButton/VButton.vue';
+    import VInput from '@controls/VInput/VInput.vue';
+    import VInputMask from '@controls/VInput/VInputMask.vue';
 
-import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
-import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
+    import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
+    import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
+    import {mapActions, mapState} from 'vuex';
 
-import _debounce from 'lodash/debounce';
-import {mapActions, mapState, mapGetters} from 'vuex';
-import {LOCALE} from '@store';
+    import {NAME as AUTH_MODULE, REFERRAL_CODE, USER} from '@store/modules/Auth';
+    import {SET_REFERRER_CODE} from '@store/modules/Auth/actions';
 
-import {NAME as AUTH_MODULE, REFERRAL_CODE, USER} from '@store/modules/Auth';
-import {SET_REFERRER_CODE} from '@store/modules/Auth/actions';
+    import {NAME as MODAL_MODULE} from '@store/modules/Modal';
+    import {CHANGE_MODAL_STATE} from '@store/modules/Modal/actions';
 
-import {NAME as MODAL_MODULE, MODALS} from '@store/modules/Modal';
-import {CHANGE_MODAL_STATE} from '@store/modules/Modal/actions';
+    import {NAME as PROFILE_MODULE} from '@store/modules/Profile';
+    import {
+        CAN_EDIT_REFERRAL_CODE,
+        NAME as CABINET_MODULE,
+        REFERRAL_PERSONAL_DISCOUNT,
+    } from '@store/modules/Profile/modules/Cabinet';
+    import {SET_CAN_EDIT_CODE, UPDATE_REFERRER_CODE} from '@store/modules/Profile/modules/Cabinet/actions';
 
-import {NAME as PROFILE_MODULE} from '@store/modules/Profile';
-import {
-    NAME as CABINET_MODULE,
-    CAN_EDIT_REFERRAL_CODE,
-    REFERRAL_PERSONAL_DISCOUNT,
-} from '@store/modules/Profile/modules/Cabinet';
-import {UPDATE_REFERRER_CODE, SET_CAN_EDIT_CODE} from '@store/modules/Profile/modules/Cabinet/actions';
+    import {saveToClipboard} from '@util';
+    import {generateReferralLink} from '@util/profile';
+    import {modalName} from '@enums';
+    import validationMixin, {minLength, referrerCode, required} from '@plugins/validation';
+    import './CabinetReferralPanel.css';
 
-import {saveToClipboard} from '@util';
-import {generateReferralLink} from '@util/profile';
-import {httpCodes, interval, modalName} from '@enums';
-import validationMixin, {required, minLength, referrerCode} from '@plugins/validation';
-import './CabinetReferralPanel.css';
-
-const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
+    const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
 
 export default {
     name: 'cabinet-referral-panel',
@@ -97,6 +106,7 @@ export default {
     data() {
         return {
             code: null,
+            qrImage: null
         };
     },
 
@@ -128,6 +138,34 @@ export default {
         ...mapActions(AUTH_MODULE, [SET_REFERRER_CODE]),
         ...mapActions(CABINET_MODULE_PATH, [UPDATE_REFERRER_CODE, SET_CAN_EDIT_CODE]),
 
+        async QRDownload() {
+            const QRCode = require('qrcode');
+
+            const downloadOptions = {
+                height: 1000,
+                width: 1000,
+                errorCorrectionLevel: 'H',
+                type: 'terminal',
+                quality: 0.95,
+                margin: 1,
+                color: {
+                    dark: '#000000',
+                    light: '#FFF',
+                },
+            }
+
+            let svgData = await QRCode.toString(this.code, downloadOptions),
+                svgBlob = new Blob([svgData], {type:"image/svg+xml;charset=utf-8"}),
+                downloadLink = document.createElement("a");
+
+            downloadLink.href = URL.createObjectURL(svgBlob);
+            downloadLink.download = "your-fucking-qr-code.svg";
+            
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        },
+
         onCopyToClipboard(e) {
             const link = generateReferralLink(this[REFERRAL_CODE]);
             const result = saveToClipboard(link);
@@ -158,6 +196,24 @@ export default {
                 }
             }
         },
+    },
+    async mounted() {
+        const QRCode = require('qrcode');
+
+        const opts = {
+            height: 200,
+            width: 200,
+            errorCorrectionLevel: 'H',
+            type: 'terminal',
+            quality: 0.95,
+            margin: 1,
+            color: {
+                dark: '#000000',
+                light: '#FFF',
+            },
+        }
+
+        this.qrImage = await QRCode.toString(this.code, opts)
     },
 
     created() {

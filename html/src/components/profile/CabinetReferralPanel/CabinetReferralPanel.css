@@ -8,6 +8,9 @@
         text-transform: none;
     }
 
+     &__qr-code{
+        cursor: pointer;
+      }
     &__item {
         align-items: center;
 
