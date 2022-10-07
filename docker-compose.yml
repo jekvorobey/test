@@ -3,6 +3,7 @@ services:
     container_name: ENV-ibt-front
     image: registry.ibt.ru:5050/ibt-front:${TAG}
     restart: always
+    #command: yarn dev
     env_file:
       - /home/iBT.studio/ENV/svc/ibt-front/.env
     environment:
