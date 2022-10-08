@@ -25,7 +25,6 @@
                 <info-row class="cabinet-referral-panel__item" name="Ваш QR код">
                     <template>
                         <span
-                            ref="qrSvg"
                             @click="QRDownload"
                             v-if="qrImage"
                             v-html="qrImage"
