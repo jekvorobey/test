@@ -12,6 +12,10 @@
         >
             <template v-for="banner in items">
                 <slot name="item" :item="banner">
+                    <banner-flip-counter
+                        title="Успей купить по акции!"
+                        deadline="2022-10-12 23:59:59"
+                    />
                     <catalog-banner-card
                         class="swiper-slide slider-banners-section__card"
                         :key="banner.id"
@@ -60,6 +64,7 @@
 <script>
 import VSlider from '@controls/VSlider/VSlider.vue';
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
+import BannerFlipCounter from "@components/BannerFlipCounter/BannerFlipCounter.vue";
 
 import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
@@ -90,6 +95,7 @@ export default {
     components: {
         VSlider,
         CatalogBannerCard,
+        BannerFlipCounter
     },
 
     props: {
