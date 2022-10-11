@@ -7,9 +7,16 @@
             <template v-for="data in timeData" v-show="show">
                 <span v-bind:key="data.label" class="flip-clock__piece" :id="data.elementId" v-show="data.show && !data.isZero">
                     <span class="flip-clock__card flip-card" :style="countdownSize ? `font-size:${countdownSize}` : ''">
-                        <b :style="{color: numColor}" class="flip-card__top">{{ data.current | twoDigits }}</b>
-                        <b :style="{color: numColor}" class="flip-card__bottom"
-                           v-bind:data-value="data.current | twoDigits"></b>
+                        <b
+                            :style="{color: numColor, background: cardTopBackground}"
+                            class="flip-card__top">
+                            {{ data.current | twoDigits }}
+                        </b>
+                        <b
+                            :style="{color: numColor, background: cardBottomBackground}"
+                            class="flip-card__bottom"
+                            v-bind:data-value="data.current | twoDigits"
+                        ></b>
                         <b :style="{color: numColor}" class="flip-card__back"
                            v-bind:data-value="data.previous | twoDigits"></b>
                         <b :style="{color: numColor}" class="flip-card__back-bottom"
@@ -42,6 +49,16 @@
                 type: String,
                 required: false,
                 default: '#fff'
+            },
+            cardTopBackground: {
+                type: String,
+                required: false,
+                default: '#222'
+            },
+            cardBottomBackground: {
+                type: String,
+                required: false,
+                default: '#393939'
             },
             deadline: {
                 type: String,
@@ -279,9 +296,9 @@
 
     .flip-title {
         text-align: center;
-        font-size: 18px;
+        font-size: 2rem;
         font-weight: 600;
-        margin-bottom: 5px;
+        margin: 10px 0 15px;
     }
 
     .flip-clock {
@@ -445,7 +462,11 @@
             z-index: 5;
         }
     }
-
+    @media (max-width: 768px) {
+        .flip-title {
+            font-size: 1.5rem;
+        }
+    }
     @media (max-width: 500px) {
         .flip-clock {
             left: calc(50% - 150px);

@@ -13,7 +13,7 @@
             <template v-for="banner in items">
                 <slot name="item" :item="banner">
                     <banner-flip-counter
-                        title="Успей купить по акции!"
+                        title="Бомбим скидки весь месяц!"
                         deadline="2022-10-12 23:59:59"
                     />
                     <catalog-banner-card
