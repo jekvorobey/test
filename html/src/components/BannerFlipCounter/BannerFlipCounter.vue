@@ -1,11 +1,11 @@
 <template>
-    <div class="container flip-clock">
+    <div class="container flip-clock" v-if="!timeEnded">
         <div :style="{color: titleColor}" class="flip-title" v-if="title">
             {{title}}
         </div>
         <div>
-            <template v-for="(data, index) in timeData" v-show="show">
-                <span v-bind:key="data.label" class="flip-clock__piece" :id="data.elementId" v-show="data.show && !data.isZero">
+            <template v-for="(data, index) in timeData">
+                <span v-bind:key="data.label" class="flip-clock__piece" :id="data.elementId" v-show="data.show && !data.isZero && data.current !== 0">
                     <span class="flip-clock__card flip-card" :style="countdownSize ? `font-size:${countdownSize}` : ''">
                         <b
                             :style="{color: numColor, background: cardTopBackground}"
@@ -22,8 +22,20 @@
                         <b :style="{color: numColor,  background: cardBottomBackground}" class="flip-card__back-bottom"
                            v-bind:data-value="data.previous | twoDigits"></b>
                     </span>
-                    <span class="flip-clock__slot"
-                          :style="labelSize ? `font-size:${labelSize}` : ''">{{ data.label }}-{{index}}</span>
+
+                    <span
+                            v-if="index === 0"
+                            class="flip-clock__slot"
+                          :style="labelSize ? `font-size:${labelSize}` : ''">{{ daysNoun }}</span>
+                     <span v-if="index === 1"
+                           class="flip-clock__slot"
+                           :style="labelSize ? `font-size:${labelSize}` : ''">{{ hoursNoun }}</span>
+                     <span v-if="index === 2"
+                           class="flip-clock__slot"
+                           :style="labelSize ? `font-size:${labelSize}` : ''">{{ minutesNoun }}</span>
+                     <span v-if="index === 3"
+                           class="flip-clock__slot"
+                           :style="labelSize ? `font-size:${labelSize}` : ''">{{ secondsNoun }}</span>
                 </span>
             </template>
         </div>
@@ -152,6 +164,7 @@
                     },
                     {
                         type: 'seconds',
+                        isZero: false,
                         current: 0,
                         previous: 0,
                         label: this.labels.seconds,
@@ -191,7 +204,27 @@
                     this.frame = requestAnimationFrame(this.updateTime.bind(this));
                 }
 
-                if (newValue === 0 && idx !== this.timeData.length - 1) this.timeData[idx].isZero = true;
+                if (newValue === 0 && idx === 0) {
+                    this.timeData[idx].isZero = true;
+                }
+
+                if (newValue === 0 && idx === 1) {
+                    if(this.timeData[0].isZero === true){
+                        this.timeData[idx].isZero = true;
+                    }
+                }
+
+                if (newValue === 0 && idx === 2) {
+                    if(this.timeData[0].isZero === true && this.timeData[1].isZero === true){
+                        this.timeData[idx].isZero = true;
+                    }
+                }
+
+                if (newValue === 0 && idx === 3) {
+                    if(this.timeData[0].isZero === true && this.timeData[1].isZero === true && this.timeData[2].isZero === true){
+                        this.timeData[idx].isZero = true;
+                    }
+                }
 
                 const d = this.timeData[idx];
                 const val = newValue < 0 ? 0 : newValue;
@@ -236,6 +269,9 @@
             },
         },
         computed: {
+            timeEnded() {
+                return this.timeData[0].isZero && this.timeData[1].isZero && this.timeData[2].isZero && this.timeData[3].current === 0
+            },
             seconds() {
                 return Math.trunc(this.diff) % 60;
             },

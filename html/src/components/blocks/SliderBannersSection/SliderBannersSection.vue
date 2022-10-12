@@ -14,7 +14,7 @@
                 <slot name="item" :item="banner">
                     <banner-flip-counter
                         title="Картошка по скидке! много картошки и много скидки!"
-                        deadline="2022-10-12 23:59:59"
+                        deadline="2022-10-15 15:17:30"
                         cardTopBackground="red"
                         cardBottomBackground="pink"
                         numColor="white"
