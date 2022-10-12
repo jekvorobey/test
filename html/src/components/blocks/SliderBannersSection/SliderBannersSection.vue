@@ -13,8 +13,11 @@
             <template v-for="banner in items">
                 <slot name="item" :item="banner">
                     <banner-flip-counter
-                        title="Бомбим скидки весь месяц!"
+                        title="Картошка по скидке! много картошки и много скидки!"
                         deadline="2022-10-12 23:59:59"
+                        cardTopBackground="red"
+                        cardBottomBackground="pink"
+                        numColor="white"
                     />
                     <catalog-banner-card
                         class="swiper-slide slider-banners-section__card"

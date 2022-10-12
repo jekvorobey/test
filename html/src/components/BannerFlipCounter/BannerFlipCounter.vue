@@ -4,7 +4,7 @@
             {{title}}
         </div>
         <div>
-            <template v-for="data in timeData" v-show="show">
+            <template v-for="(data, index) in timeData" v-show="show">
                 <span v-bind:key="data.label" class="flip-clock__piece" :id="data.elementId" v-show="data.show && !data.isZero">
                     <span class="flip-clock__card flip-card" :style="countdownSize ? `font-size:${countdownSize}` : ''">
                         <b
@@ -19,13 +19,20 @@
                         ></b>
                         <b :style="{color: numColor}" class="flip-card__back"
                            v-bind:data-value="data.previous | twoDigits"></b>
-                        <b :style="{color: numColor}" class="flip-card__back-bottom"
+                        <b :style="{color: numColor,  background: cardBottomBackground}" class="flip-card__back-bottom"
                            v-bind:data-value="data.previous | twoDigits"></b>
                     </span>
                     <span class="flip-clock__slot"
-                          :style="labelSize ? `font-size:${labelSize}` : ''">{{ data.label }}</span>
+                          :style="labelSize ? `font-size:${labelSize}` : ''">{{ data.label }}-{{index}}</span>
                 </span>
             </template>
+        </div>
+        <div>
+            <style>
+                :root {
+                    --cardTopBackground: {{ this.cardTopBackground }}
+                }
+            </style>
         </div>
     </div>
 </template>
@@ -154,71 +161,21 @@
                 ],
             };
         },
-        created() {
-            if (!this.deadline) {
-                throw new Error("Missing props 'deadline'");
-            }
-            const endTime = this.deadline;
-            this.date = Math.trunc(Date.parse(endTime.replace(/-/g, '/')) / 1000);
-            if (!this.date) {
-                throw new Error("Invalid props value, correct the 'deadline'");
-            }
-            this.interval = setInterval(() => {
-                this.now = Math.trunc(new Date().getTime() / 1000);
-            }, 1000);
-        },
-        mounted() {
-            if (this.diff !== 0) {
-                this.show = true;
-            }
-        },
-        computed: {
-            seconds() {
-                return Math.trunc(this.diff) % 60;
-            },
-            minutes() {
-                return Math.trunc(this.diff / 60) % 60;
-            },
-            hours() {
-                return Math.trunc(this.diff / 60 / 60) % 24;
-            },
-            days() {
-                return Math.trunc(this.diff / 60 / 60 / 24);
-            },
-        },
-        watch: {
-            deadline: function (newVal, oldVal) {
-                const endTime = this.deadline;
-                this.date = Math.trunc(Date.parse(endTime.replace(/-/g, '/')) / 1000);
-                if (!this.date) {
-                    throw new Error("Invalid props value, correct the 'deadline'");
-                }
-            },
-            now(value) {
-                this.diff = this.date - this.now;
-                if (this.diff <= 0 || this.stop) {
-                    this.diff = 0;
-                    this.updateTime(3, 0);
-                } else {
-                    this.updateAllCards();
-                }
-            },
-            diff(value) {
-                if (value === 0) {
-                    this.$emit('timeElapsed');
-                    this.updateAllCards();
-                }
-            },
-        },
-        filters: {
-            twoDigits(value) {
-                if (value.toString().length <= 1) {
-                    return '0' + value.toString();
-                }
-                return value.toString();
-            },
-        },
         methods: {
+            getNoun(number, one, two, five) {
+                let n = Math.abs(number)
+
+                n %= 100
+                if (n >= 5 && n <= 20) return five
+
+                n %= 10
+                if (n === 1) return one
+
+                if (n >= 2 && n <= 4) return two
+
+                return five
+            },
+
             updateAllCards() {
                 this.updateTime(0, this.days);
                 this.updateTime(1, this.hours);
@@ -277,6 +234,82 @@
                     }
                 }
             },
+        },
+        computed: {
+            seconds() {
+                return Math.trunc(this.diff) % 60;
+            },
+            minutes() {
+                return Math.trunc(this.diff / 60) % 60;
+            },
+            hours() {
+                return Math.trunc(this.diff / 60 / 60) % 24;
+            },
+            days() {
+                return Math.trunc(this.diff / 60 / 60 / 24);
+            },
+            daysNoun() {
+                return this.getNoun(this.days, 'День', 'Дня', 'Дней')
+            },
+            hoursNoun() {
+                return this.getNoun(this.hours, 'Час', 'Часа', 'Часов')
+            },
+            minutesNoun() {
+                return this.getNoun(this.minutes, 'Минуты', 'Минуты', 'Минут')
+            },
+            secondsNoun() {
+                return this.getNoun(this.seconds, 'Секунда', 'Секунды', 'Секунд')
+            },
+        },
+        watch: {
+            deadline: function (newVal, oldVal) {
+                const endTime = this.deadline;
+                this.date = Math.trunc(Date.parse(endTime.replace(/-/g, '/')) / 1000);
+                if (!this.date) {
+                    throw new Error("Invalid props value, correct the 'deadline'");
+                }
+            },
+            now(value) {
+                this.diff = this.date - this.now;
+                if (this.diff <= 0 || this.stop) {
+                    this.diff = 0;
+                    this.updateTime(3, 0);
+                } else {
+                    this.updateAllCards();
+                }
+            },
+            diff(value) {
+                if (value === 0) {
+                    this.$emit('timeElapsed');
+                    this.updateAllCards();
+                }
+            },
+        },
+        filters: {
+            twoDigits(value) {
+                if (value.toString().length <= 1) {
+                    return '0' + value.toString();
+                }
+                return value.toString();
+            },
+        },
+        created() {
+            if (!this.deadline) {
+                throw new Error("Missing props 'deadline'");
+            }
+            const endTime = this.deadline;
+            this.date = Math.trunc(Date.parse(endTime.replace(/-/g, '/')) / 1000);
+            if (!this.date) {
+                throw new Error("Invalid props value, correct the 'deadline'");
+            }
+            this.interval = setInterval(() => {
+                this.now = Math.trunc(new Date().getTime() / 1000);
+            }, 1000);
+        },
+        mounted() {
+            if (this.diff !== 0) {
+                this.show = true;
+            }
         },
         beforeDestroy() {
             if (window['cancelAnimationFrame']) {
@@ -358,7 +391,6 @@
     .flip-card__top, .flip-card__bottom, .flip-card__back-bottom, .flip-card__back::before, .flip-card__back::after {
         display: block;
         height: 0.72em;
-        background: #222;
         padding: 0.23em 0.15em 0.4em;
         border-radius: 0.15em 0.15em 0 0;
         backface-visibility: hidden;
@@ -370,8 +402,6 @@
     .flip-card__top-4digits, .flip-card__bottom-4digits, .flip-card__back-bottom-4digits, .flip-card__back-4digits::before, .flip-card__back-4digits::after {
         display: block;
         height: 0.72em;
-        color: #cca900;
-        background: #222;
         padding: 0.23em 0.15em 0.4em;
         border-radius: 0.15em 0.15em 0 0;
         backface-visibility: hidden;
@@ -379,14 +409,14 @@
         transform-style: preserve-3d;
         width: 2.65em;
     }
-
+    .flip .flip-card__back-4digits:before, .flip .flip-card__back:before {
+        background: var(--cardTopBackground);
+    }
     .flip-card__bottom, .flip-card__back-bottom, .flip-card__bottom-4digits, .flip-card__back-bottom-4digits {
-        color: #ffdc00;
         position: absolute;
         top: 50%;
         left: 0;
         border-top: solid 1px #000;
-        background: #393939;
         border-radius: 0 0 0.15em 0.15em;
         pointer-events: none;
         overflow: hidden;
