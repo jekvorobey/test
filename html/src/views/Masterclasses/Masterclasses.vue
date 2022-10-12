@@ -112,7 +112,7 @@
                     </links-switch>
 
                     <select-panel
-                        v-if="specialties"
+                        v-if="specialties && !isPastTab"
                         class="masterclasses-view__sets-header-panel"
                         name="topic"
                         id="topic"
@@ -455,7 +455,7 @@ export default {
             isMounted: false,
             showMore: false,
             filterModal: false,
-
+            isPastTab: false,
             bannerType,
             cartItemTypes,
 
@@ -661,6 +661,8 @@ export default {
         }),
 
         onChangeFilter(filter, value, oldValue) {
+            this.isPastTab = value === 'past';
+
             const { routeSegments } = this;
 
             const oldSegment = `${filter.name}-${oldValue}`;

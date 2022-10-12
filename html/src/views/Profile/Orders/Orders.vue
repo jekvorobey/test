@@ -164,7 +164,7 @@
                         <td class="orders-view__table-td">
                             <template
                                 v-if="
-                                    order.payment_status === orderPaymentStatus.NOT_PAID && order.payments.length !== 0
+                                    order.payment_status === orderPaymentStatus.NOT_PAID && order.payments.length !== 0 && order.is_canceled === 0
                                 "
                             >
                                 <v-button
@@ -234,7 +234,7 @@
                     <info-row class="orders-view__list-item-row" name="Дата доставки" :value="order.deliveryDate" />
 
                     <template
-                        v-if="order.payment_status === orderPaymentStatus.NOT_PAID && order.payments.length !== 0"
+                        v-if="order.payment_status === orderPaymentStatus.NOT_PAID && order.payments.length !== 0 && order.is_canceled === 0"
                     >
                         <info-row class="orders-view__list-item-row">
                             <v-button
