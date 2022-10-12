@@ -21,6 +21,18 @@
                         {{ referralCode }}
                     </template>
                 </info-row>
+
+                <info-row class="cabinet-referral-panel__item" name="Ваш QR код">
+                    <template>
+                        <span
+                            @click="QRDownload"
+                            v-if="qrImage"
+                            v-html="qrImage"
+                            class="cabinet-referral-panel__qr-code"
+                        ></span>
+                    </template>
+                </info-row>
+
                 <info-row class="cabinet-referral-panel__item" name="Реферальная ссылка">
                     <v-link class="cabinet-referral-panel__link" tag="button" @click="onCopyToClipboard($event)">
                         <v-svg name="link" :width="iconSize" :height="iconSize"/>
@@ -45,29 +57,28 @@ import VInputMask from '@controls/VInput/VInputMask.vue';
 
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import InfoPanel from '@components/profile/InfoPanel/InfoPanel.vue';
-
-import _debounce from 'lodash/debounce';
-import {mapActions, mapState, mapGetters} from 'vuex';
-import {LOCALE} from '@store';
+import {mapActions, mapState} from 'vuex';
 
 import {NAME as AUTH_MODULE, REFERRAL_CODE, USER} from '@store/modules/Auth';
 import {SET_REFERRER_CODE} from '@store/modules/Auth/actions';
 
-import {NAME as MODAL_MODULE, MODALS} from '@store/modules/Modal';
+import {NAME as MODAL_MODULE} from '@store/modules/Modal';
 import {CHANGE_MODAL_STATE} from '@store/modules/Modal/actions';
 
 import {NAME as PROFILE_MODULE} from '@store/modules/Profile';
 import {
-    NAME as CABINET_MODULE,
     CAN_EDIT_REFERRAL_CODE,
+    NAME as CABINET_MODULE,
     REFERRAL_PERSONAL_DISCOUNT,
 } from '@store/modules/Profile/modules/Cabinet';
-import {UPDATE_REFERRER_CODE, SET_CAN_EDIT_CODE} from '@store/modules/Profile/modules/Cabinet/actions';
+import {SET_CAN_EDIT_CODE, UPDATE_REFERRER_CODE} from '@store/modules/Profile/modules/Cabinet/actions';
 
 import {saveToClipboard} from '@util';
 import {generateReferralLink} from '@util/profile';
-import {httpCodes, interval, modalName} from '@enums';
-import validationMixin, {required, minLength, referrerCode} from '@plugins/validation';
+import {modalName} from '@enums';
+import validationMixin, {minLength, referrerCode, required} from '@plugins/validation';
+import {QRGenerate} from "@util/qr-generator";
+import {svgToPng} from "@util/svg-to-png-converter";
 import './CabinetReferralPanel.css';
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
@@ -97,6 +108,7 @@ export default {
     data() {
         return {
             code: null,
+            qrImage: null
         };
     },
 
@@ -128,6 +140,21 @@ export default {
         ...mapActions(AUTH_MODULE, [SET_REFERRER_CODE]),
         ...mapActions(CABINET_MODULE_PATH, [UPDATE_REFERRER_CODE, SET_CAN_EDIT_CODE]),
 
+        async QRDownload() {
+            let svgData = await QRGenerate(1000, this.code);
+
+            await svgToPng(svgData, 0, 'black')
+                .then(pngData => {
+                    let downloadLink = document.createElement("a");
+                    downloadLink.href = pngData;
+                    downloadLink.download = this.code + '.png';
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                })
+                .catch(error => console.log('svgToPng error: ', error))
+        },
+
         onCopyToClipboard(e) {
             const link = generateReferralLink(this[REFERRAL_CODE]);
             const result = saveToClipboard(link);
@@ -158,6 +185,10 @@ export default {
                 }
             }
         },
+    },
+
+    async mounted() {
+        this.qrImage = await QRGenerate(200, this.code)
     },
 
     created() {
