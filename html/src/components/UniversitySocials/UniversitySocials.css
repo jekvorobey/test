@@ -1,0 +1,13 @@
+.university-social {
+    padding: 15px 0;
+    display: flex;
+    &__title {
+         margin-right: 10px;
+     }
+    &__links {
+         display: flex;
+        a:not(:last-child){
+            margin-right: 5px;
+        }
+    }
+}

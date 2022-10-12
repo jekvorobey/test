@@ -151,6 +151,7 @@
                 <div v-else>
                     Сообщение отправлено
                 </div>
+                <UniversitySocials/>
             </div>
         </section>
     </section>
@@ -164,7 +165,7 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
-
+import UniversitySocials from "@components/UniversitySocials/UniversitySocials.vue";
 import UniverMain from '@images/mock/UniverMain.png';
 import UniverMainMd from '@images/mock/UniverMainMd.png';
 import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
@@ -200,11 +201,11 @@ export default {
         VInputMask,
         VSlider,
         VPicture,
-
         Breadcrumbs,
         BreadcrumbItem,
         SeparatorSection,
         FrisbuyProductContainer,
+        UniversitySocials
     },
 
     metaInfo() {
