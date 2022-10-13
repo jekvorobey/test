@@ -93,6 +93,20 @@ export default {
                         desktopImage: banner.desktopImage,
                         tabletImage: banner.tabletImage,
                         mobileImage: banner.mobileImage,
+                        countdown: {
+                            id: banner.countdown.id,
+                            isActive: banner.countdown.date_to,
+                            startDate: banner.countdown.date_from,
+                            deadLine: banner.countdown.date_to,
+                            textTitle: banner.text,
+                            desktopImage: null,
+                            tabletImage: null,
+                            mobileImage: null,
+                            textColor: banner.countdown.text_color,
+                            numColor: banner.countdown.num_color,
+                            bgNumTop: banner.countdown.bg_numbers_top,
+                            bgNumBottom: banner.countdown.bg_numbers_bottom,
+                        },
                     });
                 }
             }
