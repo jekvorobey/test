@@ -141,7 +141,7 @@ export default {
         ...mapActions(CABINET_MODULE_PATH, [UPDATE_REFERRER_CODE, SET_CAN_EDIT_CODE]),
 
         async QRDownload() {
-            let svgData = await QRGenerate(1000, this.code);
+            let svgData = await QRGenerate(1000, generateReferralLink(this[REFERRAL_CODE]));
 
             await svgToPng(svgData, 0, 'black')
                 .then(pngData => {
@@ -188,7 +188,7 @@ export default {
     },
 
     async mounted() {
-        this.qrImage = await QRGenerate(200, this.code)
+        this.qrImage = await QRGenerate(200, generateReferralLink(this[REFERRAL_CODE]))
     },
 
     created() {
