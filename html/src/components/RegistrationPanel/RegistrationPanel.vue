@@ -21,7 +21,7 @@
                     :options="maskOptions"
                     :error="phoneError"
                 >
-                    Номер телефона penis
+                    Номер телефона
                     <template v-if="!isTablet" v-slot:after>
                         <v-button class="registration-panel__form-btn" type="submit" :disabled="isDisabledGetCodeBtn">
                             Получить код
