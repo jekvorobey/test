@@ -13,9 +13,6 @@
     &.swiper-container-initialized {
         opacity: 1;
     }
-    .swiper-wrapper{
-        position: relative;
-    }
     .swiper-button-next,
     .swiper-button-prev {
         position: relative;

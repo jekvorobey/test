@@ -12,18 +12,20 @@
         >
             <template v-for="banner in items">
                 <slot name="item" :item="banner">
-                    <banner-flip-counter
-                        title="Картошка по скидке! много картошки и много скидки!"
-                        deadline="2022-10-15 15:17:30"
-                        cardTopBackground="red"
-                        cardBottomBackground="pink"
-                        numColor="white"
-                    />
                     <catalog-banner-card
                         class="swiper-slide slider-banners-section__card"
                         :key="banner.id"
                         :item="banner"
                     >
+                        <banner-flip-counter
+                                v-if="banner.countdown"
+                                :deadline="banner.countdown.deadLine"
+                                :title="banner.countdown.textTitle"
+                                :titleColor="banner.countdown.textColor"
+                                :cardTopBackground="banner.countdown.bgNumTop"
+                                :cardBottomBackground="banner.countdown.bgNumBottom"
+                                :numColor="banner.countdown.numColor"
+                        />
                         <template v-if="banner.desktopImage">
                             <source
                                 :data-srcset="getImageWithRetina(banner.desktopImage, 'webp')"

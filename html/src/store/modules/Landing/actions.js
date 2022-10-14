@@ -77,37 +77,49 @@ export default {
             getBannersByCode(bannerType.MAIN_TOP, false, '/'),
             getBannersByCode(bannerType.MAIN_MIDDLE, false, '/'),
         ]);
-
         try {
             const banners = [];
-
             if (Array.isArray(sliderBanners) && sliderBanners.length > 0) {
                 for (const banner of sliderBanners) {
-                    banners.push({
-                        id: banner.id,
-                        name: '',
-                        type: bannerType.MAIN_TOP,
-                        url: banner.url,
-                        color: banner.color,
-                        controlsColor: banner.controls_color,
-                        desktopImage: banner.desktopImage,
-                        tabletImage: banner.tabletImage,
-                        mobileImage: banner.mobileImage,
-                        countdown: {
-                            id: banner.countdown.id,
-                            isActive: banner.countdown.date_to,
-                            startDate: banner.countdown.date_from,
-                            deadLine: banner.countdown.date_to,
-                            textTitle: banner.text,
-                            desktopImage: null,
-                            tabletImage: null,
-                            mobileImage: null,
-                            textColor: banner.countdown.text_color,
-                            numColor: banner.countdown.num_color,
-                            bgNumTop: banner.countdown.bg_numbers_top,
-                            bgNumBottom: banner.countdown.bg_numbers_bottom,
-                        },
-                    });
+                    if (banner.countdown) {
+                        banners.push({
+                            id: banner.id,
+                            name: '',
+                            type: bannerType.MAIN_TOP,
+                            url: banner.url,
+                            color: banner.color,
+                            controlsColor: banner.controls_color,
+                            desktopImage: banner.desktopImage,
+                            tabletImage: banner.tabletImage,
+                            mobileImage: banner.mobileImage,
+                            countdown: {
+                                id: banner.countdown.id,
+                                isActive: banner.countdown.date_to,
+                                startDate: banner.countdown.date_from,
+                                deadLine: banner.countdown.date_to,
+                                textTitle: banner.countdown.text,
+                                desktopImage: null,
+                                tabletImage: null,
+                                mobileImage: null,
+                                textColor: banner.countdown.text_color,
+                                numColor: banner.countdown.num_color,
+                                bgNumTop: banner.countdown.bg_numbers_top,
+                                bgNumBottom: banner.countdown.bg_numbers_bottom,
+                            },
+                        });
+                    } else {
+                        banners.push({
+                            id: banner.id,
+                            name: '',
+                            type: bannerType.MAIN_TOP,
+                            url: banner.url,
+                            color: banner.color,
+                            controlsColor: banner.controls_color,
+                            desktopImage: banner.desktopImage,
+                            tabletImage: banner.tabletImage,
+                            mobileImage: banner.mobileImage,
+                        });
+                    }
                 }
             }
 
