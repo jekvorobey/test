@@ -75,7 +75,7 @@
                 <div class="catalog-product-list-card__prices" v-bind="itemPropSettings.offers">
                     <price
                         class="text-bold catalog-product-list-card__price"
-                        v-if="item.price || item.isPriceHidden"
+                        v-if="item.price || !item.price || item.isPriceHidden"
                         v-bind="
                             item.oldPrice && isEqPrices(modifiedPrice, modifiedOldPrice)
                                 ? concretePrice(modifiedPrice)
