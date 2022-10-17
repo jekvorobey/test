@@ -191,9 +191,11 @@
   &__person {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    @media(min-width: 768px) {
+        align-items: flex-end;
+    }
     @media (--tablet) {
-      flex-direction: column;
+        flex-direction: column;
     }
   }
 
