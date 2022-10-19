@@ -1,5 +1,5 @@
 <template>
-    <div class="container flip-clock" v-if="!timeEnded">
+    <div class="container flip-clock" v-if="!timeEnded && timeToStart">
         <div :style="{color: titleColor}" class="flip-title" v-if="title">
             {{title}}
         </div>
@@ -129,6 +129,7 @@
         data() {
             const uuid = uuidv4();
             return {
+                timeToStart: false,
                 now: Math.trunc(new Date().getTime() / 1000),
                 date: null,
                 interval: null,
@@ -196,76 +197,78 @@
                 this.updateTime(3, this.seconds);
             },
             updateTime(idx, newValue) {
-                if (idx >= this.timeData.length || newValue === undefined) {
-                    return;
-                }
+               if (this.timeToStart) {
+                   if (idx >= this.timeData.length || newValue === undefined) {
+                       return;
+                   }
 
-                if (window['requestAnimationFrame']) {
-                    this.frame = requestAnimationFrame(this.updateTime.bind(this));
-                }
+                   if (window['requestAnimationFrame']) {
+                       this.frame = requestAnimationFrame(this.updateTime.bind(this));
+                   }
 
-                if (newValue === 0 && idx === 0) {
-                    this.timeData[idx].isZero = true;
-                }
+                   if (newValue === 0 && idx === 0) {
+                       this.timeData[idx].isZero = true;
+                   }
 
-                if (newValue === 0 && idx === 1) {
-                    if(this.timeData[0].isZero === true){
-                        this.timeData[idx].isZero = true;
-                    }
-                }
+                   if (newValue === 0 && idx === 1) {
+                       if(this.timeData[0].isZero === true){
+                           this.timeData[idx].isZero = true;
+                       }
+                   }
 
-                if (newValue === 0 && idx === 2) {
-                    if(this.timeData[0].isZero === true && this.timeData[1].isZero === true){
-                        this.timeData[idx].isZero = true;
-                    }
-                }
+                   if (newValue === 0 && idx === 2) {
+                       if(this.timeData[0].isZero === true && this.timeData[1].isZero === true){
+                           this.timeData[idx].isZero = true;
+                       }
+                   }
 
-                if (newValue === 0 && idx === 3) {
-                    if(this.timeData[0].isZero === true && this.timeData[1].isZero === true && this.timeData[2].isZero === true){
-                        this.timeData[idx].isZero = true;
-                    }
-                }
+                   if (newValue === 0 && idx === 3) {
+                       if(this.timeData[0].isZero === true && this.timeData[1].isZero === true && this.timeData[2].isZero === true){
+                           this.timeData[idx].isZero = true;
+                       }
+                   }
 
-                const d = this.timeData[idx];
-                const val = newValue < 0 ? 0 : newValue;
-                const el = document.querySelector(`#${d.elementId}`);
+                   const d = this.timeData[idx];
+                   const val = newValue < 0 ? 0 : newValue;
+                   const el = document.querySelector(`#${d.elementId}`);
 
-                if (val !== d.current) {
-                    d.previous = d.current;
-                    d.current = val;
+                   if (val !== d.current) {
+                       d.previous = d.current;
+                       d.current = val;
 
-                    if (el) {
-                        el.classList.remove('flip');
-                        void el.offsetWidth;
-                        el.classList.add('flip');
-                    }
+                       if (el) {
+                           el.classList.remove('flip');
+                           void el.offsetWidth;
+                           el.classList.add('flip');
+                       }
 
-                    if (idx === 0) {
-                        try {
-                            const els = el.querySelectorAll('span b');
-                            if (els) {
-                                for (let e of els) {
-                                    const cls = e.classList[0];
-                                    if (newValue / 1000 >= 1) {
-                                        if (!cls.includes('-4digits')) {
-                                            const newCls = cls + '-4digits';
-                                            e.classList.add(newCls);
-                                            e.classList.remove(cls);
-                                        }
-                                    } else {
-                                        if (cls.includes('-4digits')) {
-                                            const newCls = cls.replace('-4digits', '');
-                                            e.classList.add(newCls);
-                                            e.classList.remove(cls);
-                                        }
-                                    }
-                                }
-                            }
-                        } catch (e) {
-                            console.log(e)
-                        }
-                    }
-                }
+                       if (idx === 0) {
+                           try {
+                               const els = el.querySelectorAll('span b');
+                               if (els) {
+                                   for (let e of els) {
+                                       const cls = e.classList[0];
+                                       if (newValue / 1000 >= 1) {
+                                           if (!cls.includes('-4digits')) {
+                                               const newCls = cls + '-4digits';
+                                               e.classList.add(newCls);
+                                               e.classList.remove(cls);
+                                           }
+                                       } else {
+                                           if (cls.includes('-4digits')) {
+                                               const newCls = cls.replace('-4digits', '');
+                                               e.classList.add(newCls);
+                                               e.classList.remove(cls);
+                                           }
+                                       }
+                                   }
+                               }
+                           } catch (e) {
+                               console.log(e)
+                           }
+                       }
+                   }
+               }
             },
         },
         computed: {
@@ -346,6 +349,9 @@
             if (this.diff !== 0) {
                 this.show = true;
             }
+            setTimeout( () => {
+                this.timeToStart = true
+            }, 400)
         },
         beforeDestroy() {
             if (window['cancelAnimationFrame']) {
