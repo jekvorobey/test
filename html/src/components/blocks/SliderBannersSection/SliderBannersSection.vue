@@ -18,8 +18,8 @@
                         :item="banner"
                     >
                         <banner-flip-counter
-                                v-if="banner.countdown && banner.countdown.isActive && (
-                                    Date.parse(banner.countdown.isActive) > Date.parse(new Date())
+                                v-if="banner.countdown && banner.countdown.startDate && (
+                                    Date.parse(banner.countdown.startDate) <= Date.parse(new Date())
                                     )"
                                 :deadline="banner.countdown.deadLine"
                                 :title="banner.countdown.textTitle"
