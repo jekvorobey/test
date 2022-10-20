@@ -287,7 +287,7 @@
             <div class="container">
                 <retail-rocket-container
                         data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
-                        :data-product-id="getProductIdList"
+                        :data-product-id="getProductId"
                         :data-auth="hasSession ? 'true' : 'false'"
                         :data-user-moderation="[CAN_USER_BUY] ? 'true' : 'false'"
                 />
@@ -627,7 +627,7 @@
             <div class="container">
                 <retail-rocket-container
                         data-retailrocket-markup-block="5efda11697a52833a0d006e6"
-                        :data-product-id="getProductIdList"
+                        :data-product-id="getProductId"
                         :data-auth="hasSession ? 'true' : 'false'"
                         :data-user-moderation="[CAN_USER_BUY] ? 'true' : 'false'"
                 />
@@ -1279,6 +1279,10 @@ export default {
                 });
             } else productIds.push(productId);
             return productIds;
+        },
+        getProductId() {
+            const { id } = this[PRODUCT] ;
+            return id;
         }
     },
 
