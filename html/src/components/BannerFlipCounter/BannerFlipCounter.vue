@@ -1,21 +1,24 @@
 <template>
-    <div class="container flip-clock" v-if="!timeEnded && timeToStart">
-        <div :style="{color: titleColor}" class="flip-title" v-if="title">
-            {{title}}
-        </div>
-        <div>
-            <template v-for="(data, index) in timeData">
-                <span v-bind:key="data.label" class="flip-clock__piece" :id="data.elementId" v-show="data.show && !data.isZero && data.current !== 0">
+    <div class="container flip-clock">
+
+        <div v-if="timeToStart">
+            <div :style="{color: titleColor}" class="flip-title" v-if="title">
+                {{title}}
+            </div>
+            <div>
+                <template v-for="(data, index) in timeData">
+                <span v-bind:key="data.label" class="flip-clock__piece" :id="data.elementId" v-show="data.show &&
+                !data.isZero && data.current !== 0 || (data.current === 0 && data.type === 'seconds')">
                     <span class="flip-clock__card flip-card" :style="countdownSize ? `font-size:${countdownSize}` : ''">
                         <b
-                            :style="{color: numColor, background: cardTopBackground}"
-                            class="flip-card__top">
+                                :style="{color: numColor, background: cardTopBackground}"
+                                class="flip-card__top">
                             {{ data.current | twoDigits }}
                         </b>
                         <b
-                            :style="{color: numColor, background: cardBottomBackground}"
-                            class="flip-card__bottom"
-                            v-bind:data-value="data.current | twoDigits"
+                                :style="{color: numColor, background: cardBottomBackground}"
+                                class="flip-card__bottom"
+                                v-bind:data-value="data.current | twoDigits"
                         ></b>
                         <b :style="{color: numColor}" class="flip-card__back"
                            v-bind:data-value="data.previous | twoDigits"></b>
@@ -26,7 +29,7 @@
                     <span
                             v-if="index === 0"
                             class="flip-clock__slot"
-                          :style="labelSize ? `font-size:${labelSize}` : ''">{{ daysNoun }}</span>
+                            :style="labelSize ? `font-size:${labelSize}` : ''">{{ daysNoun }}</span>
                      <span v-if="index === 1"
                            class="flip-clock__slot"
                            :style="labelSize ? `font-size:${labelSize}` : ''">{{ hoursNoun }}</span>
@@ -37,8 +40,10 @@
                            class="flip-clock__slot"
                            :style="labelSize ? `font-size:${labelSize}` : ''">{{ secondsNoun }}</span>
                 </span>
-            </template>
+                </template>
+            </div>
         </div>
+
         <div>
             <style>
                 :root {
@@ -165,7 +170,6 @@
                     },
                     {
                         type: 'seconds',
-                        isZero: false,
                         current: 0,
                         previous: 0,
                         label: this.labels.seconds,
@@ -272,9 +276,9 @@
             },
         },
         computed: {
-            timeEnded() {
-                return this.timeData[0].isZero && this.timeData[1].isZero && this.timeData[2].isZero && this.timeData[3].current === 0
-            },
+            // timeEnded() {
+            //     return this.timeData[0].isZero && this.timeData[1].isZero && this.timeData[2].isZero && this.timeData[3].current === 0
+            // },
             seconds() {
                 return Math.trunc(this.diff) % 60;
             },
