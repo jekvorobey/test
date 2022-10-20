@@ -1185,3 +1185,28 @@
         height: 100%;
     }
 }
+
+.bundle-scroll-btn {
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: 15px;
+    &__text {
+        text-align: center;
+         border-bottom: 1px solid #7a5a5a47;
+         font-weight: 500;
+     }
+     &__icon{
+          animation: UpAndDown 1s linear infinite;
+      }
+}
+
+@keyframes UpAndDown {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
