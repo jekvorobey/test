@@ -29,16 +29,16 @@
                     <span
                             v-if="index === 0"
                             class="flip-clock__slot"
-                            :style="labelSize ? `font-size:${labelSize}` : ''">{{ daysNoun }}</span>
+                            :style="{'font-size':labelSize || '', 'color': titleColor}">{{ daysNoun }}</span>
                      <span v-if="index === 1"
                            class="flip-clock__slot"
-                           :style="labelSize ? `font-size:${labelSize}` : ''">{{ hoursNoun }}</span>
+                           :style="{'font-size':labelSize || '', 'color': titleColor}">{{ hoursNoun }}</span>
                      <span v-if="index === 2"
                            class="flip-clock__slot"
-                           :style="labelSize ? `font-size:${labelSize}` : ''">{{ minutesNoun }}</span>
+                           :style="{'font-size':labelSize || '', 'color': titleColor}">{{ minutesNoun }}</span>
                      <span v-if="index === 3"
                            class="flip-clock__slot"
-                           :style="labelSize ? `font-size:${labelSize}` : ''">{{ secondsNoun }}</span>
+                           :style="{'font-size':labelSize || '', 'color': titleColor}">{{ secondsNoun }}</span>
                 </span>
                 </template>
             </div>
@@ -559,9 +559,6 @@
         }
         .flip-card {
             font-size: 1.2rem;
-        }
-        .flip-clock__slot {
-            display: none;
         }
     }
 </style>
