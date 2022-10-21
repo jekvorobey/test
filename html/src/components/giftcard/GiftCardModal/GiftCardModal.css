@@ -73,7 +73,10 @@
       }
     }
   }
-
+  &__tab-btn {
+     background-color: #fff;
+      color: #000000;
+   }
   &__top {
     display: flex;
     /*margin-bottom: calc(var(--gs) * 6);*/
@@ -188,9 +191,11 @@
   &__person {
     display: flex;
     justify-content: space-between;
-
+    @media(min-width: 768px) {
+        align-items: flex-end;
+    }
     @media (--tablet) {
-      flex-direction: column;
+        flex-direction: column;
     }
   }
 
@@ -207,7 +212,8 @@
     cursor: pointer;
 
     &--active {
-      color: #000000;
+      background-color: #000000;
+      color: #fff;
     }
   }
 

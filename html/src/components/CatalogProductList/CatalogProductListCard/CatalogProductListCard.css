@@ -11,7 +11,9 @@
     }
 
     &:hover &__body {
-        background-color: var(--cl-elem-grey);
+        @media (--tablet-min) {
+            background-color: var(--cl-elem-grey);
+        }
     }
 
     &:hover &__img {

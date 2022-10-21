@@ -115,7 +115,7 @@
                         </filter-button>
                     </div>
 
-                    <transition-group v-if="!isTabletLg" tag="ul" class="catalog-view__main-tags" name="tag-item">
+                    <transition-group tag="ul" class="catalog-view__main-tags" name="tag-item">
                         <tag-item
                             v-for="(tag, index) in activeTags"
                             :data-index="index"

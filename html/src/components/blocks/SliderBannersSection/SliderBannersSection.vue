@@ -17,6 +17,26 @@
                         :key="banner.id"
                         :item="banner"
                     >
+                        <banner-flip-counter
+                                v-if="(banner.countdown && (
+                                        banner.countdown.startDate && banner.countdown.deadLine && (
+                                        Date.parse(banner.countdown.startDate) <= Date.parse(new Date())
+                                        ) && (
+                                             Date.parse(new Date()) < Date.parse(banner.countdown.deadLine)
+                                        )
+                                    )
+                                )  || (
+                                    banner.countdown && banner.countdown.deadLine && (
+                                         Date.parse(new Date()) < Date.parse(banner.countdown.deadLine)
+                                        )
+                                    )"
+                                :deadline="banner.countdown.deadLine"
+                                :title="banner.countdown.textTitle"
+                                :titleColor="banner.countdown.textColor"
+                                :cardTopBackground="banner.countdown.bgNumTop"
+                                :cardBottomBackground="banner.countdown.bgNumBottom"
+                                :numColor="banner.countdown.numColor"
+                        />
                         <template v-if="banner.desktopImage">
                             <source
                                 :data-srcset="getImageWithRetina(banner.desktopImage, 'webp')"
@@ -60,6 +80,7 @@
 <script>
 import VSlider from '@controls/VSlider/VSlider.vue';
 import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
+import BannerFlipCounter from "@components/BannerFlipCounter/BannerFlipCounter.vue";
 
 import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
@@ -90,6 +111,7 @@ export default {
     components: {
         VSlider,
         CatalogBannerCard,
+        BannerFlipCounter
     },
 
     props: {

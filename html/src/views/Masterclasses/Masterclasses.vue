@@ -226,6 +226,10 @@
                 К сожалению, список мероприятий пуст. <br />
                 Измените настройки фильтра.
             </empty-placeholder-panel>
+
+            <div class="masterclasses-view__footer-socials">
+                <UniversitySocials/>
+            </div>
         </section>
 
         <!-- #62050
@@ -309,7 +313,7 @@ import VSlider from '@controls/VSlider/VSlider.vue';
 import MasterClassCard from '@components/MasterClassCard/MasterClassCard.vue';
 import MasterClassBannerCard from '@components/MasterClassBannerCard/MasterClassBannerCard.vue';
 import MasterclassCatalogFilter from '@components/MasterclassCatalogFilter/MasterclassCatalogFilter.vue';
-
+import UniversitySocials from "@components/UniversitySocials/UniversitySocials.vue";
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 import SeparatorSection from '@components/blocks/SeparatorSection/SeparatorSection.vue';
@@ -426,7 +430,7 @@ export default {
 
         Breadcrumbs,
         BreadcrumbItem,
-
+        UniversitySocials,
         SeparatorSection,
         EmptyPlaceholderPanel,
     },

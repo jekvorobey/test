@@ -100,7 +100,7 @@
                     <div class="gift-card-modal__person-input">
                         <div class="gift-card-modal__input-title">
                             <span
-                                class="gift-card-modal__contact-tab-title"
+                                class="gift-card-modal__contact-tab-title gift-card-modal__tab-btn btn"
                                 :class="{
                                     'gift-card-modal__contact-tab-title--active': personTo.activeTab === 'email',
                                 }"
@@ -108,9 +108,8 @@
                             >
                                 Email
                             </span>
-                            /
                             <span
-                                class="gift-card-modal__contact-tab-title"
+                                class="gift-card-modal__contact-tab-title gift-card-modal__tab-btn btn"
                                 :class="{
                                     'gift-card-modal__contact-tab-title--active': personTo.activeTab === 'phone',
                                 }"
@@ -169,7 +168,7 @@
                     <div class="gift-card-modal__person-input">
                         <div class="gift-card-modal__input-title">
                             <span
-                                class="gift-card-modal__contact-tab-title"
+                                class="gift-card-modal__contact-tab-title gift-card-modal__tab-btn btn"
                                 :class="{
                                     'gift-card-modal__contact-tab-title--active': personFrom.activeTab === 'email',
                                 }"
@@ -177,9 +176,8 @@
                             >
                                 Email
                             </span>
-                            /
                             <span
-                                class="gift-card-modal__contact-tab-title"
+                                class="gift-card-modal__contact-tab-title gift-card-modal__tab-btn btn"
                                 :class="{
                                     'gift-card-modal__contact-tab-title--active': personFrom.activeTab === 'phone',
                                 }"
