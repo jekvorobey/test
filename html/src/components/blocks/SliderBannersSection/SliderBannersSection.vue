@@ -20,14 +20,14 @@
                         <banner-flip-counter
                                 v-if="(banner.countdown && (
                                         banner.countdown.startDate && banner.countdown.deadLine && (
-                                        Date.parse(banner.countdown.startDate) <= Date.parse(new Date())
+                                        Date.parse(dateToFuckingIOS(banner.countdown.startDate)) <= Date.parse(new Date())
                                         ) && (
-                                             Date.parse(new Date()) < Date.parse(banner.countdown.deadLine)
+                                             Date.parse(new Date()) < Date.parse(dateToFuckingIOS(banner.countdown.deadLine))
                                         )
                                     )
                                 )  || (
                                     banner.countdown && banner.countdown.deadLine && (
-                                         Date.parse(new Date()) < Date.parse(banner.countdown.deadLine)
+                                         Date.parse(new Date()) < Date.parse(dateToFuckingIOS(banner.countdown.deadLine))
                                         )
                                     )"
                                 :deadline="banner.countdown.deadLine"
@@ -78,15 +78,15 @@
 </template>
 
 <script>
-import VSlider from '@controls/VSlider/VSlider.vue';
-import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
-import BannerFlipCounter from "@components/BannerFlipCounter/BannerFlipCounter.vue";
+    import VSlider from '@controls/VSlider/VSlider.vue';
+    import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
+    import BannerFlipCounter from "@components/BannerFlipCounter/BannerFlipCounter.vue";
 
-import { fileExtension } from '@enums';
-import { generatePictureSourcePath } from '@util/file';
-import './SliderBannersSection.css';
+    import {fileExtension} from '@enums';
+    import {generatePictureSourcePath} from '@util/file';
+    import './SliderBannersSection.css';
 
-const sliderOptions = {
+    const sliderOptions = {
     slidesPerView: 1,
     grabCursor: true,
     // loop: true,
@@ -195,6 +195,16 @@ export default {
     },
 
     methods: {
+        dateToFuckingIOS(dateString) {
+            if(dateString.indexOf('-') > 0) {
+                let arr = dateString.split(/[- :]/);
+                return new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
+            } else {
+                let arr = dateString.split(/[. :]/);
+                return new Date(arr[2], arr[1] - 1, arr[0], arr[3], arr[4], arr[5]);
+            }
+        },
+
         mobileImage(banner) {
             const image = banner.mobileImage || banner.tabletImage || banner.desktopImage;
             const imageRetina = banner.mobileImageRetina || banner.tabletImageRetina;
