@@ -560,8 +560,5 @@
         .flip-card {
             font-size: 1.2rem;
         }
-        .flip-clock__slot {
-            display: none;
-        }
     }
 </style>
