@@ -133,9 +133,10 @@ export default {
 
             const { firstName, lastName } = this[USER] || {};
 
-            if (!firstName || !lastName) return 'Вы';
+            if (firstName && lastName) return `${firstName} ${lastName}`;
 
-            return `${firstName} ${lastName}`;
+            if ((!firstName && !lastName) || (lastName && !firstName)) return 'Вы';
+            else return firstName;
         },
 
         async onSendMessage() {
