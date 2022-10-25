@@ -130,7 +130,11 @@ export default {
 
         getTitle(message) {
             if (message.isSystem) return 'Команда Бессовестно Талантливый';
+
             const { firstName, lastName } = this[USER] || {};
+
+            if (!firstName || !lastName) return 'Вы';
+
             return `${firstName} ${lastName}`;
         },
 
