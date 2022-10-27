@@ -15,7 +15,7 @@
             >
                 <span @click.stop.prevent="onToggleMenu">{{ item.name }}</span>
             </v-link>
-            <v-link class="header-navigation-panel__item" :class="{'scroll-size': scroll && isDesktop}" v-else :key="item.name" :to="item.url" same-disabled>
+            <v-link v-else class="header-navigation-panel__item" :class="{'scroll-size': scroll && isDesktop}"  :key="item.name" :to="item.url" same-disabled>
                 {{ item.name }}
             </v-link>
         </template>
@@ -43,12 +43,7 @@ import './HeaderNavigationPanel.critical.css';
 
 export default {
     name: 'header-navigation-panel',
-    props: {
-        scroll: {
-            type: Boolean,
-            default: false
-        }
-    },
+
     components: {
         VLink,
         VBurger,
