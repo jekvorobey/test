@@ -8,7 +8,7 @@
                         maxLength="12"
                         placeholder="Введите ИНН"
                         :value="$v.form.inn.$model"
-                        :error="$v.form.inn.$invalid"
+                        :error="$v.form.inn.$error"
                         :show-error="false"
                         @input="onInnChange"
                     />
@@ -45,14 +45,14 @@
                         v-model="form.account"
                         maxLength="20"
                         :show-error="false"
-                        :error="$v.form.account.$invalid"
+                        :error="$v.form.account.$error"
                     />
                 </info-row>
                 <info-row class="cabinet-requisites-panel__item" name="БИК">
                     <v-input
                         class="cabinet-requisites-panel__item-input"
                         :value="$v.form.bik.$model"
-                        :error="$v.form.bik.$invalid"
+                        :error="$v.form.bik.$error"
                         :show-error="false"
                         @input="onBikChange"
                     />
