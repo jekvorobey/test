@@ -16,6 +16,7 @@
             @blur="isFocus = false"
             @keyup.enter="onSearch"
             :maxlength="limit"
+            enterkeyhint="search"
         />
 
         <button class="search-filter__clear" @click="onClearClick">
