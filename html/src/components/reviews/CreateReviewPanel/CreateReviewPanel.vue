@@ -25,7 +25,8 @@
                         </template>
 
                         <template v-slot:inactiveLabel>
-                            <v-svg name="star-empty-small" width="20" height="20" />
+                            <v-svg v-if="!ratingError" name="star-empty-small" width="20" height="20"/>
+                            <v-svg v-else name="star-empty-small-error" width="20" height="20"/>
                         </template>
                     </v-rating>
                 </div>
@@ -91,6 +92,7 @@ import VRating from '@controls/VRating/VRating.vue';
 
 import { mimeType } from '@enums';
 import validationMixin, { required } from '@plugins/validation';
+import '@images/sprites/star-empty-small-error.svg';
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import './CreateReviewPanel.css';
