@@ -45,7 +45,9 @@
             flex-wrap: wrap;
         }
     }
-
+    &__referal-panel {
+         margin-bottom: 40px;
+     }
     &__panel {
         display: flex;
         width: calc(50% - var(--gs));
@@ -409,6 +411,7 @@
         }
 
         &-link {
+            display: inline-block;
             text-transform: none;
             text-decoration: underline;
             font-weight: normal;

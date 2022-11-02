@@ -4,6 +4,8 @@
             {{ pageTitle }}
         </h2>
 
+        <cabinet-referral-panel class="cabinet-view__panel referal-view__referal-panel" />
+
         <div class="referal-view__panels" v-if="referralData && level">
             <div class="referal-view__panel">
                 <div class="referal-view__panel-group">
@@ -214,7 +216,7 @@
                 </li>
             </ul>
         </template>
-        <attention-panel class="referal-view__attention-panel" v-else>
+        <attention-panel class="referal-view__attention-panel">
             <div class="referal-view__attention-section">
                 <p class="referal-view__attention-text">
                     Вам еще не начислялись вознаграждения за покупки рефералов. Воспользуйтесь одним из маркетинговых
@@ -331,7 +333,7 @@ import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
 import FilterButton from '@components/FilterButton/FilterButton.vue';
 import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
-
+import CabinetReferralPanel from "@components/profile/CabinetReferralPanel/CabinetReferralPanel.vue";
 import MessageModal from '@components/profile/MessageModal/MessageModal.vue';
 
 import { mapActions, mapGetters, mapState } from 'vuex';
@@ -353,7 +355,7 @@ import { NAME as AUTH_MODULE, REFERRAL_CODE, USER } from '@store/modules/Auth';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { $store, $progress } from '@services';
+import {$store, $progress, $logger} from '@services';
 import { fileExtension, sortDirections, modalName, themeCodes } from '@enums';
 import { referralOrderSortFields } from '@enums/profile';
 import { filterField } from '@enums/order';
@@ -366,11 +368,17 @@ import { generatePictureSourcePath } from '@util/file';
 import { generateReferralLink } from '@util/profile';
 import { getOrderFilterDate } from '@util/order';
 import metaMixin from '@plugins/meta';
+import '@images/sprites/link.svg';
 import '@images/sprites/logo.svg';
 import '@images/sprites/arrow-down-small.svg';
 import './Referal.css';
-
+import {
+    FETCH_CABINET_DATA,
+} from "@store/modules/Profile/modules/Cabinet/actions";
+import {NAME as CABINET_MODULE} from "@store/modules/Profile/modules/Cabinet";
 const REFERRAL_MODULE_PATH = `${PROFILE_MODULE}/${REFERRAL_MODULE}`;
+const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
+
 const ReferralChart = () =>
     import(/* webpackChunkName: "referral-chart" */ '@components/profile/ReferralChart/ReferralChart.vue');
 
@@ -388,6 +396,7 @@ export default {
         VArcCounter,
         GeneralModal,
 
+        CabinetReferralPanel,
         Price,
         InfoRow,
         FilterButton,
@@ -586,6 +595,7 @@ export default {
     methods: {
         ...mapActions(REFERRAL_MODULE_PATH, [FETCH_REFERRAL_DATA, FETCH_ORDERS, SET_LOAD_PATH]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
+        ...mapActions(CABINET_MODULE_PATH, [FETCH_CABINET_DATA]),
 
         onOpenOrder(id) {
             this.$router.push({ name: 'ReferalOrderDetails', params: { referalId: id } });
@@ -671,6 +681,12 @@ export default {
     },
 
     beforeRouteEnter(to, from, next) {
+        try {
+            $store.dispatch(`${CABINET_MODULE_PATH}/${FETCH_CABINET_DATA}`)
+        } catch (error) {
+            $logger.error(error);
+        }
+
         function proceed() {
             if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][REFERRAL_MODULE]) {
                 const {
