@@ -1,0 +1,23 @@
+.no-connection {
+    width: 223px;
+    text-align: center;
+    position: fixed;
+    transition: 1s all;
+    top: 0;
+    right: -300px;
+    z-index: 9999999;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    &__show {
+         right: 0;
+     }
+     &__fail {
+        background: red;
+        padding: 12px 7px;
+      }
+      &__restore {
+        background: #30f52a;
+        padding: 12px 7px;
+       }
+}
