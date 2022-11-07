@@ -5,9 +5,7 @@
                 :class="{'no-connection__show': toShow}"
                 class="no-connection"
         >
-            <div v-if="!online" class="no-connection__fail">
-                <div>Отсутствует интернет соединение</div>
-            </div>
+            <div v-if="!online" class="no-connection__fail">Отсутствует интернет соединение</div>
             <div v-else class="no-connection__restore">Соединение восстановлено</div>
         </div>
     </transition>
@@ -41,13 +39,11 @@
         mounted() {
             this.$nextTick(() => {
                 window.addEventListener('offline', () => {
-                    console.log('offline');
                     this.online = false
                     this.show()
                 });
 
                 window.addEventListener('online', () => {
-                    console.log('online');
                     this.online = true
                     this.showByTimeout()
                 });
