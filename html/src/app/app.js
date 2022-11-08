@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import { sync } from 'vuex-router-sync';
 
+import * as Sentry from "@sentry/vue";
+import { BrowserTracing } from "@sentry/tracing";
+
 import { injectionType } from '@enums';
 
 import createStore from '@store';
@@ -47,6 +50,15 @@ export default function createApp(container, initialState = null) {
     sync(store, router);
 
     if (initialState) store.replaceState(initialState);
+
+    Sentry.init({
+        Vue,
+        dsn: process.env.SENTRY_LARAVEL_DSN,
+        integrations: [
+            new BrowserTracing(),
+        ],
+        tracesSampleRate: 1.0,
+    });
 
     // create the app instance.
     // here we inject the router, store and ssr context to all child components,

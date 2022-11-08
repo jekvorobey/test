@@ -124,6 +124,8 @@ import { SCROLL, IS_MENU_OPEN } from '@store';
 
 import moment from 'moment';
 
+import * as Sentry from "@sentry/browser";
+
 Vue.use(SocialSharing);
 Vue.component('v-svg', VSvg);
 
@@ -296,6 +298,12 @@ export default {
         // скролл страницы до хеша при первой загрузке страницы
         if (this.$route.hash) setTimeout(this.scrollFix, 1);
         setTimeout(this.onCheckCitySelection, interval.TWO_SECONDS);
+        try {
+            aFunctionThatMightFail();
+        } catch (err) {
+            Sentry.captureException(err);
+            Sentry.captureMessage("Сайт говно, опять упал");
+        }
     },
 
     beforeDestroy() {
