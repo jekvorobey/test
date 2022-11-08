@@ -53,7 +53,7 @@ export default function createApp(container, initialState = null) {
 
     Sentry.init({
         Vue,
-        dsn: process.env.SENTRY_LARAVEL_DSN,
+        dsn: 'https://82da344cf71c4669bf3aa76aca01bd31@o880371.ingest.sentry.io/5849194',
         integrations: [
             new BrowserTracing(),
         ],

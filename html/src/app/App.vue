@@ -302,7 +302,7 @@ export default {
             aFunctionThatMightFail();
         } catch (err) {
             Sentry.captureException(err);
-            Sentry.captureMessage("Сайт говно, опять упал");
+            Sentry.captureMessage("TEST ERROR FINAL-ENV-TEST");
         }
     },
 
