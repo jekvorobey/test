@@ -209,7 +209,7 @@ export default {
         favoritesBtnText() {
             if (this.isTablet) return '';
             if (this.inFavorites) return 'В избранном';
-            return 'Перенести в избранное';
+            return 'Добавить в избранное';
         },
 
         deleteBtnText() {
