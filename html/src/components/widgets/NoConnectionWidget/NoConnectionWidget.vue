@@ -2,11 +2,11 @@
     <transition name="fade">
         <div
                 @click="hideByClick"
-                :class="{'no-connection__show': toShow}"
                 class="no-connection"
+                :class="{'no-connection__show': toShow, 'no-connection__restore':online,  'no-connection__fail': !online}"
         >
-            <div v-if="!online" class="no-connection__fail">Отсутствует интернет соединение</div>
-            <div v-else class="no-connection__restore">Соединение восстановлено</div>
+            <div>{{ messageText }}</div>
+            <v-svg v-if="!online" class="no-connection__cross" name="cross" width="25" height="25"/>
         </div>
     </transition>
 </template>
@@ -34,6 +34,11 @@
             },
             show() {
                 this.toShow = true
+            }
+        },
+        computed: {
+            messageText() {
+                return this.online ? 'Соединение восстановлено' : 'Отсутствует интернет соединение'
             }
         },
         mounted() {
