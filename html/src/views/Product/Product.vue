@@ -186,7 +186,7 @@
                         {{ buyBtnText }}
                     </product-cart-panel>
 
-                    <div v-if="productBundles"
+                    <div v-if="productBundles && productBundles.length > 0"
                          @click="onScrollTo($refs.bundleSection)"
                          class="bundle-scroll-btn"
                     >
