@@ -186,6 +186,19 @@
                         {{ buyBtnText }}
                     </product-cart-panel>
 
+                    <div v-if="productBundles && productBundles.length > 0"
+                         @click="onScrollTo($refs.bundleSection)"
+                         class="bundle-scroll-btn"
+                    >
+                        <span class="bundle-scroll-btn__text">КУПИТЬ ВЫГОДНЫЙ КОМПЛЕКТ</span>
+                        <v-svg
+                                class="bundle-scroll-btn__icon"
+                                name="arrow-down-small"
+                                width="25"
+                                height="25"
+                        />
+                    </div>
+
                     <product-delivery-panel
                         class="product-view__header-detail-section"
                         :delivery-methods="product.deliveryMethods"
@@ -341,7 +354,7 @@
             </div>
         </section>
 
-        <section class="product-view__section product-view__bundles" v-if="productBundles">
+        <section class="product-view__section product-view__bundles" v-if="productBundles" ref="bundleSection">
             <div class="container product-view__bundles">
                 <h2 class="product-bundle-panel__title" v-if="productBundles.length === 1">Выгодный комплект</h2>
                 <h2 class="product-bundle-panel__title" v-if="productBundles.length > 1">Выгодные комплекты</h2>
@@ -811,6 +824,7 @@ import '@images/sprites/star-small.svg';
 import '@images/sprites/arrow-small.svg';
 import '@images/sprites/wishlist-middle.svg';
 import '@images/sprites/home.svg';
+import '@images/sprites/arrow-down-small.svg';
 
 import './Product.css';
 import { getDate } from '@util';

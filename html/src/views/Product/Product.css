@@ -1185,3 +1185,19 @@
         height: 100%;
     }
 }
+
+.bundle-scroll-btn {
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: 35px;
+    @media (max-width: 1023px) {
+        margin-bottom: 20px;
+    }
+    &__text {
+        text-align: center;
+        font-weight: 500;
+     }
+}
+
