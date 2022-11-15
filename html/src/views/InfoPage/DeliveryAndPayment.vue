@@ -14,7 +14,7 @@
                 <ul class="list">
                     <li>Банковская карта (Visa, Mastercard, МИР)</li>
                     <li>Sber Pay</li>
-                    <li>Яндекс.Деньги</li>
+<!--                    <li>Яндекс.Деньги</li>-->
                     <li>Кошелёк ЮMoney</li>
                     <li>СБП (Система быстрых платежей)</li>
 <!--                    <li>Apple Pay (доступен в браузере Safari)</li>-->
