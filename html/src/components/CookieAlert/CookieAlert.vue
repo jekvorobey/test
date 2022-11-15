@@ -50,7 +50,7 @@
         mounted() {
             setTimeout(() => {
                 this.show = !$cookie.get('agreeCookie');
-            }, 4000)
+            }, 2000)
         }
     };
 </script>
