@@ -1,6 +1,6 @@
 <template>
     <div class="product-price-panel">
-        <div class="container product-price-panel__container">
+        <div class="container product-price-panel__container product-price-panel__installment">
             <div class="product-price-panel__img" v-if="image">
                 <v-picture :key="image && image.id" v-if="image" alt="">
                     <source :data-srcset="smallImage" type="image/webp" />
@@ -14,12 +14,18 @@
                 <price class="text-bold product-price-panel__price" v-bind="modifiedPrice" />
                 <price v-if="oldPrice" class="text-grey text-sm product-price-panel__price" v-bind="modifiedOldPrice" />
                 <div
-                    v-if="bonus && (!isPriceHidden || price || oldPrice)"
-                    class="text-grey text-sm product-price-panel__bonus"
+                        v-if="bonus && (!isPriceHidden || price || oldPrice)"
+                        class="text-grey text-sm product-price-panel__bonus"
                 >
                     + {{ computedBonus }} бонусов
                 </div>
             </div>
+
+            <installment-price
+                    v-if="installment && installment.isInstallmentAvailable"
+                    :value="price.value"
+                    :installment-period="installment.installmentPeriod"
+            />
 
             <buy-button
                 class="product-price-panel__btn"
@@ -39,6 +45,7 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 
 import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
+import InstallmentPrice from "@components/InstallmentPrice/InstallmentPrice.vue";
 
 import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
@@ -53,6 +60,7 @@ export default {
 
         Price,
         BuyButton,
+        InstallmentPrice
     },
 
     props: {
@@ -88,6 +96,11 @@ export default {
 
         toCardAdding: {
             type: Boolean,
+            default: false,
+        },
+
+        installment: {
+            type: [Object, Boolean],
             default: false,
         },
     },

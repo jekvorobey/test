@@ -1,6 +1,7 @@
 .product-cart-panel {
     &__info {
         display: flex;
+        align-items: center;
         margin-bottom: calc(var(--gs) * 2);
 
         &-bonus,

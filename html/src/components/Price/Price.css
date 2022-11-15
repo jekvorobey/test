@@ -2,7 +2,7 @@
     position: relative;
     white-space: nowrap;
     vertical-align: middle;
-
+    top: 1px;
     &__currency {
         font-size: 0.7em;
     }
