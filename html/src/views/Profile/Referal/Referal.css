@@ -408,6 +408,10 @@
                     margin-bottom: calc(var(--gs) * 1.5);
                 }
             }
+
+            &-mb {
+                 margin-bottom: 30px;
+             }
         }
 
         &-link {
