@@ -216,11 +216,13 @@
                 </li>
             </ul>
         </template>
-        <attention-panel class="referal-view__attention-panel">
+        <attention-panel class="referal-view__attention-panel" :class="{'referal-view__attention-panel-mb': (orders && orders.length) || !!sumArcData.value}">
             <div class="referal-view__attention-section">
                 <p class="referal-view__attention-text">
-                    Вам еще не начислялись вознаграждения за покупки рефералов. Воспользуйтесь одним из маркетинговых
-                    инструменов для привлечения аудитории:
+                    <span v-if="!((orders && orders.length) || !!sumArcData.value)">
+                        Вам еще не начислялись вознаграждения за покупки рефералов.
+                    </span>
+                    Воспользуйтесь одним из маркетинговых инструменов для привлечения аудитории:
                 </p>
                 <ul class="list list--dashed referal-view__attention-list">
                     <li class="referal-view__attention-list-item">
@@ -229,8 +231,7 @@
                         </v-link>
                         реферальную ссылку и разместить её в соцсетях
                     </li>
-                    <li class="referal-view__attention-list-item">
-                        собрать собственную
+                    <li class="referal-view__attention-list-item">собрать собственную
                         <v-link class="referal-view__attention-link" tag="button" :to="{ name: 'Promopage' }">
                             промо-страницу
                         </v-link>
