@@ -1,6 +1,5 @@
 <template>
         <header class="v-header" :class="[{ sticky: isSticky }, { 'v-header--search': search }]">
-            <cookie-alert/>
             <header-top class="v-header__top" />
             <header-middle class="v-header__middle" ref="middle" />
             <header-bottom class="v-header__bottom" ref="bottom" />
@@ -18,7 +17,6 @@
 import HeaderTop from './HeaderTop/HeaderTop.vue';
 import HeaderMiddle from './HeaderMiddle/HeaderMiddle.vue';
 import HeaderBottom from './HeaderBottom/HeaderBottom.vue';
-import CookieAlert from "@components/CookieAlert/CookieAlert.vue";
 import NavPanel from '@components/NavPanel/NavPanel.vue';
 import MobileMenu from '@components/MobileMenu/MobileMenu.vue';
 import SearchPanel from '@components/SearchPanel/SearchPanel.vue';
@@ -44,7 +42,6 @@ export default {
         HeaderTop,
         HeaderMiddle,
         HeaderBottom,
-        CookieAlert,
         SearchPanel,
         NavPanel,
         MobileMenu,
