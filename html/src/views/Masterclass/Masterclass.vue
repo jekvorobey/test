@@ -437,6 +437,7 @@
                         :description="ticket.description"
                         :max="ticket.qty - ticket.qtyOccupied"
                         :price="ticket.price"
+                        :installment="masterClass.installment"
                         :old-price="ticket.oldPrice"
                         :disabled="isInCart(ticket.offerId) || inProcess[ticket.offerId]"
                         :in-process="!!inProcess[ticket.offerId]"
@@ -818,7 +819,6 @@ export default {
         VAccordion,
         VVideo,
         VYoutube,
-
         Breadcrumbs,
         BreadcrumbItem,
 

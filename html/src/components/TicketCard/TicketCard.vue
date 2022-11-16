@@ -22,6 +22,11 @@
                     :value="computedOldPriceValue"
                     :currency="price.currency"
                 />
+                <installment-price
+                        v-if="installment && installment.isInstallmentAvailable"
+                        :value="computedPriceValue"
+                        :installment-period="installment.installmentPeriod"
+                />
             </div>
 
             <buy-button
@@ -43,6 +48,7 @@ import VCounter from '@controls/VCounter/VCounter.vue';
 
 import BuyButton from '../BuyButton/BuyButton.vue';
 import Price from '@components/Price/Price.vue';
+import InstallmentPrice from "@components/InstallmentPrice/InstallmentPrice.vue";
 
 import './TicketCard.css';
 
@@ -54,6 +60,7 @@ export default {
         VSpinner,
 
         Price,
+        InstallmentPrice,
         BuyButton,
     },
 
@@ -84,6 +91,10 @@ export default {
         },
 
         price: {
+            type: Object,
+        },
+
+        installment: {
             type: Object,
         },
 
