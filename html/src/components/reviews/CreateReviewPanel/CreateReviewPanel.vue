@@ -1,5 +1,5 @@
 <template>
-    <div class="create-review-panel">
+    <div class="create-review-panel"ref="ratingSection">
         <h2 class="create-review-panel__title">Отзывы</h2>
         <form class="create-review-panel__form" enctype="multipart/form-data" @submit.prevent="onSubmit">
             <input type="hidden" :value="code" name="object_code" />
@@ -7,8 +7,7 @@
 
             <div class="create-review-panel__form-review">
                 <div class="create-review-panel__form-rating">
-                    <span
-                        class="create-review-panel__form-rating-text"
+                    <span class="create-review-panel__form-rating-text"
                         :class="{ 'create-review-panel__form-rating-text--error': ratingError }"
                     >
                         Ваша оценка
@@ -161,7 +160,14 @@ export default {
     methods: {
         onSubmit(e) {
             this.$v.$touch();
-            if (this.$v.$invalid) return;
+            if (this.$v.$invalid) {
+                this.$refs.ratingSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'center'
+                });
+                return
+            }
 
             const formData = new FormData(e.target);
             for (const file of this.files) formData.append('files[]', file, file.name);
