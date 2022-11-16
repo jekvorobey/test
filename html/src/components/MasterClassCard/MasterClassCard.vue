@@ -23,12 +23,18 @@
                         {{ speaker }}
                     </div>
                 </v-link>
-                <div class="master-class-card__body-prices">
+                <div class="master-class-card__body-prices"
+                     :class="{'master-class-card__body-prices-installment': installment && installment.isInstallmentAvailable}">
                     <price
                         class="master-class-card__body-price"
                         v-bind="price"
                         :class="{ 'text-bold': !isSmall }"
                         :has-articles="hasArticles"
+                    />
+                    <installment-price
+                            v-if="installment && installment.isInstallmentAvailable"
+                            :value="price.value"
+                            :installment-period="installment.installmentPeriod"
                     />
                 </div>
             </div>
@@ -54,6 +60,7 @@ import VLink from '@controls/VLink/VLink.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
 
 import Price from '@components/Price/Price.vue';
+import InstallmentPrice from "@components/InstallmentPrice/InstallmentPrice.vue";
 
 import '@images/sprites/logo.svg';
 import '@images/sprites/cart.svg';
@@ -70,6 +77,7 @@ export default {
         VPicture,
 
         Price,
+        InstallmentPrice
     },
 
     props: {
@@ -96,6 +104,10 @@ export default {
 
         price: {
             type: Object,
+        },
+
+        installment: {
+            type: [Object, Boolean]
         },
 
         oldPrice: {
