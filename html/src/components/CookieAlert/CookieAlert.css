@@ -27,6 +27,11 @@
 .cookie-alert-show {
     bottom: 0;
 }
+@media(max-width: 767px) {
+    .cookie-alert-show {
+        bottom: 77px;
+    }
+}
 @media (max-width: 425px) {
     .cookie-alert {
         &__wrapper {
