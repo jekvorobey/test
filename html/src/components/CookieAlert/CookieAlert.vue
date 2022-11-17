@@ -1,13 +1,13 @@
 <template>
     <transition name="slip">
-        <div v-if="show" class="cookie-alert" :class="{ 'fixed-cookie-alert': isTabletLg }">
+        <div class="cookie-alert" :class="{'cookie-alert-show': show}">
             <div class="cookie-alert__wrapper">
                 <div class="cookie-alert__text">
                     {{ textToShow }}
                     <router-link to="/agreements/privacy-policy">Политикой конфиденциальности</router-link>
                 </div>
                 <button @click="onClose" class="cookie-alert_btn">
-                    <v-svg name="trash" width="24" height="23" modifier="cookie-alert-close"/>
+                    <v-svg name="cross" width="24" height="23" modifier="cookie-alert-close"/>
                 </button>
             </div>
         </div>
@@ -47,8 +47,10 @@
                 return this.isTabletLg ? 'Мы собираем куки. Посещая страницы сайта, вы соглашаетесь с ' : 'На сайте используются файлы cookies, которые его делают более удобным для каждого пользователя. Посещая страницы сайта, вы соглашаетесь с '
             }
         },
-        created() {
-            this.show = !$cookie.get('agreeCookie');
+        mounted() {
+            setTimeout(() => {
+                this.show = !$cookie.get('agreeCookie');
+            }, 2000)
         }
     };
 </script>

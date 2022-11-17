@@ -90,6 +90,11 @@
                         v-bind="concretePrice(modifiedOldPrice)"
                         has-articles
                     />
+                    <installment-price
+                            v-if="item.installment && item.installment.isInstallmentAvailable"
+                            :value="item.price.value"
+                            :installment-period="item.installment.installmentPeriod"
+                    />
                 </div>
 
                 <div class="link--sm catalog-product-list-card__link" v-bind="itemPropSettings.name">
@@ -136,6 +141,7 @@ import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 import NoPhotoStub from '@components/NoPhotoStub/NoPhotoStub.vue';
+import InstallmentPrice from "@components/InstallmentPrice/InstallmentPrice.vue";
 
 import {mapGetters, mapState} from 'vuex';
 
@@ -159,7 +165,7 @@ export default {
         VSvg,
         VLink,
         VPicture,
-
+        InstallmentPrice,
         Tag,
         Price,
         BuyButton,

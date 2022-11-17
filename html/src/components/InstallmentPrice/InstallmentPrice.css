@@ -1,0 +1,21 @@
+.installment-price{
+    background: #000;
+    font-size: 12px;
+    padding: 0 7px;
+    margin: 0 5px;
+    &__before {
+        color: #FFFFFF;
+     }
+    &__price {
+        font-weight: bold;
+        font-size: 13px;
+        color: #ffffff;
+     }
+     &__ruble{
+          font-size: 12px;
+          color: #ffffff;
+      }
+     &__period{
+        color: #F46325;
+      }
+}

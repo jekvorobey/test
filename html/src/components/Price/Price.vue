@@ -46,7 +46,7 @@ export default {
 
         value: {
             type: [Number, Object],
-            default: 0,
+            default: null,
         },
 
         currency: {
@@ -106,7 +106,8 @@ export default {
         },
 
         showHiddenPriceLabel() {
-            return this.isPriceHidden && (this.value === 0 || this.value === null);
+            // return this.isPriceHidden && (this.value === 0 || this.value === null);
+            return this.isPriceHidden && this.value === null;
         },
 
         itemPropSettings() {

@@ -70,6 +70,7 @@
                             class="quick-view-modal__detail-cart"
                             :productId="productPreview.productId"
                             :price="productPreview.price"
+                            :installment="productPreview.installment"
                             :old-price="productPreview.oldPrice"
                             :bonus="productPreview.bonus"
                             :is-price-hidden="productPreview.isPriceHidden"

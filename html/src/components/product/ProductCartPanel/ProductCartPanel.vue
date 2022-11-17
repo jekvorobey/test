@@ -5,6 +5,11 @@
                 <price class="text-bold product-cart-panel__info-current" v-bind="modifiedPrice" item-prop />
                 <price v-if="oldPrice" class="text-grey product-cart-panel__info-old" v-bind="modifiedOldPrice" />
             </div>
+            <installment-price
+                    v-if="installment && installment.isInstallmentAvailable"
+                    :value="price.value"
+                    :installment-period="installment.installmentPeriod"
+            />
             <div
                 v-if="!referralPartner && bonus > 0 && (!isPriceHidden || price || oldPrice)"
                 class="text-grey product-cart-panel__info-bonus"
@@ -37,6 +42,7 @@
 import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
+import InstallmentPrice from "@components/InstallmentPrice/InstallmentPrice.vue";
 
 import { mapGetters, mapState } from 'vuex';
 import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
@@ -55,6 +61,7 @@ export default {
         Price,
         BuyButton,
         FavoritesButton,
+        InstallmentPrice
     },
 
     props: {
@@ -94,6 +101,11 @@ export default {
 
         toCardAdding: {
             type: Boolean,
+            default: false,
+        },
+
+        installment: {
+            type: [Object, Boolean],
             default: false,
         },
     },

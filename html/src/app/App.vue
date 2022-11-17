@@ -5,12 +5,18 @@
         :class="{ 'fake-vue-body--scroll': scroll, 'fake-vue-body--hidden-header': hideDefaultHeader }"
     >
         <v-header class="header" v-if="!hideDefaultHeader" :is-sticky="isTabletLg || scroll" />
+
         <main class="content">
             <!-- <transition name="fade" mode="out-in"> -->
             <router-view class="view" />
             <!-- </transition> -->
         </main>
+
         <v-footer v-if="!hideDefaultFooter" class="footer" />
+
+        <cookie-alert/>
+
+        <no-connection-widget/>
 
         <transition name="fade-in">
             <quick-view-modal v-if="isQuickViewOpen && !isTabletLg" />
@@ -87,6 +93,8 @@ import '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
 
 import VHeader from '@components/VHeader/VHeader.vue';
 import VFooter from '@components/VFooter/VFooter.vue';
+import NoConnectionWidget from "@components/widgets/NoConnectionWidget/NoConnectionWidget.vue";
+import CookieAlert from "@components/CookieAlert/CookieAlert.vue";
 
 import CitySelectionModal from '@components/CitySelectionModal/CitySelectionModal.vue';
 import QuickViewModal from '@components/QuickViewModal/QuickViewModal.vue';
@@ -135,6 +143,8 @@ export default {
     components: {
         VHeader,
         VFooter,
+        NoConnectionWidget,
+        CookieAlert,
 
         CitySelectionModal,
         QuickViewModal,

@@ -144,6 +144,7 @@
                             :name="item.name"
                             :speaker="item.speaker"
                             :date="item.dateTime"
+                            :installment="item.installment"
                             :price="item.price"
                             :old-price="item.oldPrice"
                             :address="item.nearestPlaceName"

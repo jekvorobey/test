@@ -1376,9 +1376,12 @@ export default {
         //     // }
         // },
 
-        scrollToError(element) {
-            const panelScrollOffset = 24;
-            window.scrollTo({ top: getPosition(element).y - panelScrollOffset, behavior: 'smooth' });
+        scrollToError(element, offset = 0) {
+            // TODO: не работающий код прокрутки, после тестов удалить
+            // const panelScrollOffset = 24;
+            // window.scrollTo({ top: getPosition(element).y - panelScrollOffset, behavior: 'smooth' });
+
+            window.scrollTo({ top: element.offsetTop + offset, behavior: 'smooth' });
         },
 
         generateItemProductUrl(product) {

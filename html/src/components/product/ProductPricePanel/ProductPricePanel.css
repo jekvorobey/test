@@ -10,7 +10,13 @@
         display: flex;
         align-items: center;
     }
-
+    &__installment {
+        @media(max-width: 341px) {
+            .installment-price {
+                display: none;
+            }
+        }
+     }
     &__img {
         width: 56px;
         height: 56px;
