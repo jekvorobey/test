@@ -112,7 +112,7 @@
                     </div>
                 </div>
 
-                <div class="checkout-pickup-point-modal__details-desc" v-if="selectedPickupPoint.description">
+                <div class="checkout-pickup-point-modal__details-desc checkout-pickup-point-modal__details-desc-overflow" v-if="selectedPickupPoint.description">
                     <div class="text-bold">Как добраться</div>
                     {{ selectedPickupPoint.description }}
                 </div>
