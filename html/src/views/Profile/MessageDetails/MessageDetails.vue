@@ -130,8 +130,13 @@ export default {
 
         getTitle(message) {
             if (message.isSystem) return 'Команда Бессовестно Талантливый';
+
             const { firstName, lastName } = this[USER] || {};
-            return `${firstName} ${lastName}`;
+
+            if (firstName && lastName) return `${firstName} ${lastName}`;
+
+            if ((!firstName && !lastName) || (lastName && !firstName)) return 'Вы';
+            else return firstName;
         },
 
         async onSendMessage() {

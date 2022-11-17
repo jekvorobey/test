@@ -14,7 +14,7 @@
                 <ul class="list">
                     <li>Банковская карта (Visa, Mastercard, МИР)</li>
                     <li>Sber Pay</li>
-                    <li>Яндекс.Деньги</li>
+<!--                    <li>Яндекс.Деньги</li>-->
                     <li>Кошелёк ЮMoney</li>
                     <li>СБП (Система быстрых платежей)</li>
 <!--                    <li>Apple Pay (доступен в браузере Safari)</li>-->
@@ -102,11 +102,11 @@
                         </template>
 
                         <template v-slot:column-region>&nbsp;</template>
-                        <template v-slot:column-deliverydo>до 5&nbsp;000&nbsp;₽</template>
-                        <template v-slot:column-deliveryot>от 5&nbsp;000&nbsp;₽</template>
-                        <template v-slot:column-pickupdo>до 5&nbsp;000&nbsp;₽</template>
-                        <template v-slot:column-pickupot>от 5&nbsp;000&nbsp;₽</template>
-                        <template v-slot:column-ot>от 10&nbsp;000&nbsp;₽</template>
+                        <template v-slot:column-deliverydo>до 6&nbsp;000&nbsp;₽</template>
+                        <template v-slot:column-deliveryot>от 6&nbsp;000&nbsp;₽</template>
+                        <template v-slot:column-pickupdo>до 6&nbsp;000&nbsp;₽</template>
+                        <template v-slot:column-pickupot>от 6&nbsp;000&nbsp;₽</template>
+                        <template v-slot:column-ot>от 12&nbsp;000&nbsp;₽</template>
                     </v-table>
                     <template v-else>
                         <div class="info-pages-block__card" v-for="item in items" :key="item.region">

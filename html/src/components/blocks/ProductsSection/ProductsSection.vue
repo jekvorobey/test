@@ -279,7 +279,7 @@ export default {
 
         onPreview(code) {
             this[CHANGE_MODAL_STATE]({
-                name: modalName.general.QUICK_VIEW,
+                name: this.$mq.tablet ? modalName.general.QUICK_VARIANT_ADD_TO_CARD : modalName.general.QUICK_VIEW,
                 open: true,
                 state: { code },
             });

@@ -17,7 +17,7 @@
         </router-link>
         <div class="cart-product-card__body">
             <v-link class="cart-product-card__body-name" :to="href">{{ name }}</v-link>
-            <div class="cart-product-card__body-count" v-if="showCount">
+            <div class="cart-product-card__body-count" v-if="showCount && userCanBuy">
                 <v-counter min="1" :max="maxCount" :value="count" @input="debounce_countChange" :disabled="!isActive" />
             </div>
 
