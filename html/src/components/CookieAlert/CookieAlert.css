@@ -1,6 +1,7 @@
 .cookie-alert {
+    left: 10px;
+    right: 10px;
     transition: 1s all;
-     width: 100%;
     position: fixed;
     bottom: -300px;
     z-index: 999;
@@ -25,7 +26,12 @@
      }
 }
 .cookie-alert-show {
-    bottom: 0;
+    bottom: 10px;
+}
+@media(max-width: 767px) {
+    .cookie-alert-show {
+        bottom: 77px;
+    }
 }
 @media (max-width: 425px) {
     .cookie-alert {
