@@ -23,7 +23,6 @@ import '@util/router';
 import '@util/container';
 import '@util/store';
 import '@util/file';
-
 import titleMixin from '@util/title';
 
 import App from './App.vue';
@@ -53,7 +52,7 @@ export default function createApp(container, initialState = null) {
 
     Sentry.init({
         Vue,
-        dsn: 'https://82da344cf71c4669bf3aa76aca01bd31@o880371.ingest.sentry.io/5849194',
+        dsn: process.env.NODE_ENV === 'development' ? 'https://82da344cf71c4669bf3aa76aca01bd31@o880371.ingest.sentry.io/5849194' : 'prod-dsn',
         integrations: [
             new BrowserTracing(),
         ],

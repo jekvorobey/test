@@ -298,11 +298,12 @@ export default {
         // скролл страницы до хеша при первой загрузке страницы
         if (this.$route.hash) setTimeout(this.scrollFix, 1);
         setTimeout(this.onCheckCitySelection, interval.TWO_SECONDS);
+
         try {
             aFunctionThatMightFail();
         } catch (err) {
             Sentry.captureException(err);
-            Sentry.captureMessage("TEST ERROR FINAL-ENV-TEST");
+            Sentry.captureMessage("final test super work");
         }
     },
 
