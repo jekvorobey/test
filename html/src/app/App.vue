@@ -303,7 +303,7 @@ export default {
             aFunctionThatMightFail();
         } catch (err) {
             Sentry.captureException(err);
-            Sentry.captureMessage("final test super work");
+            Sentry.captureMessage("Тестовая Ошибка");
         }
     },
 

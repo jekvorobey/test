@@ -1,10 +1,10 @@
 import Vue from 'vue';
-import { sync } from 'vuex-router-sync';
+import {sync} from 'vuex-router-sync';
 
 import * as Sentry from "@sentry/vue";
-import { BrowserTracing } from "@sentry/tracing";
+import {BrowserTracing} from "@sentry/tracing";
 
-import { injectionType } from '@enums';
+import {injectionType} from '@enums';
 
 import createStore from '@store';
 import createRouter from '@router';
@@ -50,9 +50,10 @@ export default function createApp(container, initialState = null) {
 
     if (initialState) store.replaceState(initialState);
 
+    /* Подключение Sentry для vue-приложения */
     Sentry.init({
         Vue,
-        dsn: process.env.NODE_ENV === 'development' ? 'https://82da344cf71c4669bf3aa76aca01bd31@o880371.ingest.sentry.io/5849194' : 'prod-dsn',
+        dsn: process.env.VUE_DSN,
         integrations: [
             new BrowserTracing(),
         ],
@@ -73,5 +74,5 @@ export default function createApp(container, initialState = null) {
     // expose the app, the router and the store.
     // note we are not mounting the app here, since bootstrapping will be
     // different depending on whether we are in a browser or on the server.
-    return { app, router, store };
+    return {app, router, store};
 }
