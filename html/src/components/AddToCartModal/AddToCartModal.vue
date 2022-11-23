@@ -111,6 +111,7 @@ export default {
     data() {
         return {
             cartItem: null,
+            retailRocketIsReady: false
         };
     },
 
