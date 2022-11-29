@@ -2,7 +2,7 @@
     <div class="nav-panel" v-scroll-lock="isMenuOpen">
         <div class="container">
             <div class="nav-panel__main">
-                <group-list class="nav-panel__main-list" :items="categoriesCatalog" @link-click="onHandleClick" count="10"/>
+                <group-list class="nav-panel__main-list" :items="categoriesCatalog" @link-click="onHandleClick" count="11"/>
 
                 <remote-banner
                     class="nav-panel__main-banner"
