@@ -11,6 +11,7 @@ services:
     volumes:
       - /sockets/:/sockets/
       - /home/iBT.studio/ENV/svc/ibt-front/html/.env.json:/var/www/html/.env.json
+      - /home/iBT.studio/ENV/svc/ibt-front/html/.env:/var/www/html/.env
     hostname: ibt-front.ENV
     networks:
       ENV.svc.cluster.local:
