@@ -216,20 +216,7 @@
                 </li>
             </ul>
         </template>
-
-        <div class="container container--tablet-lg referal-view__controls" v-if="pagesCount > 1">
-            <show-more-button
-                    v-if="activePage < pagesCount"
-                    btn-class="btn--outline referal-view__controls-btn"
-                    @click.prevent="onShowMore"
-                    :show-preloader="showMore"
-            >
-                Показать ещё
-            </show-more-button>
-            <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
-        </div>
-
-        <attention-panel class="referal-view__attention-panel">
+        <attention-panel class="referal-view__attention-panel" :class="{'referal-view__attention-panel-mb': (orders && orders.length) || !!sumArcData.value}">
             <div class="referal-view__attention-section">
                 <p class="referal-view__attention-text">
                     <span v-if="!((orders && orders.length) || !!sumArcData.value)">
@@ -263,6 +250,18 @@
                 </ul>
             </div>
         </attention-panel>
+
+        <div class="container container--tablet-lg referal-view__controls" v-if="pagesCount > 1">
+            <show-more-button
+                v-if="activePage < pagesCount"
+                btn-class="btn--outline referal-view__controls-btn"
+                @click.prevent="onShowMore"
+                :show-preloader="showMore"
+            >
+                Показать ещё
+            </show-more-button>
+            <v-pagination :value="activePage" :page-count="pagesCount" @input="onPageChanged" />
+        </div>
 
         <transition name="fade">
             <general-modal

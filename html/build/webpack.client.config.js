@@ -156,9 +156,6 @@ module.exports = merge(base, {
               new webpack.DefinePlugin({
                   'process.env.NODE_ENV': JSON.stringify(mode),
                   'process.env.VUE_ENV': '"client"',
-                  'process.env.VUE_DSN': JSON.stringify(process.env.VUE_SENTRY_DSN),
-                  'process.env.DADATA_API_HOST': JSON.stringify(process.env.DADATA_API_HOST),
-                  'process.env.DADATA_API_KEY': JSON.stringify(process.env.DADATA_API_KEY),
               }),
               new VueSSRClientPlugin(),
               // auto generate service worker
@@ -217,9 +214,6 @@ module.exports = merge(base, {
               new webpack.DefinePlugin({
                   'process.env.NODE_ENV': JSON.stringify(mode),
                   'process.env.VUE_ENV': '"client"',
-                  'process.env.VUE_DSN': JSON.stringify(process.env.VUE_SENTRY_DSN),
-                  'process.env.DADATA_API_HOST': JSON.stringify(process.env.DADATA_API_HOST),
-                  'process.env.DADATA_API_KEY': JSON.stringify(process.env.DADATA_API_KEY),
               }),
               new VueSSRClientPlugin(),
           ],
