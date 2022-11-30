@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { cacheAdapterEnhancer } from 'axios-extensions';
+import {cacheAdapterEnhancer} from 'axios-extensions';
 
 import HttpServiceBase from './base';
 
 export default class DadataHttpService extends HttpServiceBase {
     constructor(store) {
-        const { DADATA_API_HOST, DADATA_API_KEY } = store.state.env;
+        const {DADATA_API_HOST, DADATA_API_KEY} = store.state.env;
         super(DADATA_API_HOST);
 
         this.instance = axios.create({
