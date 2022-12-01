@@ -1,4 +1,13 @@
 .add-to-cart-modal {
+    align-items: flex-start !important;
+
+    @media (min-width: 767px) {
+        .modal-wrapper {
+            position: absolute;
+            top: 15%;
+        }
+    }
+
     .popup--wide {
         @media (--tablet-lg) {
             height: 100%;
