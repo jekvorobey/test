@@ -13,7 +13,11 @@ export default {
             let productGroups;
 
             if (type === productGroupTypes.BRANDS) {
-                const activeBrandsList = await getBrandsActive();
+                const activeBrandsList = await getBrandsActive({
+                    params: {
+                        is_visible: true,
+                    },
+                });
                 productGroups = {
                     items: activeBrandsList[0].values,
                     range: activeBrandsList[0].values.length,

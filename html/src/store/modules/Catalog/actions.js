@@ -86,7 +86,7 @@ export default {
 
                 const brand = brandsList[0].values.filter((brand) => brand.code === entityCode)[0];
 
-                if (!brand) {
+                if (!brand || !brand.active) {
                     const error = new Error();
                     error.isCancel = false;
                     error.message = 'Brand not found in active brands';
