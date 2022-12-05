@@ -6,6 +6,9 @@ import { injectionType } from '@enums';
 import createStore from '@store';
 import createRouter from '@router';
 
+import * as Sentry from "@sentry/vue";
+import { BrowserTracing } from "@sentry/tracing";
+
 import createLocalization from '@plugins/i18n';
 import mq from '@plugins/media';
 import '@plugins/meta';
@@ -47,6 +50,18 @@ export default function createApp(container, initialState = null) {
     sync(store, router);
 
     if (initialState) store.replaceState(initialState);
+
+    /* Подключение Sentry для vue-приложения */
+    Sentry.init({
+        Vue,
+        dsn: process.env.NODE_ENV === 'production' ?
+            'https://82da344cf71c4669bf3aa76aca01bd31@o880371.ingest.sentry.io/5849194' :
+            'https://82da344cf71c4669bf3aa76aca01bd31@o880371.ingest.sentry.io/5849194',
+        integrations: [
+            new BrowserTracing(),
+        ],
+        tracesSampleRate: 1.0,
+    });
 
     // create the app instance.
     // here we inject the router, store and ssr context to all child components,
