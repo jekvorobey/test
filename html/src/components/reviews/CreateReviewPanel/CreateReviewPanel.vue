@@ -131,7 +131,6 @@ export default {
 
     data() {
         return {
-            heic: mimeType.image.HEIC,
             rating: 0,
             files: [],
             body: null,
