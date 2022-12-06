@@ -63,7 +63,7 @@
                 <div class="create-review-panel__form-cell">
                     <h3 class="create-review-panel__form-title">Фото и видео товара</h3>
 
-                    <span class="create-review-panel__form-subtitle">Не более 10 файлов, jpeg, png, mp4, mov</span>
+                    <span class="create-review-panel__form-subtitle">Не более 10 файлов, jpeg, png, heic, mp4, mov</span>
 
                     <v-file
                         class="create-review-panel__form-files"
@@ -131,6 +131,7 @@ export default {
 
     data() {
         return {
+            heic: mimeType.image.HEIC,
             rating: 0,
             files: [],
             body: null,
@@ -141,7 +142,7 @@ export default {
 
     computed: {
         fileAcceptedTypes() {
-            return [mimeType.image.JPEG, mimeType.image.PNG, mimeType.video.MP4, mimeType.video.MOV];
+            return [mimeType.image.JPEG, mimeType.image.PNG, mimeType.image.HEIC, mimeType.video.MP4, mimeType.video.MOV];
         },
 
         bodyError() {
