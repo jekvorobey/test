@@ -111,11 +111,11 @@
                     <template v-else>
                         <div class="info-pages-block__card" v-for="item in items" :key="item.region">
                             <info-row name="Регион" :value="item.region" />
-                            <info-row name="Курьером до 5&nbsp;000&nbsp;₽" :value="item.deliverydo" />
-                            <info-row name="Курьером от 5&nbsp;000&nbsp;₽" :value="item.deliveryot" />
-                            <info-row name="В пункт выдачи заказов (ПВЗ) до 5&nbsp;000&nbsp;₽" :value="item.pickupdo" />
-                            <info-row name="В пункт выдачи заказов (ПВЗ) от 5&nbsp;000&nbsp;₽" :value="item.pickupot" />
-                            <info-row name="Любая доставка от 10&nbsp;000&nbsp;₽" :value="item.ot" />
+                            <info-row name="Курьером до 6&nbsp;000&nbsp;₽" :value="item.deliverydo" />
+                            <info-row name="Курьером от 6&nbsp;000&nbsp;₽" :value="item.deliveryot" />
+                            <info-row name="В пункт выдачи заказов (ПВЗ) до 6&nbsp;000&nbsp;₽" :value="item.pickupdo" />
+                            <info-row name="В пункт выдачи заказов (ПВЗ) от 6&nbsp;000&nbsp;₽" :value="item.pickupot" />
+                            <info-row name="Любая доставка от 12&nbsp;000&nbsp;₽" :value="item.ot" />
                         </div>
                     </template>
                 </div>
