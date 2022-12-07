@@ -435,7 +435,7 @@ export default {
             filterModal: false,
             showMore: false,
             isFiltersLoading: false,
-            
+
             bannerType: bannerType,
             professionalDisclaimerInterval: null,
         };

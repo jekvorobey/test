@@ -946,6 +946,7 @@ export default {
     metaInfo() {
         const { metaData } = this;
         const { title, description, url, image } = metaData;
+        const metaNoIndex = !this.brand.isVisible;
 
         return {
             title,
@@ -957,7 +958,7 @@ export default {
                 'og:url': url,
                 'og:image': image,
                 'og:image:url': image,
-            }),
+            }, metaNoIndex),
         };
     },
 
@@ -1024,6 +1025,12 @@ export default {
             const { product } = this;
             const { badges } = product || {};
             return badges || [];
+        },
+
+        brand() {
+            const { product } = this;
+            const { brand } = product || {};
+            return brand || [];
         },
 
         howToList() {
