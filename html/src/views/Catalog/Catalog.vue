@@ -388,8 +388,9 @@ export default {
     },
 
     metaInfo() {
-        const { activePage, metaData } = this;
+        const { activePage, metaData, productGroup } = this;
         const { title, description, url, image, imageType } = metaData;
+        const metaNoIndex = productGroup.brand.is_visible === 0;
 
         return {
             title: activePage > 1 ? `${title} – страница ${activePage}` : title,
@@ -402,8 +403,8 @@ export default {
                 'og:image:url': image,
                 'og:image:type': imageType,
                 'og:site_name': 'Бессовестно талантливый',
-                'og:description': description || 'Mаркетплейс для мастеров бьюти-индустрии',
-            }),
+                'og:description': description || 'Mаркетплейс для мастеров бьюти-индустрии'
+            }, metaNoIndex)
         };
     },
 
@@ -434,7 +435,6 @@ export default {
             filterModal: false,
             showMore: false,
             isFiltersLoading: false,
-
             bannerType: bannerType,
             professionalDisclaimerInterval: null,
         };
@@ -1109,11 +1109,11 @@ export default {
     },
 
     beforeMount() {
-        const category = this[ACTIVE_CATEGORY] || null;
-        if (category) $retailRocket.addCategoryView(category.id);
-        this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
+            const category = this[ACTIVE_CATEGORY] || null;
+            if (category) $retailRocket.addCategoryView(category.id);
+            this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
 
-        this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
+            this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
     },
 
     mounted() {
