@@ -435,6 +435,7 @@ export default {
             filterModal: false,
             showMore: false,
             isFiltersLoading: false,
+            
             bannerType: bannerType,
             professionalDisclaimerInterval: null,
         };
@@ -1109,11 +1110,11 @@ export default {
     },
 
     beforeMount() {
-            const category = this[ACTIVE_CATEGORY] || null;
-            if (category) $retailRocket.addCategoryView(category.id);
-            this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
+        const category = this[ACTIVE_CATEGORY] || null;
+        if (category) $retailRocket.addCategoryView(category.id);
+        this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
 
-            this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
+        this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
     },
 
     mounted() {
