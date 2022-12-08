@@ -455,6 +455,10 @@ export default {
             return this.$mq.tabletLg;
         },
 
+        isBessovistniy() {
+            return this.cartData.product.bessovestniyMode
+        },
+
         showBonus() {
             return !this.referralPartner && this.activeTabItem.summary.bonusGet > 0;
         },
@@ -656,7 +660,8 @@ export default {
                         name: modalName.general.AUTH,
                         open: true,
                         state: {
-                            activeTab: authMode.LOGIN,
+                            activeTab: authMode.REGISTRATION,
+                            bessovestniyMode: this.isBessovistniy,
                             registrationSuccessRedirect: false,
                         },
                     });

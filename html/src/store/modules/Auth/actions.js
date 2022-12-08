@@ -2,6 +2,7 @@ import { storeErrorHandler } from '@util/store';
 
 import {
     checkSession,
+    fastRegistrationByPhone,
     loginByPassword,
     loginBySocial,
     logout,
@@ -25,6 +26,7 @@ export const CHECK_SESSION = 'CHECK_SESSION';
 export const LOGOUT = 'LOGOUT';
 export const LOGIN_BY_SOCIAL = 'LOGIN_BY_SOCIAL';
 export const LOGIN_BY_PASSWORD = 'LOGIN_BY_PASSWORD';
+export const FAST_REGISTRATION_BY_PHONE = 'FAST_REGISTRATION_BY_PHONE';
 export const LOGIN_BY_SIGNATURE = 'LOGIN_BY_SIGNATURE';
 export const LOGIN_BY_TOKEN = 'LOGIN_BY_TOKEN';
 
@@ -72,6 +74,16 @@ export default {
         }
     },
 
+    async [FAST_REGISTRATION_BY_PHONE]({ dispatch }, payload) {
+        try {
+            await fastRegistrationByPhone(payload);
+            dispatch(CHECK_SESSION, true);
+
+            return true
+        } catch (error) {
+            storeErrorHandler(FAST_REGISTRATION_BY_PHONE, true)(error);
+        }
+    },
     async [LOGIN_BY_PASSWORD]({ dispatch }, payload) {
         try {
             await loginByPassword(payload);

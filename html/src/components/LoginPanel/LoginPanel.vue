@@ -9,7 +9,7 @@
                 key="login-phone"
                 v-model="phone"
                 name="phone"
-                v-focus
+                v-focus="!passwordFocus"
                 :options="maskOptions"
                 :error="phoneError"
             >
@@ -20,6 +20,7 @@
                 v-model="password"
                 :error="passwordError"
                 :phoneError="phoneError"
+                v-focus="passwordFocus"
                 name="password"
                 class="login-panel__form-password-input"
             >
@@ -277,6 +278,12 @@ export default {
             type: [String, null],
             default: null,
         },
+
+        passwordFocus: {
+            type: Boolean,
+            required: false,
+            default: false
+        }
     },
 
     data() {
