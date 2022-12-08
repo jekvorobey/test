@@ -8,7 +8,20 @@
         @close="onClose"
     >
         <template v-slot:content>
-            <v-tabs :items="items" key-field="id" :activeTab.sync="activeTab" :is-visible-header="isVisibleTabsHeader">
+            <!-- Мод bessovestniyMode: Быстрая регистрация для ВСЕХ -->
+            <registration-panel
+                    v-if="bessovestniyMode"
+                    :bessovestniyMode="bessovestniyMode"
+                    @checkBessovestniyMode="checkBessovestniyMode"
+                    :enteredPhone="enteredPhone"
+                    :finish-redirect-route="registrationSuccessRedirect"
+                    @set-title="onSetTitle"
+                    @change-tab="onChangeTab"
+                    @input-phone="onInputPhone"
+            />
+
+            <!-- Мод bessovestniyMode: Обычная регистрация / авторизация -->
+            <v-tabs v-else :items="items" key-field="id" :activeTab.sync="activeTab" :is-visible-header="isVisibleTabsHeader">
                 <template v-slot:header="{ item }">
                     <span>{{ item.title }}</span>
                 </template>
@@ -16,6 +29,7 @@
                     <login-panel
                         v-if="item.type === authMode.LOGIN"
                         :enteredPhone="enteredPhone"
+                        :passwordFocus="passwordFocus"
                         @set-title="onSetTitle"
                         @change-tab="onChangeTab"
                         @input-phone="onInputPhone"
@@ -64,6 +78,8 @@ export default {
 
     data() {
         return {
+            bessovestniyMode: false,
+            passwordFocus: false,
             activeTab: 0,
             items: [
                 {
@@ -105,6 +121,12 @@ export default {
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
 
+        checkBessovestniyMode() {
+            this.bessovestniyMode = false;
+            this.passwordFocus = true;
+            this.activeTab = 0;
+        },
+
         onClose() {
             this.$emit('close');
             this.CHANGE_MODAL_STATE({ name: NAME, open: false });
@@ -130,6 +152,7 @@ export default {
 
     beforeMount() {
         this.activeTab = this.modalState.activeTab;
+        this.bessovestniyMode = this.modalState.bessovestniyMode;
 
         if (typeof this.modalState.registrationSuccessRedirect !== 'undefined') {
             this.registrationSuccessRedirect = this.modalState.registrationSuccessRedirect;

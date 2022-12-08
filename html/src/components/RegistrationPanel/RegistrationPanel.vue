@@ -1,6 +1,6 @@
 <template>
-    <div class="registration-panel__body">
-        <div class="registration-panel__desc" v-if="!sent && !accepted">
+    <div class="registration-panel__body" :class="{'registration-panel__body-all': bessovestniyMode}">
+        <div class="registration-panel__desc" v-if="!sent && !accepted && !bessovestniyMode">
             <template v-if="!sent">
                 На указанный номер телефона будет выслан код по СМС, введите его для регистрации.
             </template>
@@ -23,14 +23,26 @@
                 >
                     Номер телефона
                     <template v-if="!isTablet" v-slot:after>
-                        <v-button class="registration-panel__form-btn" type="submit" :disabled="isDisabledGetCodeBtn">
-                            Получить код
+                        <v-button
+                                :class="{'registration-panel__form-btn-loading': isLoading}"
+                                class="registration-panel__form-btn registration-panel__form-btn-desktop"
+                                type="submit"
+                                :disabled="isDisabledGetCodeBtn"
+                        >
+                             {{ btnText }}
+                            <v-spinner :show="isLoading" width="24" height="24"/>
                         </v-button>
                     </template>
 
                     <template v-slot:error="{ error }">
                         <transition name="slide-in-bottom" mode="out-in">
                             <div :key="error" v-if="error">{{ error }}</div>
+                            <div
+                                v-if="bessovestniyModeError"
+                                :key="error"
+                            >
+                                {{ 'Вы уже зарегистрированы, введите пароль на следующем шаге' }}
+                            </div>
                         </transition>
                     </template>
                 </v-input-mask>
@@ -41,7 +53,8 @@
                     type="submit"
                     :disabled="isDisabledGetCodeBtn"
                 >
-                    Получить код
+                   {{ btnText }}
+                    <v-spinner :show="isLoading" width="24" height="24"/>
                 </v-button>
             </div>
 
@@ -138,7 +151,7 @@
             </div>
         </form>
 
-        <div v-if="!accepted" class="registration-panel__socials">
+        <div v-if="!accepted && !bessovestniyMode" class="registration-panel__socials">
             <div class="registration-panel__socials-list">
                 <button class="registration-panel__socials-item" @click="onRegisterBySocial('google')">
                     <v-svg name="google-bw" height="19" width="20" class="registration-panel__socials-item--google" />
@@ -157,7 +170,7 @@
             <span class="registration-panel__socials-text">Или зарегистрируйтесь через соцсеть</span>
         </div>
 
-        <div v-if="!accepted" class="registration-panel__footer">
+        <div v-if="!accepted && !bessovestniyMode" class="registration-panel__footer">
             <v-button class="btn--outline registration-panel__footer-btn" @click.stop="onLogin">Войти</v-button>
             <span class="registration-panel__has-account" @click.stop="onLogin">Есть аккаунт?</span>
         </div>
@@ -172,13 +185,14 @@ import VPassword from '@controls/VPassword/VPassword.vue';
 import VInput from '@controls/VInput/VInput.vue';
 import VInputMask from '@controls/VInput/VInputMask.vue';
 import ValidationTooltip from '@components/ValidationTooltip/ValidationTooltip.vue';
+import VSpinner from '@controls/VSpinner/VSpinner.vue';
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 
 import _cloneDeep from 'lodash/cloneDeep';
 import { mapState, mapActions } from 'vuex';
 import { NAME as AUTH_MODULE } from '@store/modules/Auth';
-import { SEND_SMS, CHECK_CODE, REGISTER_BY_PASSWORD, GET_SOCIAL_LINK } from '@store/modules/Auth/actions';
+import { SEND_SMS, CHECK_CODE, REGISTER_BY_PASSWORD, FAST_REGISTRATION_BY_PHONE, GET_SOCIAL_LINK } from '@store/modules/Auth/actions';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -215,6 +229,7 @@ export default {
         VInputMask,
         ValidationTooltip,
         GeneralModal,
+        VSpinner
     },
 
     validations: {
@@ -260,6 +275,12 @@ export default {
             type: [String, Boolean],
             default: 'Cabinet',
         },
+
+        bessovestniyMode : {
+            type: Boolean,
+            required: false,
+            default: false
+        }
     },
 
     data() {
@@ -280,6 +301,9 @@ export default {
             passwordRepeat: null,
 
             counter: 59,
+
+            bessovestniyModeError: false,
+            isLoading: false,
 
             maskOptions: {
                 ...phoneMaskOptions,
@@ -310,6 +334,11 @@ export default {
         ...mapState(MODAL_MODULE, {
             isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
+
+        btnText() {
+            if (this.isLoading) return ''
+            else return this.bessovestniyMode ? 'Продолжить' : 'Получить код'
+        },
 
         phone() {
             return rawPhone(this.rawPhone);
@@ -382,7 +411,7 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(AUTH_MODULE, [SEND_SMS, REGISTER_BY_PASSWORD, CHECK_CODE, GET_SOCIAL_LINK]),
+        ...mapActions(AUTH_MODULE, [SEND_SMS, REGISTER_BY_PASSWORD, FAST_REGISTRATION_BY_PHONE, CHECK_CODE, GET_SOCIAL_LINK]),
 
         startCounter() {
             this.stopCounter();
@@ -471,16 +500,38 @@ export default {
         },
 
         async onSubmit() {
-            if (this.sent && this.accepted) {
-                this.$v.password.$touch();
-                this.$v.passwordRepeat.$touch();
-                if (!this.$v.password.$invalid && !this.$v.passwordRepeat.$invalid) this.finishRegistration();
-            } else if (this.sent) {
-                this.$v.code.$touch();
-                if (!this.$v.code.$invalid) this.checkCode();
-            } else {
+            if (this.bessovestniyMode) {
                 this.$v.phone.$touch();
-                if (!this.$v.phone.$invalid) this.sendSms();
+                if (!this.$v.phone.$invalid) {
+                    try {
+                        this.isLoading = true;
+                        const success = await this[FAST_REGISTRATION_BY_PHONE]({phone: this.phone});
+                        if (success) {
+                            this.onClose();
+                            this.$router.push({name: 'Checkout', params: { type: this.activeTabItem.type }})
+                        }
+                    } catch (e) {
+                        this.isLoading = false;
+                        this.bessovestniyModeError = true;
+                        setTimeout(() => {
+                            this.$emit('checkBessovestniyMode')
+                        }, 3000)
+                    } finally {
+                        this.isLoading = false;
+                    }
+                }
+            } else {
+                if (this.sent && this.accepted) {
+                    this.$v.password.$touch();
+                    this.$v.passwordRepeat.$touch();
+                    if (!this.$v.password.$invalid && !this.$v.passwordRepeat.$invalid) this.finishRegistration();
+                } else if (this.sent) {
+                    this.$v.code.$touch();
+                    if (!this.$v.code.$invalid) this.checkCode();
+                } else {
+                    this.$v.phone.$touch();
+                    if (!this.$v.phone.$invalid) this.sendSms();
+                }
             }
         },
 
