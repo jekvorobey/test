@@ -456,7 +456,11 @@ export default {
         },
 
         isBessovistniy() {
-            return this.cartData.product.bessovestniyMode
+            try {
+                return this.cartData && this.cartData.bessovestniyMode
+            } catch (e) {
+                console.warn(e)
+            }
         },
 
         showBonus() {
