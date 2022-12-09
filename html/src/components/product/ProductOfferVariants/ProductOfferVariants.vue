@@ -1,7 +1,5 @@
 <template>
     <div>
-        <h2>isThisNewMainProduct: {{isThisNewMainProduct}}</h2>
-        <h2>newProductID: {{newProductID}}</h2>
         <button
                 :disabled="isThisNewMainProduct || newProductID"
                 @click="getNewProduct"

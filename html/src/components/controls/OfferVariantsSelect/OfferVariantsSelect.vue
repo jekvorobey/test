@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h2>{{ offerVariantsOptions }}</h2>
         <h2>selected: {{ selected }}</h2>
         <select v-model="selected" @change="onChange">
             <option disabled value="" v-if="selectedIsEmpty">Выгодно</option>

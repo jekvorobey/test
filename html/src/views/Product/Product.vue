@@ -169,7 +169,6 @@
                         </div>
                     </product-option-panel>
 
-                    <h2>id: {{ product.id }} offerVariants: {{ product.offerVariants }}</h2>
                     <product-offer-variants
                             :productID="product.id"
                             :offerVariants="product.offerVariants"
