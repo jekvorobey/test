@@ -187,6 +187,7 @@ export const mimeType = Object.freeze({
     image: {
         JPEG: 'image/jpeg',
         PNG: 'image/png',
+        HEIC: 'image/heic',
     },
 
     application: {
