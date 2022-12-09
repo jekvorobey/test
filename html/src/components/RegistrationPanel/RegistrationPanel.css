@@ -7,6 +7,10 @@
 
     &__body {
         flex-grow: 1;
+
+        &-all {
+             padding: 16px;
+         }
     }
 
     &__desc {
@@ -46,6 +50,14 @@
                 .v-input__container {
                     flex-flow: row;
                 }
+            }
+
+            .spinner-transform {
+                transform: translate(-17px, -28px);
+            }
+
+            .bessovestniy-error {
+                font-size: 16px;
             }
         }
 
@@ -95,6 +107,18 @@
                 margin-bottom: calc(var(--gs) * 2);
             }
         }
+
+        &-btn {
+            &-desktop {
+                min-width: 136px;
+             }
+
+             &-loading {
+                  background-color: #fff;
+                  fill: #141116;
+                  color: #141116;
+              }
+         }
 
         &-input &-btn {
             flex: none;
