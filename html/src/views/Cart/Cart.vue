@@ -671,7 +671,6 @@ export default {
                     });
                 }
             } catch (error) {
-                console.log(error)
                 this.isLoad = false;
                 this.isStartedCheckoutProcess = false;
             }
