@@ -375,9 +375,10 @@ export function calculateStepSize(range, targetSteps) {
 
 /**
  * @param object
+ * @param noIndex - to add meta tag for robots noindex
  * @returns {*[]}
  */
-export function convertObjectToMetaProperties(object) {
+export function convertObjectToMetaProperties(object, noIndex=false) {
     const tags = [];
     const fields = Object.keys(object);
 
@@ -392,8 +393,16 @@ export function convertObjectToMetaProperties(object) {
         }
     }
 
+    if (noIndex) {
+        tags.push({
+            name: 'robots',
+            content: 'noindex',
+        });
+    }
+
     return tags;
 }
+
 
 export default {
     calculateStepSize,
