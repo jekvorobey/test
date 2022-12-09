@@ -169,6 +169,13 @@
                         </div>
                     </product-option-panel>
 
+                    <h2>id: {{ product.id }} offerVariants: {{ product.offerVariants }}</h2>
+                    <product-offer-variants
+                            :productID="product.id"
+                            :offerVariants="product.offerVariants"
+                            @offerVariantChoosen="offerVariantChoosen"
+                    />
+
                     <product-cart-panel
                         v-observe-visibility="onPriceVisibilityChanged"
                         class="product-view__header-detail-section product-view__header-detail-cart product-view__header-detail-panels"
@@ -727,9 +734,8 @@ import VSlider from '@controls/VSlider/VSlider.vue';
 import SocialSharing from 'vue-social-sharing';
 import VHtml from '@controls/VHtml/VHtml.vue';
 import NoPhotoStub from '@components/NoPhotoStub/NoPhotoStub.vue';
-
 import Tag from '@components/Tag/Tag.vue';
-
+import ProductOfferVariants from '@components/product/ProductOfferVariants/ProductOfferVariants.vue';
 import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
 import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
@@ -776,6 +782,7 @@ import {
     FETCH_PRODUCT_DATA,
     FETCH_PRODUCT_MASTERCLASSES,
     FETCH_PRODUCT_PICKUP_POINTS,
+    FETCH_PRODUCT
 } from '@store/modules/Product/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
@@ -910,10 +917,9 @@ export default {
         VPicture,
         SocialSharing,
         VHtml,
-
         Breadcrumbs,
         BreadcrumbItem,
-
+        ProductOfferVariants,
         Tag,
         CatalogProductCard,
 
@@ -1327,20 +1333,34 @@ export default {
     methods: {
         ...mapActions([FETCH_RECENTLY_VIEWED_PRODUCTS]),
         ...mapActions(AUTH_MODULE, [SET_SESSION_REFERRAL_CODE]),
-        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS, FETCH_PRODUCT_MASTERCLASSES]),
+        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT_DATA, FETCH_PRODUCT_PICKUP_POINTS, FETCH_PRODUCT_MASTERCLASSES, FETCH_PRODUCT]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM, ADD_CART_BUNDLE]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
+        async offerVariantChoosen(offerID) {
+            console.log('offerVariantChoosen ', offerID)
+            const { code, refCode: referrerCode } = this;
+            try {
+                this.$progress.start();
+                this.$router.replace({query: {offerId: offerID}});
+                await this[FETCH_PRODUCT]({ code, offer_id: offerID, referrerCode });
+                this.$progress.finish();
+            } catch (error) {
+                this.$progress.fail();
+            }
+        },
+
         async fetchProduct(to, from, next) {
             const {
                 params: { code },
-                query: { refCode: referrerCode },
+                query: { refCode: referrerCode},
             } = to;
+            const offer_id = to.query.offerId;
 
             try {
                 this.$progress.start();
-                await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
+                await this[FETCH_PRODUCT_DATA]({ code, referrerCode, offer_id });
                 this.$progress.finish();
                 next();
             } catch (error) {
@@ -1353,9 +1373,9 @@ export default {
 
         async refetchProduct() {
             try {
-                const { code, refCode: referrerCode } = this;
+                const { code, refCode: referrerCode} = this;
                 this.$progress.start();
-                await this[FETCH_PRODUCT_DATA]({ code, referrerCode });
+                await this[FETCH_PRODUCT_DATA]({ code, referrerCode, offer_id: this.product.id});
                 this.$progress.finish();
             } catch (error) {
                 this.$progress.fail();
@@ -1555,6 +1575,8 @@ export default {
             query: { refCode = null, modal },
         } = to;
 
+        const offer_id = to.query.offerId;
+
         function proceed() {
             if ($store.state[PRODUCT_MODULE]) {
                 const { productCode, referrerCode } = $store.state[PRODUCT_MODULE];
@@ -1564,7 +1586,7 @@ export default {
                 else {
                     $progress.start();
                     $store
-                        .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode })
+                        .dispatch(`${PRODUCT_MODULE}/${FETCH_PRODUCT_DATA}`, { code, referrerCode: refCode, offer_id })
                         .then(() => {
                             next((vm) => {
                                 $progress.finish();

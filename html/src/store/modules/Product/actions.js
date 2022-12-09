@@ -91,9 +91,9 @@ export default {
         }
     },
 
-    async [FETCH_PRODUCT]({ state, dispatch, commit }, { code, referrerCode }) {
+    async [FETCH_PRODUCT]({ state, dispatch, commit }, { code, referrerCode, offer_id=undefined }) {
         try {
-            const data = await getProduct(code, undefined, referrerCode);
+            const data = await getProduct(code, offer_id, referrerCode);
             const isSameGroup = state.product.variantGroup === data.variantGroup;
             const { bundles } = await getProductBundles(code);
 
