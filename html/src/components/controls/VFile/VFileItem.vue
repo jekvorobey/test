@@ -2,6 +2,7 @@
     <div class="v-file-item" :class="{ 'v-file-item--has-mask': hasMask }" @click.stop="onMaskClick">
         <transition name="fade" mode="out-in">
             <img v-if="!load" key="preloader" :src="preloader" width="30" height="30" />
+            <img v-else-if="isFileHeic" key="img" class="v-file-item__img" :src="plugHeic" />
             <img v-else-if="src" key="img" class="v-file-item__img" :src="src" />
             <div v-else key="name" class="v-file-item__container">{{ name }}</div>
         </transition>
@@ -16,6 +17,7 @@ import VSvg from '@controls/VSvg/VSvg.vue';
 
 import { mimeType, interval } from '@enums';
 import preloader from '@images/icons/preloader.svg';
+import plugHeic from '@images/icons/plug-heic.png';
 import '@images/sprites/trash.svg';
 import './VFileItem.css';
 
@@ -41,6 +43,7 @@ export default {
     data() {
         return {
             preloader,
+            plugHeic,
             load: false,
             name: null,
             src: null,
@@ -55,6 +58,12 @@ export default {
         onDeleteItem() {
             this.deleteFile(this.file);
         },
+    },
+
+    computed : {
+        isFileHeic() {
+            return this.file.type === '' && this.file.name.split('.').pop().toLowerCase() === 'heic';
+        }
     },
 
     watch: {

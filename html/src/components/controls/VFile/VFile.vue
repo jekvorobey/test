@@ -96,12 +96,16 @@ export default {
     },
 
     methods: {
+        isFileHeic(file) {
+            return file.type === '' && file.name.split('.').pop().toLowerCase() === 'heic';
+        },
+
         isAccepted(file) {
             if (!(file instanceof File)) return false;
             if (this.filter) return this.filter(file);
 
             const isAcceptedType =
-                this.acceptedTypes && (this.acceptedTypes.length === 0 || this.acceptedTypes.includes(file.type));
+                this.acceptedTypes && (this.acceptedTypes.length === 0 || this.acceptedTypes.includes(file.type) || this.isFileHeic(file));
 
             const isAcceptedSize = this.maxFileSize && file.size < this.maxFileSize;
             return isAcceptedType && isAcceptedSize;

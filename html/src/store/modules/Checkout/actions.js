@@ -381,6 +381,7 @@ export default {
             commit(SET_TYPE, type);
             commit(SET_DATA, data);
         } catch (error) {
+            Sentry.captureException(error);
             storeErrorHandler(FETCH_CHECKOUT_DATA, true)(error);
         }
     },
@@ -397,6 +398,7 @@ export default {
                 })
             );
         } catch (error) {
+            Sentry.captureException(error);
             storeErrorHandler(FETCH_CHECKOUT_RECEIVE_METHODS, true)(error);
         }
     },

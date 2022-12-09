@@ -54,6 +54,10 @@ export function getUserInfo() {
     return $http.get('/v1/auth/user-name-avatar');
 }
 
+export function fastRegistrationByPhone(payload) {
+    return $http.post('/v1/auth/fastRegistrationByPhone', payload);
+}
+
 export function loginByPassword(payload) {
     return $http.post('/v1/auth/loginByPassword', payload);
 }

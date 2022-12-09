@@ -165,6 +165,7 @@ import VCartHeader from '@components/VCartHeader/VCartHeader.vue';
 import CheckoutProductPanel from '@components/checkout/CheckoutProductPanel/CheckoutProductPanel.vue';
 import CheckoutMasterClassPanel from '@components/checkout/CheckoutMasterClassPanel/CheckoutMasterClassPanel.vue';
 
+import * as Sentry from "@sentry/browser";
 import { $store, $logger, $progress, $retailRocket } from '@services';
 import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 
@@ -379,6 +380,7 @@ export default {
             } catch (error) {
                 this.isCommit = false;
                 $logger.error(error);
+                Sentry.captureException(error);
             }
         },
 
@@ -390,6 +392,7 @@ export default {
                 this.$progress.finish();
             } catch (error) {
                 this.$progress.fail();
+                Sentry.captureException(error);
                 throw new Error(error);
             }
         },
@@ -454,6 +457,7 @@ export default {
 
             this.fetchReceiveMethods().catch((error) => {
                 console.error(error);
+                Sentry.captureException(error);
                 this.fetchReceiveMethods();
             });
         }

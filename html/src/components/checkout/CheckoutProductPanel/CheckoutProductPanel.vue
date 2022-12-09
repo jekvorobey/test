@@ -538,6 +538,8 @@ import CheckoutAddressPanel from '@components/checkout/CheckoutAddressPanel/Chec
 import CheckoutRecipientModal from '@components/checkout/CheckoutRecipientModal/CheckoutRecipientModal.vue';
 import AddressEditModal from '@components/profile/AddressEditModal/AddressEditModal.vue';
 
+import * as Sentry from "@sentry/browser";
+
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { LOCALE } from '@store';
 
@@ -758,6 +760,7 @@ export default {
             [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false,
             HAS_SESSION,
         }),
+        ...mapState(AUTH_MODULE, {authUser: (state) => state[USER]}),
         ...mapState(MODAL_MODULE, {
             isPickupPointModalOpen: (state) =>
                 state[MODALS][CheckoutPickupPointModal.name] && state[MODALS][CheckoutPickupPointModal.name].open,
@@ -843,6 +846,12 @@ export default {
 
         canDeliver() {
             const receiveMethods = this[RECEIVE_METHODS];
+
+            if (!receiveMethods || receiveMethods.length < 0) {
+                const {firstName, lastName, status} = this.authUser;
+                Sentry.captureMessage(`no RECEIVE_METHODS, доставка невозможна, клиент: ${firstName} - ${lastName}, status: ${status}`);
+            }
+
             return receiveMethods && receiveMethods.length > 0;
         },
 
@@ -1343,6 +1352,7 @@ export default {
                 await this[FETCH_CHECKOUT_DATA](cartItemTypes.PRODUCT);
             } catch (error) {
                 console.error(error);
+                Sentry.captureException(error);
             }
 
             this.fetchCards();
