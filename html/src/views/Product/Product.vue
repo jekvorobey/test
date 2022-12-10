@@ -170,6 +170,7 @@
                     </product-option-panel>
 
                     <product-offer-variants
+                            v-if="product && product.offerVariants"
                             :productID="product.id"
                             :offerVariants="product.offerVariants"
                             @offerVariantChoosen="offerVariantChoosen"
@@ -1342,7 +1343,12 @@
                 const { code, refCode: referrerCode } = this;
                 try {
                     this.$progress.start();
-                    this.$router.replace({query: {offerId: offerID}});
+                    this.$router.replace({
+                        path: this.$route.path,
+                        params: { ...this.$route.params },
+                        query: { ...this.$route.query, modal: undefined, offerId: offerID },
+                        hash: this.$route.hash,
+                    });
                     await this[FETCH_PRODUCT]({ code, offer_id: offerID, referrerCode });
                     this.$progress.finish();
                 } catch (error) {

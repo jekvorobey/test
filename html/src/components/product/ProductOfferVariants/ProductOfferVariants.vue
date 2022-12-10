@@ -1,6 +1,7 @@
 <template>
-    <div>
-        <button
+    <div class="product-offer-variants">
+        <button class="product-offer-variants__btn-new"
+                :class="{'product-offer-variants__btn-new-disabled': isThisNewMainProduct || newProductID, 'product-offer-variants__btn-new-current': currentProductIsNew}"
                 :disabled="isThisNewMainProduct || newProductID"
                 @click="getNewProduct"
         >Новый
@@ -35,7 +36,7 @@
         components: {OfferVariantsSelect},
         data() {
             return {
-                newProductID: null
+                newProductID: null,
             }
         },
         computed: {
@@ -48,6 +49,9 @@
                 })
 
                 return true
+            },
+            currentProductIsNew() {
+                return this.newProductID == this.productID
             }
         },
         methods: {

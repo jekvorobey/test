@@ -1,21 +1,35 @@
 <template>
-    <div>
-        <h2>selected: {{ selected }}</h2>
-        <select v-model="selected" @change="onChange">
-            <option disabled value="" v-if="selectedIsEmpty">Выгодно</option>
-            <option v-for="option in offerVariantsOptions" :value="option.offerId">
-                {{ option.defect }} - {{ option.price }} - {{ option.currency}}
-            </option>
-        </select>
+    <div class="aselect" :data-value="value">
+        <div class="selector" @click="toggle()">
+            <div class="label">
+                <span class="label-text">{{ value }}</span>
+                <v-svg class="label-svg" :class="{ expanded : visible }" name="arrow-down" width="20" height="20" />
+            </div>
+        </div>
+        <div :class="{ hidden : !visible, visible }">
+            <ul>
+                <li
+                        v-for="(option, index) in offerVariantsOptions"
+                        @click="select(index)"
+                        :key="option.defect"
+                        v-if="value !== offerVariantsOptions[index].defect"
+                >
+                    {{ option.defect }} - {{ option.price }} - {{ option.currency}}
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
 <script>
+    import VSvg from '@controls/VSvg/VSvg.vue';
+    import '@images/sprites/arrow-down.svg';
     import './OfferVariantsSelect.css'
 
     export default {
         name: "OfferVariantsSelect",
         emits: ['offerVariantSelected'],
+        components: {VSvg},
         props: {
             productID: {
                 type: [String, Number],
@@ -31,6 +45,8 @@
         data() {
             return {
                 selected: '',
+                value: 'Выгодно',
+                visible: false
             }
         },
         computed: {
@@ -40,7 +56,10 @@
                 this.offerVariants.forEach(offer => {
                     let item = {};
 
-                    if (offer.offerId == this.productID) this.selected = this.productID
+                    if (offer.offerId == this.productID) {
+                        this.selected = this.productID
+                        this.value = offer.options[0].values[0].value
+                    }
 
                     item['offerId'] = offer.offerId;
                     item['price'] = offer.price.value;
@@ -51,15 +70,26 @@
                 })
 
                 return total;
-            },
-            selectedIsEmpty() {
-                return this.select === ''
             }
         },
         methods: {
             onChange() {
                 this.$emit('offerVariantSelected', this.selected)
+            },
+            toggle() {
+                this.visible = !this.visible;
+            },
+            select(index) {
+                this.value = this.offerVariantsOptions[index].defect;
+                this.selected = this.offerVariantsOptions[index].offerId;
+
+                this.$emit('offerVariantSelected', this.selected)
             }
+        },
+        created() {
+            const onClickOutside = e => this.visible = this.$el.contains(e.target) && this.visible;
+            document.addEventListener('click', onClickOutside);
+            this.$on('hook:beforeDestroy', () => document.removeEventListener('click', onClickOutside));
         }
     }
 </script>
