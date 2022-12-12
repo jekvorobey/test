@@ -41,14 +41,18 @@
         },
         computed: {
             isThisNewMainProduct() {
-                this.offerVariants.forEach(item => {
-                    if (item.options.length === 0) {
-                        this.newProductID = this.offerId
-                        return item.offerId == this.productID
-                    }
-                })
+                try {
+                    this.offerVariants.forEach(item => {
+                        if (item.options && item.options.length === 0) {
+                            this.newProductID = this.offerId
+                            return item.offerId == this.productID
+                        }
+                    })
 
-                return true
+                    return true
+                } catch (e) {
+                    console.log(e)
+                }
             },
             currentProductIsNew() {
                 return this.newProductID == this.productID
