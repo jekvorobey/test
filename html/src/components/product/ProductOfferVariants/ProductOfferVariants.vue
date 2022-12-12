@@ -42,10 +42,10 @@
         computed: {
             isThisNewMainProduct() {
                 try {
-                    this.offerVariants.forEach(item => {
-                        if (item.options && item.options.length === 0) {
+                    this.offerVariants.forEach(offer => {
+                        if (offer.options && offer.options.length === 0) {
                             this.newProductID = this.offerId
-                            return item.offerId == this.productID
+                            return offer.offerId == this.productID
                         }
                     })
 

@@ -54,13 +54,15 @@
                 let total = []
 
                 this.offerVariants.forEach(offer => {
-                    let item = {};
+
+                    if (!offer.options || !offer.options[0].values) return;
 
                     if (offer.offerId == this.productID) {
                         this.selected = this.productID
                         this.value = offer.options[0].values[0].value
                     }
 
+                    let item = {};
                     item['offerId'] = offer.offerId;
                     item['price'] = offer.price.value;
                     item['currency'] = offer.price.currency;

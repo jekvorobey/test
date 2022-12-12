@@ -170,7 +170,7 @@
                     </product-option-panel>
 
                     <product-offer-variants
-                            v-if="product && product.offerVariants"
+                            v-if="product && product.offerVariants && product.offerVariants.length > 1"
                             :productID="product.id"
                             :offerVariants="product.offerVariants"
                             @offerVariantChoosen="offerVariantChoosen"
