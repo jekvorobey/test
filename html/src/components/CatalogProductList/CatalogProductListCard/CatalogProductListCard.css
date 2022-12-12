@@ -199,6 +199,11 @@
             bottom: calc((var(--gs) + calc(var(--gs) / 2)) - 4px);
             left: calc(var(--gs) + calc(var(--gs) / 2));
         }
+
+        &-right {
+            left:auto;
+            right: -24px;
+         }
     }
 
     &:hover &__variants {
@@ -286,6 +291,10 @@
 
         @media (--tablet-lg) {
             flex-direction: column;
+        }
+
+        &-discount-svg {
+            margin-right: 5px;
         }
     }
 

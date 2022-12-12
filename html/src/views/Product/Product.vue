@@ -187,6 +187,7 @@
                             :isPriceHidden="product.isPriceHidden"
                             :disabled="!canBuy || isProductToCartAdding"
                             :to-card-adding="isProductToCartAdding"
+                            :is-this-not-new-offer-product="isThisNotNewOfferProduct && product.offerVariants && product.offerVariants.length > 1"
                             item-prop
                             @cart="onBuyProduct"
                             @wishlist="onToggleFavorite(product.productId)"
@@ -975,6 +976,7 @@
                 isProductToCartAdding: false,
                 optionImage: null,
                 openedIMageId: null,
+                newOfferID: null
             };
         },
 
@@ -1024,6 +1026,12 @@
                         url: categoryCode && generateProductUrl(categoryCode, code),
                     };
                 });
+            },
+
+            isThisNotNewOfferProduct() {
+                const { product } = this;
+
+                return product.id !== this.newOfferID
             },
 
             badges() {
@@ -1387,6 +1395,19 @@
                 }
             },
 
+            checkProductID() {
+                const { product } = this;
+                console.log(product)
+                if (!product || !product.offerVariants) return
+
+                product.offerVariants.forEach(offer => {
+                    if (!offer.options || offer.options.length === 0) {
+                        console.log(offer.offerId )
+                        this.newOfferID = offer.offerId
+                    } else return null
+                })
+            },
+
             handleModalQuery(value) {
                 if (!value) return;
 
@@ -1664,6 +1685,11 @@
             const actionField = previousRouteName === 'Landing' ? 'Homepage' : 'Category';
             seoEvents.detail(products, actionField);
 
+            this.checkProductID();
         },
+
+        updated() {
+            this.checkProductID();
+        }
     };
 </script>

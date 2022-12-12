@@ -2,9 +2,10 @@
     <div>
         <div class="aselect" :data-value="value" v-if="moreThenOne">
             <div class="selector" @click="toggle()">
-                <div class="label">
+                <div class="label" :class="{'non-target-label': isNewSelected}">
                     <span class="label-text">{{ value }}</span>
-                    <v-svg class="label-svg" :class="{ expanded : visible }" name="arrow-down" width="20" height="20"/>
+                    <v-svg class="label-svg" :class="{ expanded : visible, 'non-target-svg': isNewSelected}"
+                           name="arrow-down" width="20" height="20"/>
                 </div>
             </div>
             <div :class="{ hidden : !visible, visible }">
@@ -15,7 +16,7 @@
                             :key="option.defect"
                             v-if="value !== offerVariantsOptions[index].defect"
                     >
-                        {{ option.defect }} - {{ option.price }} - {{ option.currency}}
+                        {{ option.defect }} {{ option.price }} {{ option.currency === 'RUB' ? '₽' : ''}}
                     </li>
                 </ul>
             </div>
@@ -24,7 +25,7 @@
                 class="product-offer-variants__btn-new"
                 :class="{'product-offer-variants__btn-new-current': isCurrentItem}"
                 @click="getOffer"
-        > Выгодно: {{ value }}
+        > Выгодно: {{ value }} {{ currentPrice }} ₽
         </button>
     </div>
 
@@ -40,6 +41,11 @@
         emits: ['offerVariantSelected'],
         components: {VSvg},
         props: {
+            newProductID: {
+                type: [String, Number],
+                required: false,
+                default: null
+            },
             productID: {
                 type: [String, Number],
                 required: false,
@@ -85,11 +91,17 @@
             moreThenOne() {
                 return this.offerVariantsOptions.length > 1
             },
-            oneItemID() {
+            firstItemID() {
                 return this.offerVariantsOptions[0].offerId;
             },
             isCurrentItem() {
                 return +this.selected === +this.productID
+            },
+            currentPrice() {
+                return this.offerVariantsOptions[0].price.toLocaleString();
+            },
+            isNewSelected() {
+                return +this.newProductID === +this.productID
             }
         },
         methods: {
@@ -106,8 +118,7 @@
                 this.$emit('offerVariantSelected', this.selected)
             },
             getOffer() {
-                console.log('getOffer')
-                if (!this.isCurrentItem) this.$emit('offerVariantSelected', this.oneItemID)
+                if (!this.isCurrentItem) this.$emit('offerVariantSelected', this.firstItemID)
             }
         },
         created() {
@@ -115,8 +126,5 @@
             document.addEventListener('click', onClickOutside);
             this.$on('hook:beforeDestroy', () => document.removeEventListener('click', onClickOutside));
         },
-        mounted() {
-            if (this.oneItemID) this.value = this.offerVariantsOptions[0].defect
-        }
     }
 </script>

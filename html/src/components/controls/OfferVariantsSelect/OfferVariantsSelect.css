@@ -1,4 +1,5 @@
-.aselect {}
+.aselect {
+}
 
 .aselect .selector {
     position: relative;
@@ -41,6 +42,15 @@
 .label-svg {
     transition: .3s all;
     fill: var(--cl-white);
+}
+
+.non-target-label {
+    color: #000 !important;
+    background: #f8f8f8 !important;
+}
+
+.non-target-svg {
+    fill: #000;
 }
 
 .aselect ul {

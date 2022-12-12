@@ -8,6 +8,7 @@
         >Новый
         </button>
         <offer-variants-select
+                :newProductID="newProductID"
                 :productID="productID"
                 :offerVariants="offerVariants"
                 @offerVariantSelected="offerVariantSelected"
@@ -50,7 +51,6 @@
         },
         methods: {
             offerVariantSelected(offerID) {
-                console.log('offerVariantSelected ', offerID)
                 this.$emit('offerVariantChoosen', offerID)
             },
             getNewProduct() {
@@ -70,11 +70,9 @@
             }
         },
         mounted() {
-            console.log('mounted')
             this.checkIsNewProduct()
         },
         updated() {
-            console.log('updated')
             this.checkIsNewProduct()
         },
     }
