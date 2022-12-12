@@ -1,8 +1,9 @@
 <template>
     <div class="product-offer-variants">
         <button class="product-offer-variants__btn-new"
-                :class="{'product-offer-variants__btn-new-disabled': isThisNewMainProduct || newProductID, 'product-offer-variants__btn-new-current': currentProductIsNew}"
-                :disabled="isThisNewMainProduct || newProductID"
+                :class="{'product-offer-variants__btn-new-disabled': isNoNew.length === 0,
+                'product-offer-variants__btn-new-current': isThisNewMainProduct && isNoNew.length !== 0}"
+                :disabled="isThisNewMainProduct || isNoNew.length === 0"
                 @click="getNewProduct"
         >Новый
         </button>
@@ -41,21 +42,10 @@
         },
         computed: {
             isThisNewMainProduct() {
-                try {
-                    this.offerVariants.forEach(offer => {
-                        if (offer.options && offer.options.length === 0) {
-                            this.newProductID = this.offerId
-                            return offer.offerId == this.productID
-                        }
-                    })
-
-                    return true
-                } catch (e) {
-                    console.log(e)
-                }
+                return +this.newProductID === +this.productID
             },
-            currentProductIsNew() {
-                return this.newProductID == this.productID
+            isNoNew() {
+                return this.offerVariants.filter(offer => !offer.options)
             }
         },
         methods: {
@@ -65,7 +55,27 @@
             },
             getNewProduct() {
                 this.$emit('offerVariantChoosen', this.newProductID)
+            },
+            checkIsNewProduct() {
+                try {
+                    this.offerVariants.forEach(offer => {
+                        if (!offer.options) {
+                            this.newProductID = offer.offerId;
+                        }
+                    })
+                    return +this.newProductID === +this.productId
+                } catch (e) {
+                    console.log(e)
+                }
             }
-        }
+        },
+        mounted() {
+            console.log('mounted')
+            this.checkIsNewProduct()
+        },
+        updated() {
+            console.log('updated')
+            this.checkIsNewProduct()
+        },
     }
 </script>

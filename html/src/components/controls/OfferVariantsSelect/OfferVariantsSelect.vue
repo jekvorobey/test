@@ -1,24 +1,33 @@
 <template>
-    <div class="aselect" :data-value="value">
-        <div class="selector" @click="toggle()">
-            <div class="label">
-                <span class="label-text">{{ value }}</span>
-                <v-svg class="label-svg" :class="{ expanded : visible }" name="arrow-down" width="20" height="20" />
+    <div>
+        <div class="aselect" :data-value="value" v-if="moreThenOne">
+            <div class="selector" @click="toggle()">
+                <div class="label">
+                    <span class="label-text">{{ value }}</span>
+                    <v-svg class="label-svg" :class="{ expanded : visible }" name="arrow-down" width="20" height="20"/>
+                </div>
+            </div>
+            <div :class="{ hidden : !visible, visible }">
+                <ul>
+                    <li
+                            v-for="(option, index) in offerVariantsOptions"
+                            @click="select(index)"
+                            :key="option.defect"
+                            v-if="value !== offerVariantsOptions[index].defect"
+                    >
+                        {{ option.defect }} - {{ option.price }} - {{ option.currency}}
+                    </li>
+                </ul>
             </div>
         </div>
-        <div :class="{ hidden : !visible, visible }">
-            <ul>
-                <li
-                        v-for="(option, index) in offerVariantsOptions"
-                        @click="select(index)"
-                        :key="option.defect"
-                        v-if="value !== offerVariantsOptions[index].defect"
-                >
-                    {{ option.defect }} - {{ option.price }} - {{ option.currency}}
-                </li>
-            </ul>
-        </div>
+        <button v-else
+                class="product-offer-variants__btn-new"
+                :class="{'product-offer-variants__btn-new-current': isCurrentItem}"
+                @click="getOffer"
+        > Выгодно: {{ value }}
+        </button>
     </div>
+
 </template>
 
 <script>
@@ -44,7 +53,7 @@
         },
         data() {
             return {
-                selected: '',
+                selected: null,
                 value: 'Выгодно',
                 visible: false
             }
@@ -57,7 +66,7 @@
 
                     if (!offer.options || !offer.options[0].values) return;
 
-                    if (offer.offerId == this.productID) {
+                    if (+offer.offerId === +this.productID) {
                         this.selected = this.productID
                         this.value = offer.options[0].values[0].value
                     }
@@ -72,6 +81,15 @@
                 })
 
                 return total;
+            },
+            moreThenOne() {
+                return this.offerVariantsOptions.length > 1
+            },
+            oneItemID() {
+                return this.offerVariantsOptions[0].offerId;
+            },
+            isCurrentItem() {
+                return +this.selected === +this.productID
             }
         },
         methods: {
@@ -86,12 +104,19 @@
                 this.selected = this.offerVariantsOptions[index].offerId;
 
                 this.$emit('offerVariantSelected', this.selected)
+            },
+            getOffer() {
+                console.log('getOffer')
+                if (!this.isCurrentItem) this.$emit('offerVariantSelected', this.oneItemID)
             }
         },
         created() {
             const onClickOutside = e => this.visible = this.$el.contains(e.target) && this.visible;
             document.addEventListener('click', onClickOutside);
             this.$on('hook:beforeDestroy', () => document.removeEventListener('click', onClickOutside));
+        },
+        mounted() {
+            if (this.oneItemID) this.value = this.offerVariantsOptions[0].defect
         }
     }
 </script>
