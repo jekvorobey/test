@@ -56,6 +56,12 @@
                     </li>
                 </ul>
 
+                <ul class="catalog-product-list-card__variants catalog-product-list-card__variants-right" v-if="isOfferVariants && !isTablet">
+                    <li class="catalog-product-list-card__variant">
+                       Выгодно
+                    </li>
+                </ul>
+
                 <div
                     v-if="$mq.tablet"
                     class="catalog-product-list-card__mobile-cart-btn"
@@ -83,13 +89,29 @@
                         "
                         :item-prop="itemProp"
                         has-articles
-                    />
+                    >
+                        <v-svg v-if="isOfferVariants"
+                               class="catalog-product-list-card__prices-discount-svg"
+                               name="offer-union"
+                               key="offer-union"
+                               width="20"
+                               height="20"
+                        />
+                    </price>
                     <price
                         class="text-sm text-grey catalog-product-list-card__price"
                         v-if="item.oldPrice && !isEqPrices(modifiedPrice, modifiedOldPrice)"
                         v-bind="concretePrice(modifiedOldPrice)"
                         has-articles
-                    />
+                    >
+                        <v-svg v-if="isOfferVariants"
+                               class="catalog-product-list-card__prices-discount-svg"
+                               name="offer-union"
+                               key="offer-union"
+                               width="20"
+                               height="20"
+                        />
+                    </price>
                     <installment-price
                             v-if="item.installment && item.installment.isInstallmentAvailable"
                             :value="item.price.value"
@@ -154,6 +176,7 @@ import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import '@images/sprites/cart.svg';
 import '@images/sprites/cart-filled.svg';
+import '@images/sprites/offer-union.svg';
 
 import './CatalogProductListCard.css';
 
@@ -316,6 +339,14 @@ export default {
 
         isTabletLg() {
             return this.$mq.tabletLg;
+        },
+
+        isTablet() {
+            return this.$mq.tablet;
+        },
+
+        isOfferVariants() {
+            return this.item && this.item.offerVariants && this.item.offerVariants.length > 1
         },
 
         maxVisibleVariantValues() {

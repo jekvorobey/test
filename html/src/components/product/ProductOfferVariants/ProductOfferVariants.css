@@ -1,0 +1,41 @@
+.product-offer-variants {
+    display: flex;
+    margin-top: 13px;
+    margin-bottom: 28px;
+    @media (max-width: 767px) {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+    &__btn-new {
+         min-height: 32px;
+         transition: .1s all;
+         padding: 4px 8px;
+         margin-right: 8px;
+
+         cursor: pointer;
+         background: var(--cl-grey-light);
+         border-radius: 1px;
+
+         text-transform: capitalize;
+         color: var(--cl-global) !important;
+         font-weight: 400;
+         font-size: 16px;
+         line-height: 24px;
+
+        &:hover {
+             background-color: var(--cl-global);
+             fill: var(--cl-white);
+             color: var(--cl-white) !important;
+        }
+
+        &-current{
+             background-color: var(--cl-global);
+             fill: var(--cl-white);
+             color: var(--cl-white) !important;
+        }
+
+        &-disabled {
+            color: var(--cl-grey) !important;
+        }
+     }
+}
