@@ -9,10 +9,18 @@
                 </div>
             </div>
             <div :class="{ hidden : !visible, visible }">
-                <ul>
+                <ul v-if="isNewSelected">
                     <li
                             v-for="(option, index) in offerVariantsOptions"
-                            v-if="!isNewSelected && value !== offerVariantsOptions[index].defect"
+                            @click="select(index)"
+                            :key="option.defect"
+                    >
+                        {{ option.defect }} {{ option.price }} {{ option.currency === 'RUB' ? '₽' : ''}}
+                    </li>
+                </ul>
+                <ul v-else>
+                    <li     v-if="value !== offerVariantsOptions[index].defect"
+                            v-for="(option, index) in offerVariantsOptions"
                             @click="select(index)"
                             :key="option.defect"
                     >
