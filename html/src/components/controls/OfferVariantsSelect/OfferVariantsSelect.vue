@@ -117,6 +117,7 @@
                 this.visible = !this.visible;
             },
             select(index) {
+                this.toggle()
                 this.value = this.offerVariantsOptions[index].defect;
                 this.selected = this.offerVariantsOptions[index].offerId;
 
