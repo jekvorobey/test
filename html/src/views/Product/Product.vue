@@ -1347,7 +1347,6 @@
             ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
             async offerVariantChoosen(offerID) {
-                console.log('offerVariantChoosen ', offerID)
                 const { code, refCode: referrerCode } = this;
                 try {
                     this.$progress.start();
@@ -1397,12 +1396,10 @@
 
             checkProductID() {
                 const { product } = this;
-                console.log(product)
                 if (!product || !product.offerVariants) return
 
                 product.offerVariants.forEach(offer => {
                     if (!offer.options || offer.options.length === 0) {
-                        console.log(offer.offerId )
                         this.newOfferID = offer.offerId
                     } else return null
                 })

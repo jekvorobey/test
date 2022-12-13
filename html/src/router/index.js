@@ -75,6 +75,8 @@ export default function createRouter(container) {
         fallback: false,
         // eslint-disable-next-line no-unused-vars
         scrollBehavior(to, from, savedPosition) {
+            // Если есть параметр offerId то страницу не скроллить
+            if (to.query.offerId) return false;
             if (!savedPosition && to.meta.skipScroll) return null;
             if (to.hash && isSelectorValid(to.hash)) return { selector: to.hash };
             if (savedPosition) return savedPosition;
