@@ -14,7 +14,6 @@
                             v-for="(option, index) in offerVariantsOptions"
                             @click="select(index)"
                             :key="option.defect"
-                            v-if="value !== offerVariantsOptions[index].defect"
                     >
                         {{ option.defect }} {{ option.price }} {{ option.currency === 'RUB' ? '₽' : ''}}
                     </li>
