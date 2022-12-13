@@ -12,6 +12,7 @@
                 <ul>
                     <li
                             v-for="(option, index) in offerVariantsOptions"
+                            v-if="!isNewSelected && value !== offerVariantsOptions[index].defect"
                             @click="select(index)"
                             :key="option.defect"
                     >
