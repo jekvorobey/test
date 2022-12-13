@@ -3,7 +3,7 @@
         <div class="aselect" :data-value="value" v-if="moreThenOne">
             <div class="selector" @click="toggle()">
                 <div class="label" :class="{'non-target-label': isNewSelected}">
-                    <span class="label-text">{{ value }}</span>
+                    <span class="label-text">{{ isNewSelected ? 'Выгодно' : value }}</span>
                     <v-svg class="label-svg" :class="{ expanded : visible, 'non-target-svg': isNewSelected}"
                            name="arrow-down" width="20" height="20"/>
                 </div>
