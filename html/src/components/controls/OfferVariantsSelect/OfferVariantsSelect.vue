@@ -25,7 +25,7 @@
                 class="product-offer-variants__btn-new"
                 :class="{'product-offer-variants__btn-new-current': isCurrentItem}"
                 @click="getOffer"
-        > Выгодно: {{ value }} {{ currentPrice }} ₽
+        > Выгодно: {{ valueIfOneVariant ? valueIfOneVariant : value }} {{ currentPrice }} ₽
         </button>
     </div>
 
@@ -90,6 +90,12 @@
             },
             moreThenOne() {
                 return this.offerVariantsOptions.length > 1
+            },
+            valueIfOneVariant() {
+                if (this.offerVariantsOptions.length === 1) {
+                    return this.offerVariantsOptions[0].defect
+                }
+                return false
             },
             firstItemID() {
                 return this.offerVariantsOptions[0].offerId;
