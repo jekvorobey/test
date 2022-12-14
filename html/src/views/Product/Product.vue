@@ -170,7 +170,7 @@
                     </product-option-panel>
 
                     <product-offer-variants
-                            v-if="product && product.offerVariants && product.offerVariants.length > 1"
+                            v-if="offerVariantsToShow"
                             :productID="product.id"
                             :offerVariants="product.offerVariants"
                             @offerVariantChoosen="offerVariantChoosen"
@@ -1026,6 +1026,16 @@
                         url: categoryCode && generateProductUrl(categoryCode, code),
                     };
                 });
+            },
+
+            offerVariantsToShow() {
+                const { product } = this;
+                try {
+                    const res = product.offerVariants.filter(offer => offer.options && offer.options.length > 0)
+                    return res.length > 0
+                } catch (e) {
+                    return false
+                }
             },
 
             isThisNotNewOfferProduct() {
