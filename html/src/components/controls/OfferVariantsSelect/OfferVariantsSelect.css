@@ -15,21 +15,21 @@
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
     border-top: 10px solid #888;
-    transform: rotateZ(0deg) translateY(0px);
+    transform: rotateZ(0deg);
     transition-duration: 0.3s;
     transition-timing-function: cubic-bezier(0.59, 1.39, 0.37, 1.01);
 }
 
 .aselect .selector .expanded {
-    transform: rotateZ(180deg) translateY(2px);
+    transform: rotateZ(180deg);
 }
 
 .aselect .selector .label {
-    max-height: 32px;
+    min-height: 32px;
     display: flex;
     align-items: center;
     cursor: pointer;
-    padding: 12px;
+    padding: 0 12px;
     font-size: 16px;
     color: var(--cl-white);
     background: var(--cl-black);

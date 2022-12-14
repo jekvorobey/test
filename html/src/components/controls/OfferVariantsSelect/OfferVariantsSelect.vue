@@ -15,7 +15,7 @@
                             @click="select(index)"
                             :key="option.defect"
                     >
-                        {{ option.defect }} {{ option.price }} {{ option.currency === 'RUB' ? '₽' : ''}}
+                        {{ option.defect }} {{ option.price }}&nbsp;{{ option.currency === 'RUB' ? '₽' : ''}}
                     </li>
                 </ul>
                 <ul v-else>
@@ -24,7 +24,7 @@
                             @click="select(index)"
                             :key="option.defect"
                     >
-                        {{ option.defect }} {{ option.price }} {{ option.currency === 'RUB' ? '₽' : ''}}
+                        {{ option.defect }} {{ option.price }}&nbsp;{{ option.currency === 'RUB' ? '₽' : ''}}
                     </li>
                 </ul>
             </div>
@@ -33,7 +33,7 @@
                 class="product-offer-variants__btn-new"
                 :class="{'product-offer-variants__btn-new-current': isCurrentItem}"
                 @click="getOffer"
-        > Выгодно: {{ valueIfOneVariant ? valueIfOneVariant : value }} {{ currentPrice }} ₽
+        > Выгодно: {{ valueIfOneVariant ? valueIfOneVariant : value }} {{ currentPrice }}&nbsp;₽
         </button>
     </div>
 
@@ -87,7 +87,7 @@
 
                     let item = {};
                     item['offerId'] = offer.offerId;
-                    item['price'] = offer.price.value;
+                    item['price'] = offer.price.value.toLocaleString();;
                     item['currency'] = offer.price.currency;
                     item['defect'] = offer.options[0].values[0].value
 
