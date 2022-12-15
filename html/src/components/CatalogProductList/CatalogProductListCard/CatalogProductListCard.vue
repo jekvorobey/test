@@ -346,7 +346,18 @@ export default {
         },
 
         isOfferVariants() {
-            return this.item && this.item.offerVariants && this.item.offerVariants.length > 1
+            try {
+                const res = this.item.offerVariants.filter(
+                    offer => offer.options &&
+                    offer.options.length > 0 &&
+                    offer.price &&
+                    offer.price.value &&
+                    +offer.price.value > 0
+                )
+                return res.length > 0
+            } catch (e) {
+                return false
+            }
         },
 
         maxVisibleVariantValues() {
