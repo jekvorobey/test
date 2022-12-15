@@ -112,7 +112,7 @@
                 return +this.selected === +this.productID
             },
             currentPrice() {
-                return this.offerVariantsOptions[0].price && this.offerVariantsOptions[0].price.toLocaleString() || null;
+                return this.offerVariantsOptions && this.offerVariantsOptions[0].price.toLocaleString() || null;
             },
             isNewSelected() {
                 return +this.newProductID === +this.productID
