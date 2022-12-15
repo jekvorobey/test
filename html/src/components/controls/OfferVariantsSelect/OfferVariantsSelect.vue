@@ -87,7 +87,7 @@
 
                     let item = {};
                     item['offerId'] = offer.offerId;
-                    item['price'] = offer.price.value.toLocaleString();;
+                    item['price'] = offer.price && offer.price.value.toLocaleString();;
                     item['currency'] = offer.price.currency;
                     item['defect'] = offer.options[0].values[0].value
 
