@@ -37,6 +37,10 @@
 
 .label-text {
     margin-right: 8px;
+    max-width: 330px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .label-svg {

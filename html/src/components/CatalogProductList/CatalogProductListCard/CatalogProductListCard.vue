@@ -90,7 +90,7 @@
                         :item-prop="itemProp"
                         has-articles
                     >
-                        <v-svg v-if="isOfferVariants"
+                        <v-svg v-if="isOfferVariantsWithOutPrice"
                                class="catalog-product-list-card__prices-discount-svg"
                                name="offer-union"
                                key="offer-union"
@@ -104,7 +104,7 @@
                         v-bind="concretePrice(modifiedOldPrice)"
                         has-articles
                     >
-                        <v-svg v-if="isOfferVariants"
+                        <v-svg v-if="isOfferVariantsWithOutPrice"
                                class="catalog-product-list-card__prices-discount-svg"
                                name="offer-union"
                                key="offer-union"
@@ -346,7 +346,27 @@ export default {
         },
 
         isOfferVariants() {
-            return this.item && this.item.offerVariants && this.item.offerVariants.length > 1
+            try {
+                const res = this.item.offerVariants.filter(offer => offer.options && offer.options.length > 0)
+                return res.length > 0
+            } catch (e) {
+                return false
+            }
+        },
+
+        isOfferVariantsWithOutPrice() {
+            try {
+                const res = this.item.offerVariants.filter(
+                    offer => offer.options &&
+                    offer.options.length > 0 &&
+                    offer.price &&
+                    offer.price.value &&
+                    +offer.price.value > 0
+                )
+                return res.length > 0
+            } catch (e) {
+                return false
+            }
         },
 
         maxVisibleVariantValues() {
