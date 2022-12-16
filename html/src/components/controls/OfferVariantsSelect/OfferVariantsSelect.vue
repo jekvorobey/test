@@ -88,8 +88,8 @@
                     let item = {};
                     item['offerId'] = offer.offerId;
                     item['price'] = offer.price && offer.price.value.toLocaleString() || null;
-                    item['currency'] = offer.price.currency;
-                    item['defect'] = offer.options[0].values[0].value
+                    item['currency'] = offer.price && offer.price.currency || null;
+                    item['defect'] = offer.options && offer.options[0].values[0].value || null;
 
                     total.push(item)
                 })
