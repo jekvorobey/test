@@ -87,7 +87,7 @@
 
                     let item = {};
                     item['offerId'] = offer.offerId;
-                    item['price'] = offer.price && offer.price.value.toLocaleString() || null;
+                    item['price'] = offer.price && offer.price.value && offer.price.value.toLocaleString() || null;
                     item['currency'] = offer.price && offer.price.currency || null;
                     item['defect'] = offer.options && offer.options[0].values[0].value || null;
 
@@ -112,7 +112,9 @@
                 return +this.selected === +this.productID
             },
             currentPrice() {
-                return this.offerVariantsOptions && this.offerVariantsOptions[0].price.toLocaleString() || null;
+                return this.offerVariantsOptions &&
+                    this.offerVariantsOptions[0].price &&
+                    this.offerVariantsOptions[0].price.toLocaleString() || null
             },
             isNewSelected() {
                 return +this.newProductID === +this.productID
