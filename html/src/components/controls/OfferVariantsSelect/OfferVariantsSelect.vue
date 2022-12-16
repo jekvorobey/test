@@ -33,7 +33,7 @@
                 class="product-offer-variants__btn-new"
                 :class="{'product-offer-variants__btn-new-current': isCurrentItem}"
                 @click="getOffer"
-        > Выгодно: {{ valueIfOneVariant ? valueIfOneVariant : value }} {{ currentPrice }}&nbsp;₽
+        > Выгодно: {{ valueIfOneVariant ? valueIfOneVariant : value }} {{ currentPrice }}&nbsp;{{ currentPrice ? '₽' : ''}}
         </button>
     </div>
 
