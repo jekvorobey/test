@@ -153,7 +153,9 @@ export default {
         },
 
         modifiedOldPrice() {
-            return this.oldPrice ?? Object.assign(this.oldPrice, { isPriceHidden: this.isPriceHidden });
+            return this.oldPrice
+                ? Object.assign(this.oldPrice, { isPriceHidden: this.isPriceHidden })
+                : { isPriceHidden: this.isPriceHidden };
         },
 
         itemPropSettings() {
