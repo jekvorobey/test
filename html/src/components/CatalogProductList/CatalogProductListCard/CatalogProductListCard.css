@@ -200,9 +200,11 @@
             left: calc(var(--gs) + calc(var(--gs) / 2));
         }
 
-        &-right {
+        &-right-top {
             left:auto;
             right: -24px;
+            top: 8px;
+            bottom: auto;
          }
     }
 
