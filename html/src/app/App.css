@@ -12,3 +12,8 @@
     filter: blur(0);
     transition: filter 400ms, -webkit-filter 400ms;
 }
+
+.b24-widget-button-position-bottom-right {
+    right: 20px !important;
+    bottom: 85px !important;
+}
