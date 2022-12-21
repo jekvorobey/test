@@ -388,8 +388,9 @@ export default {
     },
 
     metaInfo() {
-        const { activePage, metaData } = this;
+        const { activePage, metaData, productGroup } = this;
         const { title, description, url, image, imageType } = metaData;
+        const metaNoIndex = productGroup.brand.is_visible === 0;
 
         return {
             title: activePage > 1 ? `${title} – страница ${activePage}` : title,
@@ -402,8 +403,8 @@ export default {
                 'og:image:url': image,
                 'og:image:type': imageType,
                 'og:site_name': 'Бессовестно талантливый',
-                'og:description': description || 'Mаркетплейс для мастеров бьюти-индустрии',
-            }),
+                'og:description': description || 'Mаркетплейс для мастеров бьюти-индустрии'
+            }, metaNoIndex)
         };
     },
 

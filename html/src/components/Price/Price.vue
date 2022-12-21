@@ -1,5 +1,6 @@
 <template>
     <component class="price" :is="tag" v-on="$listeners">
+        <slot></slot>
         <template v-if="isObject">
             <template v-if="valueLabel.from"
                 ><template v-if="hasArticles">от&nbsp;</template

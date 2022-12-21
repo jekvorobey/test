@@ -2,7 +2,15 @@
     <div class="product-cart-panel">
         <div class="product-cart-panel__info">
             <div class="product-cart-panel__info-prices" v-bind="itemPropSettings">
-                <price class="text-bold product-cart-panel__info-current" v-bind="modifiedPrice" item-prop />
+                <price class="text-bold product-cart-panel__info-current" v-bind="modifiedPrice" item-prop>
+                    <v-svg v-if="isThisNotNewOfferProduct"
+                           class="catalog-product-list-card__prices-discount-svg"
+                           name="offer-union"
+                           key="offer-union"
+                           width="20"
+                           height="20"
+                    />
+                </price>
                 <price v-if="oldPrice" class="text-grey product-cart-panel__info-old" v-bind="modifiedOldPrice" />
             </div>
             <installment-price
@@ -43,6 +51,7 @@ import Price from '@components/Price/Price.vue';
 import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 import InstallmentPrice from "@components/InstallmentPrice/InstallmentPrice.vue";
+import VSvg from "@controls/VSvg/VSvg.vue";
 
 import { mapGetters, mapState } from 'vuex';
 import { NAME as AUTH_MODULE, USER, REFERRAL_PARTNER } from '@store/modules/Auth';
@@ -52,6 +61,7 @@ import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 
 import { pluralize } from '@util';
 import '@images/sprites/wishlist-middle.svg';
+import '@images/sprites/offer-union.svg';
 import './ProductCartPanel.css';
 
 export default {
@@ -61,13 +71,20 @@ export default {
         Price,
         BuyButton,
         FavoritesButton,
-        InstallmentPrice
+        InstallmentPrice,
+        VSvg
     },
 
     props: {
         productId: {
             type: [Number, String],
             required: true,
+        },
+
+        isThisNotNewOfferProduct: {
+            type: Boolean,
+            default: false,
+            required: false
         },
 
         price: {
@@ -136,7 +153,9 @@ export default {
         },
 
         modifiedOldPrice() {
-            return this.oldPrice ?? Object.assign(this.oldPrice, { isPriceHidden: this.isPriceHidden });
+            return this.oldPrice
+                ? Object.assign(this.oldPrice, { isPriceHidden: this.isPriceHidden })
+                : { isPriceHidden: this.isPriceHidden };
         },
 
         itemPropSettings() {
