@@ -187,7 +187,7 @@
                             :isPriceHidden="product.isPriceHidden"
                             :disabled="!canBuy || isProductToCartAdding"
                             :to-card-adding="isProductToCartAdding"
-                            :is-this-not-new-offer-product="!product.isPriceHidden && isThisNotNewOfferProduct && product.offerVariants && product.offerVariants.length > 1"
+                            :is-this-not-new-offer-product="!product.isPriceHidden && isThisNotNewOfferProduct && product.offerVariants && product.offerVariants.length > 0"
                             item-prop
                             @cart="onBuyProduct"
                             @wishlist="onToggleFavorite(product.productId)"
