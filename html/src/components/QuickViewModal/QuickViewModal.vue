@@ -66,6 +66,13 @@
                             </div>
                         </product-option-panel>
 
+                        <product-offer-variants
+                                v-if="offerVariantsToShow"
+                                :productID="productPreview.id"
+                                :offerVariants="productPreview.offerVariants"
+                                @offerVariantChoosen="offerVariantChoosen"
+                        />
+
                         <product-cart-panel
                             class="quick-view-modal__detail-cart"
                             :productId="productPreview.productId"
@@ -75,6 +82,7 @@
                             :bonus="productPreview.bonus"
                             :is-price-hidden="productPreview.isPriceHidden"
                             :disabled="!canBuy"
+                            :is-this-not-new-offer-product="!productPreview.isPriceHidden && isThisNotNewOfferProduct && productPreview.offerVariants && productPreview.offerVariants.length > 1"
                             @cart="onCartStateChange"
                             @wishlist="onToggleFavorite(productPreview.productId)"
                         >
@@ -122,7 +130,7 @@ import ProductDeliveryPanel from '@components/product/ProductDeliveryPanel/Produ
 import VSpinner from '@controls/VSpinner/VSpinner.vue';
 import Tag from '@components/Tag/Tag.vue';
 import NoPhotoStub from '@components/NoPhotoStub/NoPhotoStub.vue';
-
+import ProductOfferVariants from '@components/product/ProductOfferVariants/ProductOfferVariants.vue';
 import ProductOptionTag from '@components/product/ProductOptionTag/ProductOptionTag.vue';
 import ProductColorTag from '@components/product/ProductColorTag/ProductColorTag.vue';
 import ProductOptionPanel from '@components/product/ProductOptionPanel/ProductOptionPanel.vue';
@@ -155,6 +163,13 @@ import { cartItemTypes } from '@enums/product';
 import { generateProductUrl, prepareProductImage } from '@util/catalog';
 import './QuickViewModal.css';
 import { RetailRocketHelper } from '@services/RetailRocketService';
+import {
+    FETCH_PRODUCT,
+    FETCH_PRODUCT_DATA,
+    FETCH_PRODUCT_MASTERCLASSES,
+    FETCH_PRODUCT_PICKUP_POINTS
+} from "@store/modules/Product/actions";
+import {NAME as PRODUCT_MODULE} from "@store/modules/Product";
 
 const NAME = modalName.general.QUICK_VIEW;
 
@@ -176,6 +191,7 @@ export default {
         ProductOptionPanel,
         ProductDetailPanel,
         ProductDeliveryPanel,
+        ProductOfferVariants,
 
         ProductOptionTag,
         ProductColorTag,
@@ -185,6 +201,7 @@ export default {
         return {
             optionImage: null,
             optionImages: [],
+            newOfferID: null,
         };
     },
 
@@ -198,6 +215,22 @@ export default {
         ...mapGetters(PREVIEW_MODULE, [CHARACTERISTICS, GET_NEXT_COMBINATION]),
         ...mapState(GEO_MODULE, [SELECTED_CITY]),
         ...mapGetters(CART_MODULE, [IS_IN_CART]),
+
+        offerVariantsToShow() {
+            const { productPreview } = this;
+            try {
+                const res = productPreview.offerVariants.filter(offer => offer.options && offer.options.length > 0)
+                return res.length > 0
+            } catch (e) {
+                return false
+            }
+        },
+
+        isThisNotNewOfferProduct() {
+            const { productPreview } = this;
+
+            return productPreview.id !== this.newOfferID
+        },
 
         badges() {
             const { productPreview } = this;
@@ -254,10 +287,40 @@ export default {
         ...mapActions(PREVIEW_MODULE, [FETCH_PRODUCT_PREVIEW]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
-
+        ...mapActions(PRODUCT_MODULE, [FETCH_PRODUCT]),
         onSelectOption(charCode, optValue) {
             const { code } = this[GET_NEXT_COMBINATION](charCode, optValue);
             this[FETCH_PRODUCT_PREVIEW]({ code });
+        },
+
+        checkProductID() {
+            const { productPreview } = this;
+            if (!productPreview || !productPreview.offerVariants) return
+
+            productPreview.offerVariants.forEach(offer => {
+                if (!offer.options || offer.options.length === 0) {
+                    this.newOfferID = offer.offerId
+                } else return null
+            })
+        },
+
+        async offerVariantChoosen(offerID) {
+            const { code, refCode: referrerCode } = this;
+            try {
+                this.$progress.start();
+                this.$router.replace({
+                    path: this.$route.path,
+                    params: { ...this.$route.params },
+                    query: { ...this.$route.query, modal: undefined, offerId: offerID },
+                    hash: this.$route.hash,
+                });
+                // await this[FETCH_PRODUCT]({ code, offer_id: offerID, referrerCode });
+                await this[FETCH_PRODUCT_PREVIEW]({offerId: offerID, code});
+                this.checkProductID();
+                this.$progress.finish();
+            } catch (error) {
+                this.$progress.fail();
+            }
         },
 
         onShowOption(charCode, optValue) {
@@ -336,5 +399,13 @@ export default {
         const { offerId, code } = this.modalState || {};
         this[FETCH_PRODUCT_PREVIEW]({ offerId, code, clear: true });
     },
+
+    mounted() {
+        this.checkProductID();
+    },
+
+    updated() {
+        this.checkProductID();
+    }
 };
 </script>
