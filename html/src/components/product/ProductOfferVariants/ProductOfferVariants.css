@@ -15,6 +15,7 @@
          white-space: nowrap;
          overflow: hidden;
          text-overflow: ellipsis;
+         text-transform: unset;
 
          min-height: 32px;
          transition: .1s all;
@@ -25,7 +26,6 @@
          background: var(--cl-grey-light);
          border-radius: 1px;
 
-         text-transform: capitalize;
          color: var(--cl-global) !important;
          font-weight: 400;
          font-size: 16px;

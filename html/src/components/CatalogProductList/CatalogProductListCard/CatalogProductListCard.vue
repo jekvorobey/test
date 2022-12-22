@@ -103,15 +103,7 @@
                         v-if="item.oldPrice && !isEqPrices(modifiedPrice, modifiedOldPrice)"
                         v-bind="concretePrice(modifiedOldPrice)"
                         has-articles
-                    >
-                        <v-svg v-if="isOfferVariantsWithOutPrice"
-                               class="catalog-product-list-card__prices-discount-svg"
-                               name="offer-union"
-                               key="offer-union"
-                               width="20"
-                               height="20"
-                        />
-                    </price>
+                    ></price>
                     <installment-price
                             v-if="item.installment && item.installment.isInstallmentAvailable"
                             :value="item.price.value"
