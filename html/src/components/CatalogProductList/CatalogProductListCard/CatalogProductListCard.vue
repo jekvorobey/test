@@ -56,7 +56,7 @@
                     </li>
                 </ul>
 
-                <ul class="catalog-product-list-card__variants catalog-product-list-card__variants-right" v-if="isOfferVariants && !isTablet">
+                <ul class="catalog-product-list-card__variants catalog-product-list-card__variants-right-top" v-if="isOfferVariants && !isTablet">
                     <li class="catalog-product-list-card__variant">
                        Выгодно
                     </li>
