@@ -49,6 +49,20 @@
                 </li>
             </ul>
         </li>
+        <!-- Выгодно (захардкожено) -->
+        <li
+                class="group-list__item"
+                :style="{ width: columnWidth }"
+        >
+            <v-link
+                    class="group-list__link group-list__title"
+                    to="/catalog/filters/vigodno-povrezhdena_upakovka/vigodno-povrezhden_flakon/vigodno-ostatochnyy_srok_godnosti_6_3_mesyaca/vigodno-ostatochnyy_srok_godnosti_3_1_mesyaca/vigodno-vitrinnyj_obrazec/"
+                    @click="onClick"
+            >
+                Выгодно
+            </v-link>
+        </li>
+        <!-- Выгодно (захардкожено) -->
     </ul>
 </template>
 
