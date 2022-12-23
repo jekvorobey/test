@@ -30,17 +30,23 @@
             —
             <price class="product-delivery-panel__price" v-bind="method.cost" /><span class="text-grey">{{ formatDate(method.date) }}</span>
         </p>
-
-        <p class="text-bold">Бесплатно при заказе от 12 000
-            <span class="price__currency">₽</span>
-        </p>
+        <v-link :to="{path: '/delivery-and-payment/', hash:'#delivery'}" class="text-unset text-underline text-underline-offset-8">
+            <p class="text-bold">Дешевле при заказе от 6 000
+                <span class="price__currency">₽</span>
+            </p>
+        </v-link>
+        <v-link :to="{path: '/delivery-and-payment/', hash:'#delivery'}" class="text-unset text-underline text-underline-offset-8">
+            <p class="text-bold">Бесплатно при заказе от 12 000
+                <span class="price__currency">₽</span>
+            </p>
+        </v-link>
     </div>
 </template>
 
 <script>
 import VClamp from 'vue-clamp';
 import VSvg from '@controls/VSvg/VSvg.vue';
-
+import VLink from '@controls/VLink/VLink.vue';
 import Price from '@components/Price/Price.vue';
 
 import { mapState, mapActions } from 'vuex';
@@ -62,7 +68,7 @@ export default {
     components: {
         VSvg,
         VClamp,
-
+        VLink,
         Price,
     },
 

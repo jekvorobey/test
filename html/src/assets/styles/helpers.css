@@ -98,3 +98,15 @@
 .network {
     display: flex;
 }
+
+.text-unset {
+    text-transform: unset !important;
+}
+
+.text-underline {
+    text-decoration: underline !important;
+}
+
+.text-underline-offset-8 {
+    text-underline-offset: 8px !important;
+}
