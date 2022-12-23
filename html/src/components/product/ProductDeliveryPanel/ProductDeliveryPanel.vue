@@ -30,12 +30,12 @@
             —
             <price class="product-delivery-panel__price" v-bind="method.cost" /><span class="text-grey">{{ formatDate(method.date) }}</span>
         </p>
-        <v-link :to="{path: '/delivery-and-payment/', hash:'#delivery'}" class="text-unset text-underline text-underline-offset-8">
+        <v-link :to="{path: '/delivery-and-payment/', hash:'#delivery'}" class="help-text-unset help-text-underline help-text-underline-offset-8">
             <p class="text-bold">Дешевле при заказе от 6 000
                 <span class="price__currency">₽</span>
             </p>
         </v-link>
-        <v-link :to="{path: '/delivery-and-payment/', hash:'#delivery'}" class="text-unset text-underline text-underline-offset-8">
+        <v-link :to="{path: '/delivery-and-payment/', hash:'#delivery'}" class="help-text-unset help-text-underline help-text-underline-offset-8">
             <p class="text-bold">Бесплатно при заказе от 12 000
                 <span class="price__currency">₽</span>
             </p>
