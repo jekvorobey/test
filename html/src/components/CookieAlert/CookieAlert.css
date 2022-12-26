@@ -3,8 +3,8 @@
     right: 10px;
     transition: 1s all;
     position: fixed;
+    z-index: 10160;
     bottom: -300px;
-    z-index: 999;
     background: var(--cl-global);
     color: var(--cl-white);
     &__wrapper {
