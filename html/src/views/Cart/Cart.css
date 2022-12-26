@@ -299,8 +299,11 @@
     }
 
     &__professional-text{
-         padding: 20px 15px;
-         text-align: center;
+        padding: 20px 15px;
+        text-align: center;
+        @media (min-width: 1024px) {
+            padding: 37px 15px 20px 15px;
+        }
      }
 
     .cart-item-leave-active {
