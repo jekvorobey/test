@@ -10,7 +10,8 @@
 
                 <self-router-link class="header-bottom__bottom-logo-middle" to="/" same-disabled>
                     <v-svg name="logo-text" width="278" height="28" />
-                    <v-svg name="logo" width="30" height="30" />
+                    <!-- <v-svg name="logo" width="30" height="30" /> -->
+                    <v-svg name="winter-logo" width="30" height="30" />
                 </self-router-link>
 
                 <div class="header-bottom__bottom-menu" v-if="scroll || isTabletLg">
@@ -63,6 +64,7 @@ import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
 import '@images/sprites/logo.svg';
 import '@images/sprites/logo-text.svg';
+import '@images/sprites/winter-logo.svg';
 
 import '@images/sprites/search-middle.svg';
 import '@images/sprites/cart-middle.svg';
