@@ -70,7 +70,7 @@
 
             <br />
 
-            <section class="section">
+            <section class="section" ref="delivery">
                 <div :class="{ container: !isTablet }">
                     <h3 class="container container--tablet info-pages-block__subtitle">
                         Стоимость доставки в зависимости от региона и суммы заказа
@@ -341,5 +341,12 @@ export default {
             return this.$mq.tablet;
         },
     },
+    mounted() {
+        setTimeout(() => {
+            if (this.$route.hash) {
+                this.$refs[this.$route.hash.replace('#', '')].scrollIntoView({ behavior: 'smooth' })
+            }
+        }, 200)
+    }
 };
 </script>
