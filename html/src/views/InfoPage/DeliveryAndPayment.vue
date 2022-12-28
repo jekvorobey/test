@@ -8,6 +8,12 @@
 
         <section class="section info-pages-block__content typo">
             <div class="container">
+                <p>
+                    <v-link
+                            to="/pages/dostavka22-23"
+                            class="info-pages-block__delivery-link"
+                    >Доставка в новогодний период 2022-2023</v-link>
+                </p>
                 <h3 class="info-pages-block__subtitle">Условия оплаты</h3>
                 <p>Заказы оформляются на условиях полной оплаты на сайте любым удобным способом:</p>
 
@@ -198,6 +204,7 @@
 <script>
 import VTable from '@controls/VTable/VTable.vue';
 import InfoRow from '@components/profile/InfoRow/InfoRow.vue';
+import VLink from '@controls/VLink/VLink.vue';
 
 import metaMixin from '@plugins/meta';
 
@@ -211,6 +218,7 @@ export default {
     components: {
         VTable,
         InfoRow,
+        VLink,
     },
 
     metaInfo() {
