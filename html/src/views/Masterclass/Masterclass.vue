@@ -16,6 +16,7 @@
                 class="master-class-view__banner"
                 :image="bannerImage"
                 :name="masterClass.title"
+                :maxDiscount="masterClass.maxDiscount"
                 :price="masterClass.price"
                 btn-text="Купить билет"
                 show-btn

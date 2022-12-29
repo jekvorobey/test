@@ -43,6 +43,14 @@
             margin: auto;
             opacity: 0.1;
         }
+
+        &-discount {
+             color: #f46325;
+             font-size: 22px;
+             position: absolute;
+             top: 10px;
+             left: 20px;
+         }
     }
 
     &__mobile-cart-btn {

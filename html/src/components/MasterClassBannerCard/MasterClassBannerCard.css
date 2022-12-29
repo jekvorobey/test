@@ -28,7 +28,16 @@
     }
 
     &__img {
+        position: relative;
         width: 100%;
+
+        &-discount {
+             color: #f46325;
+             font-size: 22px;
+             position: absolute;
+             top: 10px;
+             left: 20px;
+         }
     }
 
     &--link {

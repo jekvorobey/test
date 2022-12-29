@@ -2,6 +2,13 @@
     <li v-if="showBtn" class="master-class-banner-card">
         <v-picture class="master-class-banner-card__img" v-if="image">
             <slot />
+            <div v-if="maxDiscount"
+                    class="master-class-banner-card__img-discount"
+            >
+                <div>-{{maxDiscount.discountValue}}</div>
+                <br>
+                <div>От {{maxDiscount.priceValue / 12}} р.\мес</div>
+            </div>
         </v-picture>
         <div class="master-class-banner-card__panel">
             <div class="text-bold master-class-banner-card__info">
@@ -82,6 +89,12 @@ export default {
 
         description: {
             type: String,
+        },
+
+        maxDiscount: {
+            type: Object,
+            required: false,
+            default: false
         },
 
         btnText: {
