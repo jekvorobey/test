@@ -145,7 +145,7 @@
                             :speaker="item.speaker"
                             :date="item.dateTime"
                             :installment="item.installment"
-                            :maxDiscount="item.maxDiscount"
+                            :discount="item.discount"
                             :price="item.price"
                             :old-price="item.oldPrice"
                             :address="item.nearestPlaceName"

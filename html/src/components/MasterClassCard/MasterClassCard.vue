@@ -3,9 +3,9 @@
         <router-link class="master-class-card__img" :to="to">
             <v-picture v-if="image">
                 <slot />
-                <div v-if="maxDiscount"
+                <div v-if="discount"
                     class="master-class-card__img-discount"
-                > -{{ maxDiscount.discountValue }} </div>
+                > -{{ discount.maxDiscount }} </div>
             </v-picture>
             <v-svg v-else id="master-class-card-empty" name="logo" width="48" height="48" />
 
@@ -113,7 +113,7 @@ export default {
             type: [Object, Boolean]
         },
 
-        maxDiscount: {
+        discount: {
             type: Object,
             required: false,
             default: false
