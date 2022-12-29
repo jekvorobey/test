@@ -1,6 +1,6 @@
 <template>
     <transition name="slip">
-        <div class="cookie-alert" :class="{'cookie-alert-show': show}">
+        <div class="cookie-alert" :class="{'cookie-alert-show': show, 'cookie-alert-product': isProductPage && !isOnBottom}">
             <div class="cookie-alert__wrapper">
                 <div class="cookie-alert__text">
                     {{ textToShow }}
@@ -27,6 +27,8 @@
         data() {
             return {
                 show: false,
+                isProductPage: false,
+                isOnBottom: false,
             };
         },
         methods: {
@@ -38,20 +40,32 @@
                     path: '/',
                 });
             },
+            coockieHandleScroll(){
+                this.isOnBottom = window.innerHeight + window.scrollY > document.body.clientHeight - 300;
+            }
         },
         computed: {
             isTabletLg() {
                 return this.$mq.tabletLg;
+            },
+            isTablet() {
+                return this.$mq.tablet;
             },
             textToShow() {
                 return this.isTabletLg ? 'Мы собираем куки. Посещая страницы сайта, вы соглашаетесь с ' : 'На сайте используются файлы cookies, которые его делают более удобным для каждого пользователя. Посещая страницы сайта, вы соглашаетесь с '
             }
         },
         mounted() {
+            window.addEventListener('scroll', this.coockieHandleScroll);
+            this.isProductPage = this.$route.path.split('/').includes('product');
+
             setTimeout(() => {
                 this.show = !$cookie.get('agreeCookie');
             }, 2000)
-        }
+        },
+        beforeDestroy() {
+            window.removeEventListener('scroll', this.coockieHandleScroll);
+        },
     };
 </script>
 
