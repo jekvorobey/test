@@ -5,9 +5,9 @@
             <div v-if="discount && discount.maxDiscount"
                     class="master-class-banner-card__img-discount"
             >
-                <div>-{{discount.maxDiscount}}</div>
+                <div class="master-class-banner-card__img-discount__price">-{{discount.maxDiscount}}</div>
                 <br>
-                <div>От {{Math.round(discount.minPrice / 12).toLocaleString()}} р.\мес</div>
+                <div class="master-class-banner-card__img-discount__installment">От {{Math.round(discount.minPrice / 12).toLocaleString()}} ₽ x 12 мес</div>
             </div>
         </v-picture>
         <div class="master-class-banner-card__panel">

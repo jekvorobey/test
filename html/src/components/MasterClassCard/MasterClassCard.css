@@ -45,8 +45,10 @@
         }
 
         &-discount {
-             color: #f46325;
-             font-size: 22px;
+             background: var(--cl-black);
+             color: var(--cl-white);
+             padding: 2px 4px;
+             font-size: 12px;
              position: absolute;
              top: 10px;
              left: 20px;
