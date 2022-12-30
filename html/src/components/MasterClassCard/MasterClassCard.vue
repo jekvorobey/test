@@ -114,7 +114,7 @@ export default {
         },
 
         discount: {
-            type: Object,
+            type: [Object, Array],
             required: false,
             default: false
         },
