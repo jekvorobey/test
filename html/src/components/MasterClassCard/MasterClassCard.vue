@@ -3,7 +3,7 @@
         <router-link class="master-class-card__img" :to="to">
             <v-picture v-if="image">
                 <slot />
-                <div v-if="discount"
+                <div v-if="discount && discount.maxDiscount"
                     class="master-class-card__img-discount"
                 > -{{ discount.maxDiscount }} </div>
             </v-picture>

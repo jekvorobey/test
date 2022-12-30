@@ -2,7 +2,7 @@
     <li v-if="showBtn" class="master-class-banner-card">
         <v-picture class="master-class-banner-card__img" v-if="image">
             <slot />
-            <div v-if="discount"
+            <div v-if="discount && discount.maxDiscount"
                     class="master-class-banner-card__img-discount"
             >
                 <div>-{{discount.maxDiscount}}</div>
