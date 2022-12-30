@@ -41,7 +41,10 @@
                  background: var(--cl-black);
                  color: var(--cl-white);
                  padding: 2px 4px;
-                 font-size: 12px;
+                 font-size: .625rem;
+                 letter-spacing: .04em;
+                 font-weight: 500;
+                 line-height: 1rem;
                  margin-bottom: 10px;
             }
 
@@ -49,7 +52,10 @@
                  background: var(--cl-black);
                  color: var(--cl-white);
                  padding: 2px 4px;
-                 font-size: 12px;
+                 font-size: .625rem;
+                 letter-spacing: .04em;
+                 font-weight: 500;
+                 line-height: 1rem;
             }
          }
     }
