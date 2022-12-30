@@ -7,7 +7,7 @@
             >
                 <div>-{{discount.maxDiscount}}</div>
                 <br>
-                <div>От {{discount.minPrice / 12}} р.\мес</div>
+                <div>От {{Math.round(discount.minPrice / 12).toLocaleString()}} р.\мес</div>
             </div>
         </v-picture>
         <div class="master-class-banner-card__panel">
