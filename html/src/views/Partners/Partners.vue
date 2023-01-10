@@ -225,7 +225,7 @@ import ParthnerSales1 from '@images/mock/ParthnerSales1.png';
 import ParthnerSales2 from '@images/mock/ParthnerSales2.png';
 import ParthnerSales3 from '@images/mock/ParthnerSales3.png';
 
-import pdfFile from '@files/Marketplace_iBT.pdf';
+import pdfFile from '@files/Marketplace_iBT_s.pdf';
 
 import '@images/sprites/download.svg';
 import '@images/sprites/home.svg';
