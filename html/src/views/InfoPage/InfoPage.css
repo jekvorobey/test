@@ -5,6 +5,14 @@
         margin: calc(var(--gs) * 3) auto calc(var(--gs) * 7);
     }
 
+    &__delivery-link {
+        text-transform: none !important;
+        text-decoration: underline;
+        text-underline-offset: 8px;
+        color: var(--cl-red);
+        font-weight: bold;
+    }
+
     &__title {
         font-size: 28px;
         line-height: 40px;
