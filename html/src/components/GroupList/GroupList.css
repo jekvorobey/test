@@ -5,17 +5,11 @@
     &__link {
         line-height: 1.5em;
         font-weight: 400;
-        border-bottom: 1px solid transparent;
         text-transform: none;
-
-        &:hover {
-            border-bottom: 1px solid var(--cl-global);
-        }
 
         &--selected {
             line-height: 1.5em;
-            font-weight: 400;
-            border-bottom: 1px solid transparent;
+            font-weight: 600;
             text-transform: none;
         }
     }
@@ -45,12 +39,13 @@
             font-size: 16px;
             margin: var(--gs) 0;
             font-weight: 400;
-            border-bottom: 1px solid transparent;
             text-transform: none;
             color: var(--cl-grey);
 
             &:hover {
-                border-bottom: 1px solid var(--cl-grey);
+                 text-decoration: underline;
+                 text-underline-offset: 5px;
+                 text-decoration-color: var(--cl-grey);
             }
         }
     }

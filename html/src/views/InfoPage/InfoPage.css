@@ -7,8 +7,6 @@
 
     &__delivery-link {
         text-transform: none !important;
-        text-decoration: underline;
-        text-underline-offset: 8px;
         color: var(--cl-red);
         font-weight: bold;
     }

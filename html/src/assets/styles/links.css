@@ -1,0 +1,30 @@
+.underline-hover {
+    display: inline-block;
+}
+
+.underline-hover::after {
+    content: '';
+    width: 0;
+    height: 1px;
+    display: block;
+    background: var(--cl-black);
+    transition: 300ms;
+}
+
+.underline-hover:hover::after {
+    width: 100%;
+}
+
+.link-underline a {
+    text-decoration: underline !important;
+    text-underline-offset: 5px !important;
+}
+
+.link-unset a {
+    text-decoration: unset !important;
+}
+
+.link-underline:hover > a{
+    text-decoration: underline !important;
+}
+
