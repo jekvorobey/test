@@ -6,6 +6,7 @@
                 <p class="notification-modal__message">{{ message }}</p>
                 <div class="notification-modal__actions">
                     <v-button class="notification-modal__btn" @click="onClose">{{ btnText }}</v-button>
+                    <v-button v-if="bundle" class="notification-modal__btn" to="/cart">Перейти в корзину</v-button>
                     <v-button v-if="altBtn" class="notification-modal__btn" :to="altBtn.action">{{
                         altBtn.message
                     }}</v-button>
@@ -25,7 +26,7 @@ import { mapState, mapActions } from 'vuex';
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
 
-import { modalName } from '@enums';
+import {eventName, modalName} from '@enums';
 import './NotificationModal.css';
 
 const NAME = modalName.general.NOTIFICATION;
@@ -55,6 +56,10 @@ export default {
             return this.modalState.message || '';
         },
 
+        bundle() {
+            return this.modalState.bundle || false;
+        },
+
         btnText() {
             return this.modalState.btnMessage || 'Закрыть';
         },
@@ -77,6 +82,10 @@ export default {
             this.$emit('close');
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false });
         },
+    },
+
+    beforeDestroy() {
+       this.onClose()
     },
 };
 </script>
