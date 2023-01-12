@@ -25,7 +25,7 @@
             >
                 <ul>
                     <li class="group-list__item__li" v-for="{ name, id, to } in children" :key="id">
-                        <v-link v-if="to !== currentPath" class="group-list__link" :to="to" @click="onClick">
+                        <v-link v-if="to !== currentPath" class="group-list__link underline-hover" :to="to" @click="onClick">
                             {{ name }}
                         </v-link>
                         <div v-else class="group-list__link--selected">
@@ -40,7 +40,7 @@
             </v-expander>
             <ul v-else>
                 <li class="group-list__item__li" v-for="{ name, id, to } in children" :key="id">
-                    <v-link v-if="to !== currentPath" class="group-list__link" :to="to" @click="onClick">
+                    <v-link v-if="to !== currentPath" class="group-list__link underline-hover" :to="to" @click="onClick">
                         {{ name }}
                     </v-link>
                     <div v-else class="group-list__link--selected">
@@ -55,7 +55,7 @@
                 :style="{ width: columnWidth }"
         >
             <v-link
-                    class="group-list__link group-list__title"
+                    class="group-list__link group-list__title underline-hover"
                     to="/catalog/filters/vigodno-povrezhdena_upakovka/vigodno-povrezhden_flakon/vigodno-ostatochnyy_srok_godnosti_6_3_mesyaca/vigodno-ostatochnyy_srok_godnosti_3_1_mesyaca/vigodno-vitrinnyj_obrazec/"
                     @click="onClick"
             >

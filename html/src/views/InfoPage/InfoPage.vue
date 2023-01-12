@@ -1,5 +1,5 @@
 <template>
-    <div class="container info-pages-block">
+    <div class="container info-pages-block link-underline">
         <h1 class="info-pages-block__title">
             {{ landing.name }}
         </h1>

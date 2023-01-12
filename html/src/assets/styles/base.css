@@ -69,7 +69,6 @@ a {
     fill: inherit;
     text-decoration: none;
     transition: all var(--time) var(--timing-function);
-    border-bottom: 1px solid var(--cl-global);
 
     &:hover {
         text-decoration: none;
