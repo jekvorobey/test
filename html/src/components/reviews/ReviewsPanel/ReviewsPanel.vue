@@ -221,7 +221,7 @@ export default {
             try {
                 this.isAddingReview = false;
                 await this[CREATE_REVIEW]({ code, type, formData });
-                message = 'Спасибо за ваш отзыв!';
+                message = 'Спасибо за ваш отзыв! Будет размещен после проверки';
             } catch (error) {
                 message = 'Не удалось отправить отзыв.';
             }
