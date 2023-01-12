@@ -97,6 +97,7 @@
                                     :error="addressError && addressError.length > 0"
                                     @change-address="onChangeAddress"
                                     @set-address="onSetAddress"
+                                    @onAddAddress="onAddAddress"
                             />
 
                             <checkout-pickup-point-panel

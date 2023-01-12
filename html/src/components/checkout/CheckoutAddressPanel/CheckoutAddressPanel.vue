@@ -6,6 +6,7 @@
                 'checkout-address-panel__title--error': error,
             }"
             v-if="!addresses || !addresses.length"
+            @click="onClickTitle"
         >
             Добавьте адрес
         </h3>
@@ -42,6 +43,8 @@ import './CheckoutAddressPanel.css';
 export default {
     name: 'checkout-address-panel',
 
+    emits: ['onAddAddress'],
+
     components: {
         CheckoutOptionCard,
     },
@@ -72,6 +75,10 @@ export default {
         onChangeAddress(address, index) {
             this.$emit('change-address', { address, index });
         },
+
+        onClickTitle() {
+            this.$emit('onAddAddress')
+        }
     },
 };
 </script>
