@@ -242,7 +242,7 @@ export default {
                     name: modalName.general.NOTIFICATION,
                     open: true,
                     state: {
-                        message: 'Чтобы оставить отзыв, необходимо приобрести данный товар на маркетплейсе iBT.ru',
+                        message: 'Оставить отзыв можно после покупки и получения товара',
                     },
                 });
         },
