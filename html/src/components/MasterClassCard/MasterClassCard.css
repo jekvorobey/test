@@ -67,6 +67,12 @@
         .icon {
             opacity: 1!important;
         }
+
+        &-white {
+            background: var(--cl-white);
+            padding: 5px 5px 0 5px;
+            border-radius: 5px;
+         }
     }
 
     &--small &__img {

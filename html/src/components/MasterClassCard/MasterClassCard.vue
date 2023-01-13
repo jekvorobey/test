@@ -1,15 +1,25 @@
 <template>
-    <li class="master-class-card" :class="{ 'master-class-card--small': isSmall }">
-        <router-link class="master-class-card__img" :to="to">
+    <li class="master-class-card catalog-product-list-card" :class="{ 'master-class-card--small': isSmall }">
+        <router-link class="master-class-card__img catalog-product-list-card__img no-padding" :to="to">
             <v-picture v-if="image">
                 <slot />
                 <div v-if="discount && discount.maxDiscount"
                     class="master-class-card__img-discount"
                 > -{{ discount.maxDiscount }} </div>
+
+                <div v-if="!isTabletLg" class="catalog-product-list-card__controls" v-once>
+                    <buy-button
+                            class="btn--outline catalog-product-list-card__controls-btn"
+                            @click.prevent.stop="$emit('buy')"
+                    >
+                        Купить
+                    </buy-button>
+                </div>
+
             </v-picture>
             <v-svg v-else id="master-class-card-empty" name="logo" width="48" height="48" />
 
-            <div v-if="$mq.tablet" class="master-class-card__mobile-cart-btn" @click.prevent.stop="$emit('buy')">
+            <div v-if="$mq.tablet" class="master-class-card__mobile-cart-btn master-class-card__mobile-cart-btn-white" @click.prevent.stop="$emit('buy')">
                 <v-link tag="button">
                     <transition name="fade-absolute">
                         <v-svg v-if="inCart" name="cart-filled" key="cart-filled" width="24" height="24" />
@@ -61,7 +71,7 @@
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VPicture from '@controls/VPicture/VPicture.vue';
-
+import BuyButton from "@components/BuyButton/BuyButton.vue";
 import Price from '@components/Price/Price.vue';
 import InstallmentPrice from "@components/InstallmentPrice/InstallmentPrice.vue";
 
@@ -78,7 +88,7 @@ export default {
         VSvg,
         VLink,
         VPicture,
-
+        BuyButton,
         Price,
         InstallmentPrice
     },
@@ -141,6 +151,11 @@ export default {
         inCart: {
             type: Boolean,
             default: false,
+        },
+    },
+    computed: {
+        isTabletLg() {
+            return this.$mq.tabletLg;
         },
     },
 };

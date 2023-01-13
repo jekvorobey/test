@@ -95,6 +95,10 @@
     }
 }
 
+.no-padding {
+    padding: 0 !important;
+}
+
 .network {
     display: flex;
 }
