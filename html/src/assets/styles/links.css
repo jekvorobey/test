@@ -15,9 +15,13 @@
     width: 100%;
 }
 
+.link-underline a:has(img){
+    text-decoration: none;
+}
+
 .link-underline a {
-    text-decoration: underline !important;
-    text-underline-offset: 5px !important;
+    text-decoration: underline;
+    text-underline-offset: 5px;
 }
 
 .link-unset a {
