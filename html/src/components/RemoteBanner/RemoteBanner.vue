@@ -35,7 +35,7 @@
                     <source :data-srcset="getImageWithRetina(mobileImage)" media="(min-width: 320px)" />
                 </template>
 
-                <img class="blur-up lazyload v-picture__img" :data-src="defaultImage.original" alt="" />
+                <img class="blur-up lazyload v-picture__img" :data-src="defaultImage && defaultImage.original" alt="" />
             </v-picture>
 
             <button
@@ -80,7 +80,7 @@ export default {
 
     props: {
         banner: {
-            type: Object,
+            type: [Object, Array],
             required: true,
         },
 
@@ -207,7 +207,7 @@ export default {
                     imageRetina = image.retinaWebp;
                     break;
                 default:
-                    imageOrig = image.original;
+                    imageOrig = image && image.original;
                     imageRetina = image.retina;
             }
 
