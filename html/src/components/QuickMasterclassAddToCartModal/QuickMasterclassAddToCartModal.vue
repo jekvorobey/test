@@ -1,5 +1,9 @@
 <template>
-    <pin-modal class="quick-variant-add-to-card-modal" :loading="isLoading" @close="onClose">
+    <pin-modal
+            class="quick-variant-add-to-card-modal"
+            :class="{'quick-variant-add-to-card-modal__center': !isTablet}"
+            :loading="isLoading"
+            @close="onClose">
         <div v-if="modalState.masterclass" class="quick-variant-add-to-card-modal__inner">
             <product-option-panel class="quick-variant-add-to-card-modal__characteristic" header="Тип билета">
                 <div class="quick-variant-add-to-card-modal__options">
@@ -75,6 +79,9 @@ export default {
         ...mapState(MODAL_MODULE, {
             isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
             modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isTablet() {
+                return this.$mq.tablet;
+            },
         }),
 
         ...mapGetters(CART_MODULE, {
