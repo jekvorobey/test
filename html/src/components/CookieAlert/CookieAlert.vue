@@ -1,6 +1,6 @@
 <template>
     <transition name="slip">
-        <div class="cookie-alert" :class="{'cookie-alert-show': show, 'cookie-alert-product': isProductPage && !isOnBottom}">
+        <div class="cookie-alert" :class="{'cookie-alert-show': show, 'cookie-alert-product': isProductPage && !isOnBottom && show}">
             <div class="cookie-alert__wrapper">
                 <div class="cookie-alert__text">
                     {{ textToShow }}

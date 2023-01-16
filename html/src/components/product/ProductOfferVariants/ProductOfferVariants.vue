@@ -1,18 +1,24 @@
 <template>
-    <div class="product-offer-variants">
-        <button class="product-offer-variants__btn-new"
-                :class="{'product-offer-variants__btn-new-disabled': isNoNew.length === 0,
-                'product-offer-variants__btn-new-current': isThisNewMainProduct && isNoNew.length !== 0}"
-                :disabled="isThisNewMainProduct || isNoNew.length === 0"
-                @click="getNewProduct"
-        >Новый
-        </button>
-        <offer-variants-select
-                :newProductID="newProductID"
-                :productID="productID"
-                :offerVariants="offerVariants"
-                @offerVariantSelected="offerVariantSelected"
-        />
+    <div>
+        <div class="product-offer-variants">
+            <button class="product-offer-variants__btn-new"
+                    :class="{'product-offer-variants__btn-new-disabled': isNoNew.length === 0,
+                    'product-offer-variants__btn-new-current': isThisNewMainProduct && isNoNew.length !== 0}"
+                    :disabled="isThisNewMainProduct || isNoNew.length === 0"
+                    @click="getNewProduct"
+            >Новый
+            </button>
+            <offer-variants-select
+                    :newProductID="newProductID"
+                    :productID="productID"
+                    :offerVariants="offerVariants"
+                    @changeDescription="changeDescription"
+                    @offerVariantSelected="offerVariantSelected"
+            />
+        </div>
+        <div class="product-offer-variants aselect-bottom-description">
+            {{ description }}
+        </div>
     </div>
 </template>
 
@@ -38,6 +44,7 @@
         components: {OfferVariantsSelect},
         data() {
             return {
+                description: null,
                 newProductID: null,
             }
         },
@@ -50,6 +57,10 @@
             }
         },
         methods: {
+            changeDescription(description) {
+                console.log('description ', description)
+                this.description = description;
+            },
             offerVariantSelected(offerID) {
                 this.$emit('offerVariantChoosen', offerID)
             },

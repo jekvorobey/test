@@ -1,42 +1,41 @@
 <template>
-    <div>
-        <div class="aselect" :data-value="value" v-if="moreThenOne">
-            <div class="selector" @click="toggle()">
-                <div class="label" :class="{'non-target-label': isNewSelected}">
-                    <span class="label-text">{{ isNewSelected ? 'Выгодно' : value }}</span>
-                    <v-svg class="label-svg" :class="{ expanded : visible, 'non-target-svg': isNewSelected}"
-                           name="arrow-down" width="20" height="20"/>
+        <div>
+            <div class="aselect" :data-value="value" v-if="moreThenOne">
+                <div class="selector" @click="toggle()">
+                    <div class="label" :class="{'non-target-label': isNewSelected}">
+                        <span class="label-text">{{ isNewSelected ? 'Выгодно' : value }}</span>
+                        <v-svg class="label-svg" :class="{ expanded : visible, 'non-target-svg': isNewSelected}"
+                               name="arrow-down" width="20" height="20"/>
+                    </div>
+                </div>
+                <div :class="{ hidden : !visible, visible }">
+                    <ul v-if="isNewSelected">
+                        <li
+                                v-for="(option, index) in offerVariantsOptions"
+                                @click="select(index)"
+                                :key="option.defect"
+                        >
+                            {{ option.defect }} {{ option.price }}&nbsp;{{ option.currency === 'RUB' ? '₽' : ''}}
+                        </li>
+                    </ul>
+                    <ul v-else>
+                        <li     v-if="value !== offerVariantsOptions[index].defect"
+                                v-for="(option, index) in offerVariantsOptions"
+                                @click="select(index)"
+                                :key="option.defect"
+                        >
+                            {{ option.defect }} {{ option.price }}&nbsp;{{ option.currency === 'RUB' ? '₽' : ''}}
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div :class="{ hidden : !visible, visible }">
-                <ul v-if="isNewSelected">
-                    <li
-                            v-for="(option, index) in offerVariantsOptions"
-                            @click="select(index)"
-                            :key="option.defect"
-                    >
-                        {{ option.defect }} {{ option.price }}&nbsp;{{ option.currency === 'RUB' ? '₽' : ''}}
-                    </li>
-                </ul>
-                <ul v-else>
-                    <li     v-if="value !== offerVariantsOptions[index].defect"
-                            v-for="(option, index) in offerVariantsOptions"
-                            @click="select(index)"
-                            :key="option.defect"
-                    >
-                        {{ option.defect }} {{ option.price }}&nbsp;{{ option.currency === 'RUB' ? '₽' : ''}}
-                    </li>
-                </ul>
-            </div>
+            <button v-else
+                    class="product-offer-variants__btn-new"
+                    :class="{'product-offer-variants__btn-new-current': isCurrentItem}"
+                    @click="getOffer"
+            > Выгодно: {{ valueIfOneVariant ? valueIfOneVariant : value }} {{ currentPrice }}&nbsp;{{ currentPrice ? '₽' : ''}}
+            </button>
         </div>
-        <button v-else
-                class="product-offer-variants__btn-new"
-                :class="{'product-offer-variants__btn-new-current': isCurrentItem}"
-                @click="getOffer"
-        > Выгодно: {{ valueIfOneVariant ? valueIfOneVariant : value }} {{ currentPrice }}&nbsp;{{ currentPrice ? '₽' : ''}}
-        </button>
-    </div>
-
 </template>
 
 <script>
@@ -69,6 +68,7 @@
             return {
                 selected: null,
                 value: 'Выгодно',
+                description: null,
                 visible: false
             }
         },
@@ -83,6 +83,8 @@
                     if (+offer.offerId === +this.productID) {
                         this.selected = this.productID
                         this.value = offer.options[0].values[0].value
+                        this.description = offer.options[0].values[0].description
+                        this.$emit('changeDescription', this.description)
                     }
 
                     let item = {};
@@ -90,6 +92,7 @@
                     item['price'] = offer.price && offer.price.value && offer.price.value.toLocaleString() || null;
                     item['currency'] = offer.price && offer.price.currency || null;
                     item['defect'] = offer.options && offer.options[0].values[0].value || null;
+                    item['description'] = offer.options && offer.options[0].values[0].description || null;
 
                     total.push(item)
                 })
@@ -123,6 +126,7 @@
         methods: {
             onChange() {
                 this.$emit('offerVariantSelected', this.selected)
+                this.$emit('changeDescription', this.description)
             },
             toggle() {
                 this.visible = !this.visible;
@@ -130,12 +134,17 @@
             select(index) {
                 this.toggle()
                 this.value = this.offerVariantsOptions[index].defect;
+                this.description = this.offerVariantsOptions[index].description
                 this.selected = this.offerVariantsOptions[index].offerId;
 
+                this.$emit('changeDescription', this.description)
                 this.$emit('offerVariantSelected', this.selected)
             },
             getOffer() {
-                if (!this.isCurrentItem) this.$emit('offerVariantSelected', this.firstItemID)
+                if (!this.isCurrentItem) {
+                    this.$emit('changeDescription', this.firstItemID.options[0].values[0].description)
+                    this.$emit('offerVariantSelected', this.firstItemID)
+                }
             }
         },
         created() {
