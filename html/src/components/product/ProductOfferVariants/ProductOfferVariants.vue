@@ -58,7 +58,6 @@
         },
         methods: {
             changeDescription(description) {
-                console.log('description ', description)
                 this.description = description;
             },
             offerVariantSelected(offerID) {
