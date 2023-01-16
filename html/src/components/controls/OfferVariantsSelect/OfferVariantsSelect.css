@@ -90,3 +90,9 @@
 .aselect .visible {
     visibility: visible;
 }
+
+.aselect-bottom-description {
+    font-size: .925rem;
+    font-weight: 500;
+    max-width: 400px;
+}
