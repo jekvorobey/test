@@ -84,7 +84,7 @@
                         this.selected = this.productID
                         this.value = offer.options[0].values[0].value
                         this.description = offer.options[0].values[0].description
-                        this.$emit('changeDescription', this.description)
+                        this.$emit('emitDescription', this.description)
                     }
 
                     let item = {};
@@ -120,13 +120,14 @@
                     this.offerVariantsOptions[0].price.toLocaleString() || null
             },
             isNewSelected() {
+                if (+this.newProductID === +this.productID) this.$emit('emitDescription', null);
+
                 return +this.newProductID === +this.productID
             }
         },
         methods: {
             onChange() {
                 this.$emit('offerVariantSelected', this.selected)
-                this.$emit('changeDescription', this.description)
             },
             toggle() {
                 this.visible = !this.visible;
@@ -137,12 +138,10 @@
                 this.description = this.offerVariantsOptions[index].description
                 this.selected = this.offerVariantsOptions[index].offerId;
 
-                this.$emit('changeDescription', this.description)
                 this.$emit('offerVariantSelected', this.selected)
             },
             getOffer() {
                 if (!this.isCurrentItem) {
-                    this.$emit('changeDescription', this.firstItemID.options[0].values[0].description)
                     this.$emit('offerVariantSelected', this.firstItemID)
                 }
             }
