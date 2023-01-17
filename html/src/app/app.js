@@ -59,7 +59,11 @@ export default function createApp(container, initialState = null) {
         integrations: [
             new BrowserTracing(),
         ],
-        tracesSampleRate: 1.0,
+        // // default 100%
+        // tracesSampleRate: 1.0,
+        // test 10%
+        tracesSampleRate: 0.1,
+        environment: "ibt-front"
     });
 
     // create the app instance.

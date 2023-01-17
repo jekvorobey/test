@@ -184,7 +184,7 @@ function render(req, res, env) {
         }
     };
 
-    const context = {
+    let context = {
         title: 'IBT',
         url: req.url,
         req,
@@ -204,9 +204,14 @@ function render(req, res, env) {
             res.setHeader('Server', serverInfo);
 
             res.send(html);
-            if (!isProd) logger.success(`whole request: ${Date.now() - s}ms`, req.url);
+            if (!isProd) {
+                logger.success(`whole request: ${Date.now() - s}ms`, req.url);
+                logger.info('process.memoryUsage() ', process.memoryUsage())
+            }
         })
         .catch(handleError);
+
+    delete context;
 }
 
 let env = new Config();

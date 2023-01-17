@@ -15,8 +15,11 @@ export default {
     },
 
     [READ_MODAL_OPENING_HISTORY]({ commit }) {
-        if (process.env.VUE_ENV === 'client' && window.localStorage.getItem('modalsShowCount')) {
-            commit(MUTATE_MODALS_SHOW_COUNT, JSON.parse(window.localStorage.getItem('modalsShowCount')));
+        if (process.env.VUE_ENV === 'client' &&
+            window && window.localStorage &&
+            window.localStorage.getItem('modalsShowCount')) {
+            commit(MUTATE_MODALS_SHOW_COUNT, JSON.parse(
+                window && window.localStorage && window.localStorage.getItem('modalsShowCount')));
         }
     },
 
