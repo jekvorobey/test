@@ -1,22 +1,20 @@
 <template>
-    <div>
-        <div class="product-offer-variants">
-            <button class="product-offer-variants__btn-new"
-                    :class="{'product-offer-variants__btn-new-disabled': isNoNew.length === 0,
-                    'product-offer-variants__btn-new-current': isThisNewMainProduct && isNoNew.length !== 0}"
-                    :disabled="isThisNewMainProduct || isNoNew.length === 0"
-                    @click="getNewProduct"
-            >Новый
-            </button>
-            <offer-variants-select
-                    :newProductID="newProductID"
-                    :productID="productID"
-                    :offerVariants="offerVariants"
-                    @changeDescription="changeDescription"
-                    @offerVariantSelected="offerVariantSelected"
-            />
-        </div>
-        <div class="product-offer-variants aselect-bottom-description">
+    <div class="product-offer-variants">
+        <button class="product-offer-variants__btn-new"
+                :class="{'product-offer-variants__btn-new-disabled': isNoNew.length === 0,
+                'product-offer-variants__btn-new-current': isThisNewMainProduct && isNoNew.length !== 0}"
+                :disabled="isThisNewMainProduct || isNoNew.length === 0"
+                @click="getNewProduct"
+        >Новый
+        </button>
+        <offer-variants-select
+                :newProductID="newProductID"
+                :productID="productID"
+                :offerVariants="offerVariants"
+                @offerVariantSelected="offerVariantSelected"
+                @emitDescription="emitDescription"
+        />
+        <div class="aselect-bottom-description">
             {{ description }}
         </div>
     </div>
@@ -57,8 +55,9 @@
             }
         },
         methods: {
-            changeDescription(description) {
-                this.description = description;
+            emitDescription(descr) {
+                this.description = descr
+
             },
             offerVariantSelected(offerID) {
                 this.$emit('offerVariantChoosen', offerID)
