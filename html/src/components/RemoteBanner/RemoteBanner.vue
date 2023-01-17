@@ -1,6 +1,6 @@
 <template>
     <component
-        v-if="banner"
+        v-if="banner && !bannerIsArray"
         :is="bannerComponent"
         class="remote-banner"
         :style="cssVariables"
@@ -109,6 +109,10 @@ export default {
     },
 
     computed: {
+        bannerIsArray() {
+            return Array.isArray(this.banner)
+        },
+
         bannerComponent() {
             if (!this.hasUrl) {
                 return 'div';
