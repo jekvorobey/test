@@ -42,7 +42,7 @@
         components: {OfferVariantsSelect},
         data() {
             return {
-                description: 'no descr',
+                description: null,
                 newProductID: null,
             }
         },
