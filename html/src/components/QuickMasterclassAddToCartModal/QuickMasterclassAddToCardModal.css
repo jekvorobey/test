@@ -1,5 +1,9 @@
 .quick-variant-add-to-card-modal {
 
+    &__center {
+        align-items: center;
+    }
+
     &__inner {
         position: relative;
         width: 100%;

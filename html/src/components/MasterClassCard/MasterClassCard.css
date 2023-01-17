@@ -54,24 +54,24 @@
              line-height: 1.2rem;
              position: absolute;
              top: 8px;
-             left: 12px;
+             left: 8px;
          }
     }
 
     &__mobile-cart-btn {
         position: absolute;
         bottom: 8px;
-        right: 12px;
+        right: 8px;
         z-index: 2;
 
         .icon {
+            fill: var(--cl-white);
             opacity: 1!important;
         }
 
         &-white {
-            background: var(--cl-white);
+            background: var(--cl-black);
             padding: 5px 5px 0 5px;
-            border-radius: 5px;
          }
     }
 

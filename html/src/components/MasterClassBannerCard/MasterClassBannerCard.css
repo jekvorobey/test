@@ -34,7 +34,7 @@
         &-discount {
              position: absolute;
              top: 8px;
-             left: 12px;
+             left: 8px;
 
             &__price {
                  display: inline-block;
@@ -45,7 +45,7 @@
                  letter-spacing: .04em;
                  font-weight: 700;
                  line-height: 1.2rem;
-                 margin-bottom: 10px;
+                 margin-bottom: 8px;
             }
 
             &__installment {
