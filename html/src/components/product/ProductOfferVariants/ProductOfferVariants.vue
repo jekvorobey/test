@@ -14,7 +14,7 @@
                 @offerVariantSelected="offerVariantSelected"
                 @emitDescription="emitDescription"
         />
-        <div class="aselect-bottom-description">
+        <div class="aselect-bottom-description" v-if="!isThisNewMainProduct">
             {{ description }}
         </div>
     </div>
@@ -57,7 +57,6 @@
         methods: {
             emitDescription(descr) {
                 this.description = descr
-
             },
             offerVariantSelected(offerID) {
                 this.$emit('offerVariantChoosen', offerID)
