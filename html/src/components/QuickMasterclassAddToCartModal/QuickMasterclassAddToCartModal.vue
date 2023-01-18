@@ -17,7 +17,7 @@
                         v-if="ticket.price && ticket.price.value && ticket.price.value !== null"
                     >
                         {{ ticket.name }} (
-                            {{ ticket.price.value === 0 ? 'Бесплатно' : ticket.price.value.toLocaleString() + ' руб.' }}
+                            {{ +ticket.price.value === 0 ? 'Бесплатно' : ticket.price.value.toLocaleString() + ' руб.' }}
                         )
                     </product-option-tag>
                 </div>
