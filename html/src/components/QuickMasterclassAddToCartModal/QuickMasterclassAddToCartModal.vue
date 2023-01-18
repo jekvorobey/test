@@ -16,9 +16,9 @@
                         @click.stop="selectedTicket = ticket"
                         v-if="ticket.price && ticket.price.value !== null"
                     >
-                        {{ ticket.name }} (
-                            {{ +ticket.price.value === 0 ? 'Бесплатно' : ticket.price.value.toLocaleString() + ' руб.' }}
-                        )
+                        {{ ticket.name }} -
+                            <strong v-if="+ticket.price.value === 0">Бесплатно</strong>
+                            <span v-else>{{ ticket.price.value.toLocaleString() + ' руб.' }}</span>
                     </product-option-tag>
                 </div>
             </product-option-panel>
