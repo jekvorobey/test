@@ -1304,7 +1304,7 @@
             },
 
             isTabletLg() {
-                return this.$mq.tabletLg;
+                return this.$mq && this.$mq.tabletLg;
             },
 
             isTablet() {
