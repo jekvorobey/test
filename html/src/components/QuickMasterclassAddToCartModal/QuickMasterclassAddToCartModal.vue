@@ -14,7 +14,7 @@
                         :selected="selectedTicket && selectedTicket.id === ticket.id"
                         :disabled="false"
                         @click.stop="selectedTicket = ticket"
-                        v-if="ticket.price && ticket.price.value && ticket.price.value !== null"
+                        v-if="ticket.price && ticket.price.value !== null"
                     >
                         {{ ticket.name }} (
                             {{ +ticket.price.value === 0 ? 'Бесплатно' : ticket.price.value.toLocaleString() + ' руб.' }}
