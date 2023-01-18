@@ -43,14 +43,6 @@
                 </template>
             </div>
         </div>
-
-        <div>
-            <style>
-                :root {
-                    --cardTopBackground: {{ this.cardTopBackground }}
-                }
-            </style>
-        </div>
     </div>
 </template>
 
