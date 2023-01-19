@@ -1,5 +1,5 @@
 <template>
-    <pin-modal :class="classes" @close="onClose">
+    <pin-modal :class="classes" @close="onClose" :style="{'align-items': modalDirection}">
         <div class="snack-notification-modal__inner">
             <template v-if="typeof message === 'string'">
                 <div class="snack-notification-modal__message">{{ message }}</div>
@@ -57,6 +57,10 @@ export default {
 
         closeTimeout() {
             return this.modalState.closeTimeout || 3000;
+        },
+
+        modalDirection() {
+            return this.modalState.direction || '';
         },
 
         classes() {
