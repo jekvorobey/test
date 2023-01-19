@@ -19,6 +19,7 @@ module.exports = {
         path: path.resolve(__dirname, '../../public/assets'),
         publicPath: '/assets/',
         filename: isProd ? '[name].[chunkhash].js' : '[name].js',
+        globalObject: 'self'
     },
     resolve: {
         alias: {

@@ -100,7 +100,7 @@ export default {
         },
 
         installment: {
-            type: [Object, Boolean],
+            type: [Object, Boolean, Array],
             default: false,
         },
     },

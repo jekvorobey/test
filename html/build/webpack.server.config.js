@@ -19,6 +19,7 @@ module.exports = merge(base, {
     output: {
         filename: 'server-bundle.js',
         libraryTarget: 'commonjs2',
+        globalObject: 'self'
     },
     module: {
         rules: [
