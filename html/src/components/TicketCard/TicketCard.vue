@@ -95,7 +95,7 @@ export default {
         },
 
         installment: {
-            type: Object,
+            type: [Object, Boolean, Array]
         },
 
         oldPrice: {
