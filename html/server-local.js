@@ -207,27 +207,6 @@ function render(req, res, env) {
             res.send(html);
             if (!isProd) {
                 logger.success(`whole request: ${Date.now() - s}ms`, req.url);
-                setInterval(() => {
-                    const {heapUsed: used, rss, heapTotal: tot, external: ext} = process.memoryUsage()
-                    const f = (value) => (!value ? '-' : `${Math.round(value / 1048576)} MB`)
-
-                    logger.info(
-                        `[${new Date().toTimeString().substr(0, 8)}] Memory usage: ${f(used)} (RSS: ${f(rss)}) - total heap: ${f(
-                            tot
-                        )} - external: ${f(ext)}`
-                    )
-                }, 10000)
-            } else {
-                setInterval(() => {
-                    const {heapUsed: used, rss, heapTotal: tot, external: ext} = process.memoryUsage()
-                    const f = (value) => (!value ? '-' : `${Math.round(value / 1048576)} MB`)
-
-                    logger.info(
-                        `[${new Date().toTimeString().substr(0, 8)}] Memory usage: ${f(used)} (RSS: ${f(rss)}) - total heap: ${f(
-                            tot
-                        )} - external: ${f(ext)}`
-                    )
-                }, 10000)
             }
         })
         .catch(handleError);
