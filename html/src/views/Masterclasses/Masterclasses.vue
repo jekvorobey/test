@@ -734,6 +734,7 @@ export default {
                             name: modalName.general.SNACK_NOTIFICATION,
                             open: true,
                             state: {
+                                direction: this.isTablet ? false : 'center',
                                 closeTimeout: 1500,
                                 message: 'Билет добавлен в корзину',
                             },
@@ -747,6 +748,7 @@ export default {
                         name: modalName.general.SNACK_NOTIFICATION,
                         open: true,
                         state: {
+                            direction: this.isTablet ? false : 'center',
                             closeTimeout: 1500,
                             message: 'Билет уже добавлен в корзину',
                         },
