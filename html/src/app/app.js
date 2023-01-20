@@ -63,7 +63,8 @@ export default function createApp(container, initialState = null) {
         // tracesSampleRate: 1.0,
         // test 10%
         tracesSampleRate: 0.1,
-        environment: "ibt-front"
+        environment: "ibt-front",
+        release: '1.0.0',
     });
 
     // create the app instance.
