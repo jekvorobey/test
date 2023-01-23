@@ -10,8 +10,8 @@
 
                 <self-router-link class="header-bottom__bottom-logo-middle" to="/" same-disabled>
                     <v-svg name="logo-text" width="278" height="28" />
-                    <!-- <v-svg name="logo" width="30" height="30" /> -->
-                    <v-svg name="winter-logo" width="30" height="30" />
+                     <v-svg name="logo" width="30" height="30" />
+                    <!--  <v-svg name="winter-logo" width="30" height="30" />-->
                 </self-router-link>
 
                 <div class="header-bottom__bottom-menu" v-if="scroll || isTabletLg">
