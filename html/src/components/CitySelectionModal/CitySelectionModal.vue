@@ -11,7 +11,7 @@
             <div class="city-selection-modal__body">
                 <h3 class="city-selection-modal__hl">
                     {{ header }}
-                    <v-spinner width="18" height="18" :show="isAddressPending" v-if="!isTablet"/>
+
                 </h3>
                 <v-input
                     class="city-selection-modal__input"
@@ -25,8 +25,6 @@
                         <v-svg name="search-middle" width="24" height="24" />
                     </template>
                 </v-input>
-
-                <v-spinner width="18" height="18" :show="isAddressPending" v-if="isTablet"/>
 
                 <div class="city-selection-modal__wrapper">
                     <ul v-if="isTablet" class="city-selection-modal__list">
@@ -75,6 +73,9 @@
                         </ul>
                     </v-scroll>
                 </div>
+            </div>
+            <div v-if="isAddressPending" class="city-selection-modal__loader-layout">
+                <v-spinner show width="50" height="50" />
             </div>
         </template>
     </general-modal>
