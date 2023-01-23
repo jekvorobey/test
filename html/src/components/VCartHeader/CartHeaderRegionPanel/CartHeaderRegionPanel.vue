@@ -8,7 +8,7 @@
                 </span>
             </button>
         </div>
-        <div class="cart-header-region-panel__description">
+        <div class="cart-header-region-panel__description" v-if="text">
             От выбранного региона зависят доступные способы и сроки получения заказов
         </div>
     </div>
@@ -34,6 +34,13 @@ export default {
     components: {
         VSvg,
         VClamp,
+    },
+
+    props: {
+        text: {
+            default: true,
+            required: false
+        }
     },
 
     computed: {
