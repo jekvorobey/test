@@ -27,7 +27,7 @@
 
             <div class="catalog-product-card__controls" v-if="showControls && !isTabletLg">
                 <buy-button
-                    v-if="showBuyBtn"
+                    v-if="showBuyBtn && !limitQtyToBuy"
                     class="btn--outline catalog-product-card__controls-btn"
                     @click.prevent="onBuyButtonClick"
                 >
@@ -39,7 +39,7 @@
                 </v-link>
             </div>
             <div
-                v-if="$mq.tablet"
+                v-if="$mq.tablet && !limitQtyToBuy"
                 class="catalog-product-list-card__mobile-cart-btn"
                 @click.prevent.stop="onBuyButtonClick"
             >
@@ -208,6 +208,10 @@ export default {
         showBuyBtn: {
             type: Boolean,
             default: false,
+        },
+
+        limitQtyToBuy() {
+            return this.item.limitQty && this.item.limitQty > 0;
         },
 
         showWishlistBtn: {
