@@ -210,10 +210,6 @@ export default {
             default: false,
         },
 
-        limitQtyToBuy() {
-            return this.item.limitQty && this.item.limitQty > 0;
-        },
-
         showWishlistBtn: {
             type: Boolean,
             default: true,
@@ -223,6 +219,12 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        limit: {
+            type: Number,
+            default: false,
+            reuired: false
+        }
     },
 
     computed: {
@@ -243,6 +245,10 @@ export default {
 
         badgesUnique() {
             return this.badges ? this.badges.filter((v, i, a) => a.indexOf(v) === i) : [];
+        },
+
+        limitQtyToBuy() {
+            return this.limit && this.limit > 0;
         },
 
         modifiedPrice() {
