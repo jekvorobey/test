@@ -15,6 +15,7 @@
             >
                 <v-svg name="cross" width="24" height="24" />Выбор пункта выдачи
             </button>
+
             <template v-else class="container checkout-pickup-point-modal">
                 <button
                     class="checkout-pickup-point-modal__header-btn checkout-pickup-point-modal__header-btn--arrow"
@@ -39,10 +40,16 @@
                     <v-svg class="checkout-pickup-point-modal__tabs-icon" :name="tab.icon" width="24" height="24" />
                     {{ tab.name }}
                 </button>
+                <cart-header-region-panel
+                        :text="false"
+                        :class="{'region-panel-modal-pickup__mobile': isTabletLg}"
+                        class="region-panel-modal-pickup"
+                />
             </div>
 
             <div class="checkout-pickup-point-modal__map" v-if="!isTabletLg || activeTab === 0">
                 <yandex-map
+                    :key="yandexMapkeyToRebuild"
                     v-if="showMap"
                     :zoom="14"
                     :coords="coords"
@@ -50,7 +57,7 @@
                     :cluster-options="clusterOptions"
                     :show-all-markers="false"
                     :options="{
-                        minZoom: 13,
+                        minZoom: 10,
                     }"
                     @map-was-initialized="initHandler"
                     @boundschange="onMapBoundsChange"
@@ -135,6 +142,8 @@
                     <h3 class="checkout-pickup-point-modal__filter-header-hl" v-if="!isTabletLg">
                         Выбор пункта выдачи
                     </h3>
+
+                    <cart-header-region-panel v-if="!isTabletLg" :text="false" class="region-panel-modal-pickup"/>
 
                     <div class="checkout-pickup-point-modal__filter-header-controls">
                         <v-select
@@ -229,10 +238,11 @@ import VSpinner from "@controls/VSpinner/VSpinner.vue";
 
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 import CheckoutOptionCard from '@components/checkout/CheckoutOptionCard/CheckoutOptionCard.vue';
+import CartHeaderRegionPanel from "@components/VCartHeader/CartHeaderRegionPanel/CartHeaderRegionPanel.vue";
 
 import { mapGetters, mapState, mapActions } from 'vuex';
 import { LOCALE } from '@store';
-import { NAME as GEO_MODULE } from '@store/modules/Geolocation';
+import {NAME as GEO_MODULE, SELECTED_CITY} from '@store/modules/Geolocation';
 import { SELECTED_CITY_COORDS } from '@store/modules/Geolocation/getters';
 
 import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
@@ -266,10 +276,13 @@ export default {
         VSpinner,
         CheckoutOptionCard,
         GeneralModal,
+        CartHeaderRegionPanel,
     },
 
     data() {
         return {
+            yandexMapkeyToRebuild: false,
+            selectedCity: this.city,
             selectedType: null,
             selectedMetro: null,
             selectedPickupPoint: null,
@@ -321,7 +334,9 @@ export default {
         ...mapState(MODAL_MODULE, {
             isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
-
+        ...mapState(GEO_MODULE, {
+            city: (state) => (state[SELECTED_CITY] && state[SELECTED_CITY].name) || 'Выберите город',
+        }),
         filteredPickupPoints() {
             if (!this.yandexMapApi) {
                 return [];
@@ -435,6 +450,16 @@ export default {
                 this.debouncedSearch = value;
             }, 1000);
         },
+
+        city() {
+            if (this.filteredPickupPoints.length === 0 || this.filteredPickupPoints.length > 1) {
+                this.coords = this[SELECTED_CITY_COORDS];
+            } else {
+                this.coords = this.filteredPickupPoints[0].point.map.coords;
+            }
+
+            this.yandexMapkeyToRebuild = !this.yandexMapkeyToRebuild
+        }
     },
 
     methods: {

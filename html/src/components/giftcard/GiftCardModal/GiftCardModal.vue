@@ -76,7 +76,8 @@
                 </div>
 
                 <div class="gift-card-modal__textarea">
-                    <v-input v-model="order.comment" tag="textarea" placeholder="Текст поздравления">
+                    <v-input v-model="order.comment" tag="textarea" placeholder="Текст поздравления"
+                             :maxlength="personTo.activeTab === 'phone' ? 60 : 5000">
                         Ваше поздравление получателю
                     </v-input>
                 </div>

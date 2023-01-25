@@ -11,18 +11,18 @@
                 !data.isZero && data.current !== 0 || (data.current === 0 && data.type === 'seconds')">
                     <span class="flip-clock__card flip-card" :style="countdownSize ? `font-size:${countdownSize}` : ''">
                         <b
-                                :style="{color: numColor, background: cardTopBackground}"
+                                :style="{color: numColor, backgroundColor: cardTopBackground}"
                                 class="flip-card__top">
                             {{ data.current | twoDigits }}
                         </b>
                         <b
-                                :style="{color: numColor, background: cardBottomBackground}"
+                                :style="{color: numColor, backgroundColor: cardBottomBackground}"
                                 class="flip-card__bottom"
                                 v-bind:data-value="data.current | twoDigits"
                         ></b>
                         <b :style="{color: numColor}" class="flip-card__back"
                            v-bind:data-value="data.previous | twoDigits"></b>
-                        <b :style="{color: numColor,  background: cardBottomBackground}" class="flip-card__back-bottom"
+                        <b :style="{color: numColor,  backgroundColor: cardBottomBackground}" class="flip-card__back-bottom"
                            v-bind:data-value="data.previous | twoDigits"></b>
                     </span>
 
@@ -42,14 +42,6 @@
                 </span>
                 </template>
             </div>
-        </div>
-
-        <div>
-            <style>
-                :root {
-                    --cardTopBackground: {{ this.cardTopBackground }}
-                }
-            </style>
         </div>
     </div>
 </template>
@@ -456,7 +448,7 @@
         width: 2.65em;
     }
     .flip .flip-card__back-4digits:before, .flip .flip-card__back:before {
-        background: var(--cardTopBackground);
+        background-color: inherit;
     }
     .flip-card__bottom, .flip-card__back-bottom, .flip-card__bottom-4digits, .flip-card__back-bottom-4digits {
         position: absolute;

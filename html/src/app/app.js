@@ -59,7 +59,26 @@ export default function createApp(container, initialState = null) {
         integrations: [
             new BrowserTracing(),
         ],
-        tracesSampleRate: 1.0,
+        ignoreErrors: [
+            'TypeError',
+            'Object.i',
+            '<unknown>',
+            'a.metaInfo',
+            'r.brand.is_visible',
+            'window.frisbuy[n].gallery',
+            'this.$el.querySelector is not a function',
+            'this.$el.querySelector(".frisbuy-gallery-post")',
+            'Cannot read properties of undefined (reading \'gallery\')',
+            'Cannot read properties of undefined (reading \'is_visible\')',
+            'null is not an object (evaluating \'t.offsetTop\')',
+            'undefined is not an object (evaluating \'r.brand.is_visible\')',
+        ],
+        // // default 100%
+        // tracesSampleRate: 1.0,
+        // test 10%
+        tracesSampleRate: 0.1,
+        environment: "ibt-front",
+        release: '1.0.0',
     });
 
     // create the app instance.

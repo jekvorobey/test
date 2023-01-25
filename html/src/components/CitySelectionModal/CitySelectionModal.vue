@@ -11,7 +11,7 @@
             <div class="city-selection-modal__body">
                 <h3 class="city-selection-modal__hl">
                     {{ header }}
-                    <v-spinner width="18" height="18" :show="isAddressPending" />
+
                 </h3>
                 <v-input
                     class="city-selection-modal__input"
@@ -73,6 +73,9 @@
                         </ul>
                     </v-scroll>
                 </div>
+            </div>
+            <div v-if="isAddressPending" class="city-selection-modal__loader-layout">
+                <v-spinner show width="50" height="50" />
             </div>
         </template>
     </general-modal>

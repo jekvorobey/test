@@ -1,5 +1,9 @@
 <template>
-    <pin-modal class="quick-variant-add-to-card-modal" :loading="isLoading" @close="onClose">
+    <pin-modal
+            class="quick-variant-add-to-card-modal"
+            :class="{'quick-variant-add-to-card-modal__center': !isTablet}"
+            :loading="isLoading"
+            @close="onClose">
         <div v-if="modalState.masterclass" class="quick-variant-add-to-card-modal__inner">
             <product-option-panel class="quick-variant-add-to-card-modal__characteristic" header="Тип билета">
                 <div class="quick-variant-add-to-card-modal__options">
@@ -10,8 +14,11 @@
                         :selected="selectedTicket && selectedTicket.id === ticket.id"
                         :disabled="false"
                         @click.stop="selectedTicket = ticket"
+                        v-if="ticket.price && ticket.price.value !== null"
                     >
-                        {{ ticket.name }}
+                        {{ ticket.name }} -
+                            <strong v-if="+ticket.price.value === 0">Бесплатно</strong>
+                            <span v-else>{{ ticket.price.value.toLocaleString() + ' руб.' }}</span>
                     </product-option-tag>
                 </div>
             </product-option-panel>
@@ -75,6 +82,9 @@ export default {
         ...mapState(MODAL_MODULE, {
             isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
             modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
+            isTablet() {
+                return this.$mq.tablet;
+            },
         }),
 
         ...mapGetters(CART_MODULE, {
@@ -121,6 +131,7 @@ export default {
                         name: modalName.general.SNACK_NOTIFICATION,
                         open: true,
                         state: {
+                            direction: this.isTablet ? false : 'center',
                             closeTimeout: 1500,
                             message: 'Билет добавлен в корзину',
                         },

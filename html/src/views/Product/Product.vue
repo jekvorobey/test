@@ -1304,7 +1304,7 @@
             },
 
             isTabletLg() {
-                return this.$mq.tabletLg;
+                return this.$mq && this.$mq.tabletLg;
             },
 
             isTablet() {
@@ -1520,7 +1520,7 @@
                 this[CHANGE_MODAL_STATE]({
                     name: modalName.general.NOTIFICATION,
                     open: true,
-                    state: { message: 'Комплект добавлен в корзину' },
+                    state: { message: 'Комплект добавлен в корзину', bundle: true },
                 });
             },
 

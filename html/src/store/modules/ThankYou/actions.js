@@ -4,7 +4,7 @@ export const SET_COMPLETED_ORDERS = 'SET_COMPLETED_ORDERS';
 export const GET_COMPLETED_ORDERS = 'GET_COMPLETED_ORDERS';
 
 function getOrdersFromLocalStorage() {
-    const localStorageData = window.localStorage.getItem('ThankYouViewCompletedOrders');
+    const localStorageData = window && window.localStorage && window.localStorage.getItem('ThankYouViewCompletedOrders');
     const parsedData = localStorageData ? JSON.parse(localStorageData) : [];
     return Array.isArray(parsedData) ? parsedData : [];
 }

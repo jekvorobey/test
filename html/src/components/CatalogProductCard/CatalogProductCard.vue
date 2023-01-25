@@ -27,7 +27,7 @@
 
             <div class="catalog-product-card__controls" v-if="showControls && !isTabletLg">
                 <buy-button
-                    v-if="showBuyBtn"
+                    v-if="showBuyBtn && !limitQtyToBuy"
                     class="btn--outline catalog-product-card__controls-btn"
                     @click.prevent="onBuyButtonClick"
                 >
@@ -39,7 +39,7 @@
                 </v-link>
             </div>
             <div
-                v-if="$mq.tablet"
+                v-if="$mq.tablet && !limitQtyToBuy"
                 class="catalog-product-list-card__mobile-cart-btn"
                 @click.prevent.stop="onBuyButtonClick"
             >
@@ -219,6 +219,12 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        limit: {
+            type: Number,
+            default: false,
+            reuired: false
+        }
     },
 
     computed: {
@@ -239,6 +245,10 @@ export default {
 
         badgesUnique() {
             return this.badges ? this.badges.filter((v, i, a) => a.indexOf(v) === i) : [];
+        },
+
+        limitQtyToBuy() {
+            return this.limit && this.limit > 0;
         },
 
         modifiedPrice() {

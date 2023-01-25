@@ -45,6 +45,7 @@
                         <ul class="search-panel__products-list" :class="{ 'has-preloader': preloader }">
                             <li class="search-panel__products-card" v-for="item in products" :key="item.id">
                                 <catalog-product-card
+                                    :limit="item.limitQty"
                                     :offer-id="item.id"
                                     :product-id="item.productId"
                                     :name="item.name"

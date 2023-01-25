@@ -145,6 +145,7 @@
                             :speaker="item.speaker"
                             :date="item.dateTime"
                             :installment="item.installment"
+                            :discount="item.discount"
                             :price="item.price"
                             :old-price="item.oldPrice"
                             :address="item.nearestPlaceName"
@@ -733,6 +734,7 @@ export default {
                             name: modalName.general.SNACK_NOTIFICATION,
                             open: true,
                             state: {
+                                direction: this.isTablet ? false : 'center',
                                 closeTimeout: 1500,
                                 message: 'Билет добавлен в корзину',
                             },
@@ -746,6 +748,7 @@ export default {
                         name: modalName.general.SNACK_NOTIFICATION,
                         open: true,
                         state: {
+                            direction: this.isTablet ? false : 'center',
                             closeTimeout: 1500,
                             message: 'Билет уже добавлен в корзину',
                         },

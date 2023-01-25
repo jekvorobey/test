@@ -8,6 +8,10 @@
         &-name {
             font-size: 16px;
             text-transform: none;
+            @media(max-width: 628px) {
+                max-width: 100px;
+                text-overflow: ellipsis;
+            }
         }
 
         .icon {
@@ -20,4 +24,11 @@
         line-height: 16px;
         color: var(--cl-grey);
     }
+}
+
+.region-panel-modal-pickup {
+    margin-bottom: 20px;
+    &__mobile {
+         margin-bottom: 0;
+     }
 }

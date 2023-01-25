@@ -1,5 +1,5 @@
 <template>
-    <section class="section info-pages-block">
+    <section class="section info-pages-block link-underline">
         <h1 class="container info-pages-block__title">
             {{ pageTitle }}
         </h1>

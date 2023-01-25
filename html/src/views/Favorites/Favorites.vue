@@ -44,6 +44,7 @@
                         v-for="product in favorites"
                         :key="product.id"
                         :offer-id="product.id"
+                        :limit="product.limitQty"
                         :product-id="product.productId"
                         :name="product.name"
                         :type="product.type"

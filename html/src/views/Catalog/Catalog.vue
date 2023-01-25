@@ -390,7 +390,7 @@ export default {
     metaInfo() {
         const { activePage, metaData, productGroup } = this;
         const { title, description, url, image, imageType } = metaData;
-        const metaNoIndex = productGroup.brand.is_visible === 0;
+        const metaNoIndex = productGroup && productGroup.brand && productGroup.brand.is_visible === 0;
 
         return {
             title: activePage > 1 ? `${title} – страница ${activePage}` : title,

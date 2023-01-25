@@ -16,14 +16,12 @@ const routeCache = require('route-cache');
 
 const expressVersion = require('express/package.json').version;
 const serverRendererVersion = require('vue-server-renderer/package.json').version;
-const { createBundleRenderer } = require('./build/custom-vue-server-renderer');
 
 const isProd = process.env.NODE_ENV === 'production';
 const serverInfo = `express/${expressVersion} vue-server-renderer/${serverRendererVersion}`;
 const ServerLogger = require('./src/services/LogService/ServerLogger');
 
 const logger = new ServerLogger();
-const setupDevServer = require('./build/setup-dev-server');
 
 const resolve = (file) => path.resolve(__dirname, file);
 const urlRegex = /\/$/;
@@ -114,6 +112,8 @@ if (serverRendererVersion !== '2.6.11')
     );
 
 function createRenderer(bundle, options) {
+    const { createBundleRenderer } = require('./build/custom-vue-server-renderer');
+
     logger.info('creating bundle renderer...');
     // https://github.com/vuejs/vue/blob/dev/packages/vue-server-renderer/README.md#why-use-bundlerenderer
 
@@ -164,6 +164,7 @@ if (isProd) {
 } else {
     // In development: setup the dev server with watch and hot-reload,
     // and create a new renderer on bundle / index template update.
+    const setupDevServer = require('./build/setup-dev-server');
     readyPromise = setupDevServer(app, templatePath, (bundle, options) => {
         logger.info('setup dev server...');
         renderer = createRenderer(bundle, options);
@@ -204,7 +205,9 @@ function render(req, res, env) {
             res.setHeader('Server', serverInfo);
 
             res.send(html);
-            if (!isProd) logger.success(`whole request: ${Date.now() - s}ms`, req.url);
+            if (!isProd) {
+                logger.success(`whole request: ${Date.now() - s}ms`, req.url);
+            }
         })
         .catch(handleError);
 }

@@ -29,8 +29,8 @@
     bottom: 10px;
 }
 @media(max-width: 767px) {
-    .cookie-alert-show {
-        bottom: 77px;
+    .cookie-alert-product {
+        bottom: 90px;
     }
 }
 @media (max-width: 425px) {
