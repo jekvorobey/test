@@ -41,22 +41,6 @@
                     <v-link tag="button" class="catalog-product-list-card__controls-link" @click.prevent="onPreview">
                         Быстрый&nbsp;просмотр
                     </v-link>
-                    <v-link
-                            v-if="referralPartner && !isInPromo"
-                            @click.prevent="onAddToPromo"
-                            tag="button"
-                            class="catalog-product-list-card__controls-link"
-                    >
-                        Добавить&nbsp;в&nbsp;промо
-                    </v-link>
-                    <v-link
-                            v-else-if="referralPartner && isInPromo"
-                            @click.prevent="onDeleteFromPromo"
-                            tag="button"
-                            class="catalog-product-list-card__controls-link"
-                    >
-                        Удалить из промо
-                    </v-link>
                 </div>
 
                 <ul class="catalog-product-list-card__variants">
@@ -131,13 +115,21 @@
                     {{ item.name }}
                 </div>
 
-                <div class="catalog-product-list-card__rating" v-once>
+                <div class="catalog-product-list-card__rating">
                     <span
                         v-for="number in 5"
                         class="catalog-product-list-card__rating-star"
                         :class="{ 'catalog-product-list-card__rating-star--empty': number > item.rating }"
                         :key="number"
                     />
+                    <v-link
+                            v-if="referralPartner"
+                            @click.prevent="onTogglePromoItem"
+                            tag="button"
+                            class="catalog-product-list-card__controls-link"
+                    >
+                        {{ promoBtnText }}
+                    </v-link>
                 </div>
             </div>
 
@@ -177,9 +169,10 @@ import {mapGetters, mapState} from 'vuex';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
+import { NAME as CATALOG_MODULE } from '@store/modules/Catalog';
+import { IS_IN_PROMO} from "@store/modules/Catalog/getters";
 import {IS_ADDING_TO_BASKET, NAME as CART_MODULE} from "@store/modules/Cart";
 import { generateAbsoluteProductUrl, generateProductUrl, prepareProductImage } from '@util/catalog';
-import {addProfilePromopageProductById, deleteProfilePromopageProductById} from '@api';
 
 import {NAME as AUTH_MODULE, USER, REFERRAL_PARTNER} from '@store/modules/Auth';
 
@@ -209,6 +202,7 @@ export default {
     data(){
         return{
             isBuyButtonClicked: false,
+            counter: 0
         }
     },
 
@@ -256,20 +250,18 @@ export default {
             type: Boolean,
             default: false,
         },
-
-        promoIds: {
-            type: Array,
-            required: false,
-            default: []
-        }
     },
 
     computed: {
+        countValue() {
+            return this.counter;
+        },
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false
         }),
 
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
+        ...mapGetters(CATALOG_MODULE, [IS_IN_PROMO]),
 
         ...mapState(CART_MODULE, {
             isAddingToBasket: (state) => state[IS_ADDING_TO_BASKET]
@@ -277,6 +269,14 @@ export default {
 
         inFavorites() {
             return this[IS_IN_FAVORITES](this.item.productId);
+        },
+
+        inPromo() {
+            return this[IS_IN_PROMO](this.item.productId);
+        },
+
+        promoBtnText() {
+            return this.inPromo ? 'Удалить из промо' : 'Добавить в промо';
         },
 
         showBuyBtn() {
@@ -475,27 +475,14 @@ export default {
 
             return style;
         },
-
-        isInPromo() {
-            if (this.promoIds && this.promoIds.length > 0) {
-                return this.promoIds.includes(this.item.productId)
-            } else {
-                return false
-            }
-        }
     },
 
     methods: {
-        async onAddToPromo() {
-            console.log('onAddToPromo')
-            await addProfilePromopageProductById(this.item.productId);
-            this.$emit('onPromoChange')
-        },
-
-        async onDeleteFromPromo() {
-            console.log('onAddToPromo')
-            await deleteProfilePromopageProductById(this.item.productId);
-            this.$emit('onPromoChange')
+        async onTogglePromoItem() {
+            console.log('onTogglePromoItem need emit')
+            // await addProfilePromopageProductById(this.item.productId);
+            // this.$emit('onPromoChange')
+            this.$emit('toggle-promo-item', { productId: this.item.productId });
         },
 
         onBuyButtonClick() {

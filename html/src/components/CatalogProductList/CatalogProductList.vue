@@ -18,7 +18,7 @@
             <component
                 class="catalog-product-list__item"
                 v-for="(item, index) in items"
-                :key="item.id + profilePromopageItemsIds.length"
+                :key="item.id"
                 :class="getClass(item.type)"
                 :is="getComponent(item.type)"
                 :item="item"
@@ -26,11 +26,11 @@
                 :position="index + 1"
                 :mobile-order="calcMobileOrder(item, index)"
                 :in-cart="isInCart(cartItemTypes.PRODUCT, item.id)"
-                :promo-ids="profilePromopageItemsIds"
                 item-prop
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"
+                @toggle-promo-item="onTogglePromoItem(item.productId)"
                 @click-event-triggered="registerSeoEvent(item, index)"
                 @onPromoChange="onPromoChange"
             />
@@ -39,17 +39,17 @@
             <component
                 class="catalog-product-list__item"
                 v-for="(item, index) in items"
-                :key="item.id + profilePromopageItemsIds.length"
+                :key="item.id"
                 :class="getClass(item.type)"
                 :is="getComponent(item.type)"
                 :item="item"
                 :referral-code="referralCode"
                 :mobile-order="calcMobileOrder(item, index)"
                 :in-cart="isInCart(cartItemTypes.PRODUCT, item.id)"
-                :promo-ids="profilePromopageItemsIds"
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"
+                @toggle-promo-item="onTogglePromoItem(item.productId)"
                 @click-event-triggered="registerSeoEvent(item, index)"
                 @onPromoChange="onPromoChange"
             />
@@ -61,7 +61,7 @@
 import CatalogBannerListCard from './CatalogBannerListCard/CatalogBannerListCard.vue';
 import CatalogProductListCard from './CatalogProductListCard/CatalogProductListCard.vue';
 
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -73,12 +73,26 @@ import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { IS_IN_CART } from '@store/modules/Cart/getters';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
-import { modalName } from '@enums';
-import { cartItemTypes, catalogItemTypes } from '@enums/product';
+import {httpCodes, modalName, sortDirections} from '@enums';
+import {cartItemTypes, catalogItemTypes, productGroupTypes} from '@enums/product';
 import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 import './CatalogProductList.css';
 
-import {getProfilePromopageItemsIds} from '@api';
+import {
+    NAME as CATALOG_MODULE,
+    ITEMS_REFERRER_PROMO,
+} from '@store/modules/Catalog';
+import {
+    FETCH_CATALOG_DATA,
+    FETCH_ITEMS_REFERRER_PROMO, SET_LOAD_PATH,
+    TOGGLE_ITEM_REFERRER_PROMO
+} from '@store/modules/Catalog/actions';
+import {sortFields} from "@enums/catalog";
+import {DEFAULT_PAGE, MIN_SCROLL_VALUE} from "@constants";
+import {$progress, $store} from "@services";
+import {computeFilterData} from "@util/catalog";
+import {SCROLL} from "@store";
+import {createNotFoundRoute} from "@util/router";
 
 const itemAnimationDelayDelta = 100;
 let counter = 0;
@@ -122,11 +136,11 @@ export default {
     data() {
         return {
             cartItemTypes,
-            profilePromopageItemsIds: null,
         };
     },
 
     computed: {
+        ...mapState(CATALOG_MODULE, [ITEMS_REFERRER_PROMO]),
         ...mapGetters(CART_MODULE, {
             isInCart: IS_IN_CART,
         }),
@@ -153,6 +167,7 @@ export default {
     },
 
     methods: {
+        ...mapActions(CATALOG_MODULE, [FETCH_ITEMS_REFERRER_PROMO, TOGGLE_ITEM_REFERRER_PROMO]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
         ...mapActions(CART_MODULE, {
@@ -217,6 +232,11 @@ export default {
             this[TOGGLE_FAVORITES_ITEM](productId);
         },
 
+        onTogglePromoItem(productId) {
+            console.log('onTogglePromoItem ', productId)
+            this[TOGGLE_ITEM_REFERRER_PROMO](productId)
+        },
+
         onPreview(code) {
             const { referralCode } = this;
 
@@ -229,7 +249,8 @@ export default {
 
         async onPromoChange() {
             console.log('onPromoChange')
-            this.profilePromopageItemsIds = await getProfilePromopageItemsIds();
+            await this[FETCH_ITEMS_REFERRER_PROMO]();
+            console.log('ITEMS_REFERRER_PROMO ', this[ITEMS_REFERRER_PROMO]);
         },
 
         async onAddToCart(item) {
@@ -312,12 +333,13 @@ export default {
             seoEvents.click(products, 'Category');
         },
     },
-    async beforeMount() {
+    async created() {
         try {
-            this.profilePromopageItemsIds = await getProfilePromopageItemsIds();
+            await this[FETCH_ITEMS_REFERRER_PROMO]();
+            console.log('ITEMS_REFERRER_PROMO ', this[ITEMS_REFERRER_PROMO]);
         } catch (e) {
             console.log(e)
         }
-    }
+    },
 };
 </script>

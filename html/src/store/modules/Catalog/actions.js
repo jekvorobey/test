@@ -11,9 +11,14 @@ import {
     getProductGroup,
     getBrandsActive,
     getBrand,
+    getProfilePromopageItemsIds,
+    addProfilePromopageProductById,
+    deleteProfilePromopageProductById,
 } from '@api';
-import { SET_LOAD_PATH as M_SET_LOAD_PATH, APPLY_DATA, SET_PREVIOUS_CATALOG_FETCH_PAYLOAD } from './mutations';
+import { SET_LOAD_PATH as M_SET_LOAD_PATH, APPLY_DATA, SET_PREVIOUS_CATALOG_FETCH_PAYLOAD, SET_ITEMS_REFERRER_PROMO } from './mutations';
 import { PREVIOUS_CATALOG_FETCH_PAYLOAD } from './index';
+import {ADD_FAVORITES_ITEM, DELETE_FAVORITES_ITEM, TOGGLE_FAVORITES_ITEM} from "@store/modules/Favorites/actions";
+import {IS_IN_PROMO} from "@store/modules/Catalog/getters";
 
 function mergeFunction(objValue, srcValue) {
     if (Array.isArray(objValue)) return objValue.concat(srcValue);
@@ -30,6 +35,8 @@ export const SET_LOAD_PATH = 'SET_LOAD_PATH';
 export const FETCH_CATALOG_DATA = 'FETCH_CATALOG_DATA';
 export const REFRESH_CATALOG_DATA = 'REFRESH_CATALOG_DATA';
 export const CHANGE_FILTER_STATE = 'CHANGE_FILTER_STATE';
+export const FETCH_ITEMS_REFERRER_PROMO = 'FETCH_ITEMS_REFERRER_PROMO';
+export const TOGGLE_ITEM_REFERRER_PROMO = 'TOGGLE_ITEM_REFERRER_PROMO';
 
 export default {
     [SET_LOAD_PATH]({ commit }, payload) {
@@ -267,5 +274,29 @@ export default {
         }
 
         commit(APPLY_DATA, data);
+    },
+
+    async [FETCH_ITEMS_REFERRER_PROMO]({commit}) {
+        try {
+            const data = await getProfilePromopageItemsIds();
+            console.log('action FETCH_ITEMS_REFERRER_PROMO', data)
+            commit(SET_ITEMS_REFERRER_PROMO, data);
+        } catch(e) {
+            console.log(e)
+        }
+    },
+
+    async [TOGGLE_ITEM_REFERRER_PROMO]({ dispatch, getters }, productId) {
+        try {
+            const exists = getters[IS_IN_PROMO](productId);
+            console.log('TOGGLE_ITEM_REFERRER_PROMO exists ', exists)
+
+            if (!exists) await addProfilePromopageProductById(productId);
+            else await deleteProfilePromopageProductById(productId);
+
+            await dispatch(FETCH_ITEMS_REFERRER_PROMO)
+        } catch(e) {
+            console.log(e)
+        }
     },
 };

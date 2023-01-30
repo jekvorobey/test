@@ -1,4 +1,6 @@
 import { mapFilterSegments, getAllActiveCategories } from '@util/catalog';
+import {FAVORITES_MAP, IS_IN_FAVORITES} from "@store/modules/Favorites/getters";
+import {ITEMS_REFERRER_PROMO} from "@store/modules/Catalog/index";
 
 export const ROUTE_SEGMENTS = 'routeSegments';
 export const FILTER_SEGMENTS = 'filterSegments';
@@ -10,6 +12,7 @@ export const ACTIVE_CATEGORIES = 'activeCategories';
 export const ROOT_CATEGORY = 'rootCategory';
 export const BREADCRUMBS = 'breadcrumbs';
 export const SHOW_PANEL = 'showPanel';
+export const IS_IN_PROMO = 'isInPromo';
 
 const pageSize = 12;
 
@@ -80,5 +83,9 @@ export default {
             }
         }
         return activeTags;
+    },
+
+    [IS_IN_PROMO]: (state) => (id) => {
+        return state[ITEMS_REFERRER_PROMO].includes(id)
     },
 };
