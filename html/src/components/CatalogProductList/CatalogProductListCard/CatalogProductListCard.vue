@@ -41,6 +41,22 @@
                     <v-link tag="button" class="catalog-product-list-card__controls-link" @click.prevent="onPreview">
                         Быстрый&nbsp;просмотр
                     </v-link>
+                    <v-link
+                            v-if="referralPartner && !isInPromo"
+                            @click.prevent="onAddToPromo"
+                            tag="button"
+                            class="catalog-product-list-card__controls-link"
+                    >
+                        Добавить&nbsp;в&nbsp;промо
+                    </v-link>
+                    <v-link
+                            v-else-if="referralPartner && isInPromo"
+                            @click.prevent="onDeleteFromPromo"
+                            tag="button"
+                            class="catalog-product-list-card__controls-link"
+                    >
+                        Удалить из промо
+                    </v-link>
                 </div>
 
                 <ul class="catalog-product-list-card__variants">
@@ -163,6 +179,9 @@ import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
 import {IS_ADDING_TO_BASKET, NAME as CART_MODULE} from "@store/modules/Cart";
 import { generateAbsoluteProductUrl, generateProductUrl, prepareProductImage } from '@util/catalog';
+import {addProfilePromopageProductById, deleteProfilePromopageProductById} from '@api';
+
+import {NAME as AUTH_MODULE, USER, REFERRAL_PARTNER} from '@store/modules/Auth';
 
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
@@ -237,9 +256,19 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        promoIds: {
+            type: Array,
+            required: false,
+            default: []
+        }
     },
 
     computed: {
+        ...mapState(AUTH_MODULE, {
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false
+        }),
+
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
 
         ...mapState(CART_MODULE, {
@@ -446,9 +475,29 @@ export default {
 
             return style;
         },
+
+        isInPromo() {
+            if (this.promoIds && this.promoIds.length > 0) {
+                return this.promoIds.includes(this.item.productId)
+            } else {
+                return false
+            }
+        }
     },
 
     methods: {
+        async onAddToPromo() {
+            console.log('onAddToPromo')
+            await addProfilePromopageProductById(this.item.productId);
+            this.$emit('onPromoChange')
+        },
+
+        async onDeleteFromPromo() {
+            console.log('onAddToPromo')
+            await deleteProfilePromopageProductById(this.item.productId);
+            this.$emit('onPromoChange')
+        },
+
         onBuyButtonClick() {
             // костыль инвалида по требованию, убрать после доработки
             if (!this.isAddingToBasket) {

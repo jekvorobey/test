@@ -18,7 +18,7 @@
             <component
                 class="catalog-product-list__item"
                 v-for="(item, index) in items"
-                :key="item.id"
+                :key="item.id + profilePromopageItemsIds.length"
                 :class="getClass(item.type)"
                 :is="getComponent(item.type)"
                 :item="item"
@@ -26,28 +26,32 @@
                 :position="index + 1"
                 :mobile-order="calcMobileOrder(item, index)"
                 :in-cart="isInCart(cartItemTypes.PRODUCT, item.id)"
+                :promo-ids="profilePromopageItemsIds"
                 item-prop
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"
                 @click-event-triggered="registerSeoEvent(item, index)"
+                @onPromoChange="onPromoChange"
             />
         </transition-group>
         <ul class="catalog-product-list__list" v-else>
             <component
                 class="catalog-product-list__item"
                 v-for="(item, index) in items"
-                :key="item.id"
+                :key="item.id + profilePromopageItemsIds.length"
                 :class="getClass(item.type)"
                 :is="getComponent(item.type)"
                 :item="item"
                 :referral-code="referralCode"
                 :mobile-order="calcMobileOrder(item, index)"
                 :in-cart="isInCart(cartItemTypes.PRODUCT, item.id)"
+                :promo-ids="profilePromopageItemsIds"
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"
                 @click-event-triggered="registerSeoEvent(item, index)"
+                @onPromoChange="onPromoChange"
             />
         </ul>
     </div>
@@ -73,6 +77,8 @@ import { modalName } from '@enums';
 import { cartItemTypes, catalogItemTypes } from '@enums/product';
 import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 import './CatalogProductList.css';
+
+import {getProfilePromopageItemsIds} from '@api';
 
 const itemAnimationDelayDelta = 100;
 let counter = 0;
@@ -116,6 +122,7 @@ export default {
     data() {
         return {
             cartItemTypes,
+            profilePromopageItemsIds: null,
         };
     },
 
@@ -220,6 +227,11 @@ export default {
             });
         },
 
+        async onPromoChange() {
+            console.log('onPromoChange')
+            this.profilePromopageItemsIds = await getProfilePromopageItemsIds();
+        },
+
         async onAddToCart(item) {
             const { referralCode } = this;
             const { code, type, stock, id, variantGroups } = item;
@@ -300,5 +312,12 @@ export default {
             seoEvents.click(products, 'Category');
         },
     },
+    async beforeMount() {
+        try {
+            this.profilePromopageItemsIds = await getProfilePromopageItemsIds();
+        } catch (e) {
+            console.log(e)
+        }
+    }
 };
 </script>
