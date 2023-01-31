@@ -30,9 +30,8 @@
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"
-                @toggle-promo-item="onTogglePromoItem(item.productId)"
+                @toggle-promo-item="onTogglePromoItem(item)"
                 @click-event-triggered="registerSeoEvent(item, index)"
-                @onPromoChange="onPromoChange"
             />
         </transition-group>
         <ul class="catalog-product-list__list" v-else>
@@ -49,9 +48,8 @@
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"
-                @toggle-promo-item="onTogglePromoItem(item.productId)"
+                @toggle-promo-item="onTogglePromoItem(item)"
                 @click-event-triggered="registerSeoEvent(item, index)"
-                @onPromoChange="onPromoChange"
             />
         </ul>
     </div>
@@ -83,8 +81,7 @@ import {
     ITEMS_REFERRER_PROMO,
 } from '@store/modules/Catalog';
 import {
-    FETCH_CATALOG_DATA,
-    FETCH_ITEMS_REFERRER_PROMO, SET_LOAD_PATH,
+    FETCH_ITEMS_REFERRER_PROMO,
     TOGGLE_ITEM_REFERRER_PROMO
 } from '@store/modules/Catalog/actions';
 import {sortFields} from "@enums/catalog";
@@ -232,9 +229,12 @@ export default {
             this[TOGGLE_FAVORITES_ITEM](productId);
         },
 
-        onTogglePromoItem(productId) {
-            console.log('onTogglePromoItem ', productId)
-            this[TOGGLE_ITEM_REFERRER_PROMO](productId)
+        onTogglePromoItem(item) {
+            console.log('onTogglePromoItem ', item)
+            const {productId, code, variantGroups} = item
+
+            if (variantGroups) this.onPreview(code);
+            else this[TOGGLE_ITEM_REFERRER_PROMO](productId)
         },
 
         onPreview(code) {
@@ -247,13 +247,8 @@ export default {
             });
         },
 
-        async onPromoChange() {
-            console.log('onPromoChange')
-            await this[FETCH_ITEMS_REFERRER_PROMO]();
-            console.log('ITEMS_REFERRER_PROMO ', this[ITEMS_REFERRER_PROMO]);
-        },
-
         async onAddToCart(item) {
+            console.log('onAddToCart ', item)
             const { referralCode } = this;
             const { code, type, stock, id, variantGroups } = item;
 

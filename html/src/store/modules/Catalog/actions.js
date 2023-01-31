@@ -17,8 +17,7 @@ import {
 } from '@api';
 import { SET_LOAD_PATH as M_SET_LOAD_PATH, APPLY_DATA, SET_PREVIOUS_CATALOG_FETCH_PAYLOAD, SET_ITEMS_REFERRER_PROMO } from './mutations';
 import { PREVIOUS_CATALOG_FETCH_PAYLOAD } from './index';
-import {ADD_FAVORITES_ITEM, DELETE_FAVORITES_ITEM, TOGGLE_FAVORITES_ITEM} from "@store/modules/Favorites/actions";
-import {IS_IN_PROMO} from "@store/modules/Catalog/getters";
+import {IS_IN_PROMO, IS_GLUING_IN_PROMO} from "@store/modules/Catalog/getters";
 
 function mergeFunction(objValue, srcValue) {
     if (Array.isArray(objValue)) return objValue.concat(srcValue);
@@ -37,6 +36,7 @@ export const REFRESH_CATALOG_DATA = 'REFRESH_CATALOG_DATA';
 export const CHANGE_FILTER_STATE = 'CHANGE_FILTER_STATE';
 export const FETCH_ITEMS_REFERRER_PROMO = 'FETCH_ITEMS_REFERRER_PROMO';
 export const TOGGLE_ITEM_REFERRER_PROMO = 'TOGGLE_ITEM_REFERRER_PROMO';
+export const TOGGLE_ALL_ITEMS_REFERRER_PROMO = 'TOGGLE_ALL_ITEMS_REFERRER_PROMO';
 
 export default {
     [SET_LOAD_PATH]({ commit }, payload) {
@@ -294,6 +294,25 @@ export default {
             if (!exists) await addProfilePromopageProductById(productId);
             else await deleteProfilePromopageProductById(productId);
 
+            await dispatch(FETCH_ITEMS_REFERRER_PROMO)
+        } catch(e) {
+            console.log(e)
+        }
+    },
+
+    async [TOGGLE_ALL_ITEMS_REFERRER_PROMO]({ dispatch, getters }, productIdList) {
+        try {
+            const gluingExists = getters[IS_GLUING_IN_PROMO](productIdList);
+
+            if (!gluingExists) {
+                for(let i = 0; i < productIdList.length; i++) {
+                    await addProfilePromopageProductById(productIdList[i]);
+                }
+            } else {
+                for(let i = 0; i < productIdList.length; i++) {
+                    await deleteProfilePromopageProductById(productIdList[i]);
+                }
+            }
             await dispatch(FETCH_ITEMS_REFERRER_PROMO)
         } catch(e) {
             console.log(e)

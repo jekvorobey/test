@@ -62,6 +62,16 @@
                     </li>
                 </ul>
 
+                <v-link
+                        v-if="$mq.tablet && referralPartner"
+                        @click.prevent.stop="onTogglePromoItem"
+                        tag="button"
+                        class="catalog-product-list-card__mobile-cart-btn"
+                        style="right: 50px;"
+                >
+                    P
+                </v-link>
+
                 <div
                     v-if="$mq.tablet && !limitQtyToBuy"
                     class="catalog-product-list-card__mobile-cart-btn"
@@ -202,7 +212,6 @@ export default {
     data(){
         return{
             isBuyButtonClicked: false,
-            counter: 0
         }
     },
 
@@ -253,9 +262,6 @@ export default {
     },
 
     computed: {
-        countValue() {
-            return this.counter;
-        },
         ...mapState(AUTH_MODULE, {
             [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false
         }),
@@ -479,10 +485,7 @@ export default {
 
     methods: {
         async onTogglePromoItem() {
-            console.log('onTogglePromoItem need emit')
-            // await addProfilePromopageProductById(this.item.productId);
-            // this.$emit('onPromoChange')
-            this.$emit('toggle-promo-item', { productId: this.item.productId });
+            this.$emit('toggle-promo-item');
         },
 
         onBuyButtonClick() {
