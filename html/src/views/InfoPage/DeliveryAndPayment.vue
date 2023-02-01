@@ -137,9 +137,9 @@
                             :columns="columns2"
                     >
                         <colgroup>
-                            <col width="30%" />
-                            <col width="30%" />
-                            <col width="30%" />
+                            <col width="10%" />
+                            <col width="40%" />
+                            <col width="40%" />
                         </colgroup>
 
                         <template v-slot:thead-before>
