@@ -121,16 +121,13 @@
                 </div>
 
                 <div class="container">
-                    <p>
-                        <strong>
+                    <h3 class="container container--tablet info-pages-block__subtitle">
                             Ориентировочные сроки доставки заказов по часто встречающимся направлениям
                             <br>
                             Точные сроки доставки будут рассчитаны при оформлении заказа
-                        </strong>
-                    </p>
-                    <br/>
+                    </h3>
                     <v-table
-                            class="info-pages-block__table"
+                            class="info-pages-block__table info-pages-block__table-no-mb"
                             key-field="region"
                             v-if="!isTablet"
                             :items="items2"
@@ -161,6 +158,11 @@
                             <info-row name="Cроки доставки заказов, содержащих Опасный груз*, дней" :value="item.deliveryot" />
                         </div>
                     </template>
+                    <p class="info-pages-block__table-small-text">
+                        *товары, имеющие отметку "Опасный груз" на упаковке, включая спиртосодержащую,
+                        легковоспламеняющуюся продукцию, лаки для ногтей, лаки для волос и другие виды
+                        аэрозольной упаковки. Указанные сроки приводятся исключительно в информационных целях
+                    </p>
                 </div>
             </section>
 
