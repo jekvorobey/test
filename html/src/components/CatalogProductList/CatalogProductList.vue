@@ -71,8 +71,8 @@ import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { IS_IN_CART } from '@store/modules/Cart/getters';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
-import {httpCodes, modalName, sortDirections} from '@enums';
-import {cartItemTypes, catalogItemTypes, productGroupTypes} from '@enums/product';
+import { modalName } from '@enums';
+import {cartItemTypes, catalogItemTypes} from '@enums/product';
 import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 import './CatalogProductList.css';
 
@@ -84,12 +84,6 @@ import {
     FETCH_ITEMS_REFERRER_PROMO,
     TOGGLE_ITEM_REFERRER_PROMO
 } from '@store/modules/Catalog/actions';
-import {sortFields} from "@enums/catalog";
-import {DEFAULT_PAGE, MIN_SCROLL_VALUE} from "@constants";
-import {$progress, $store} from "@services";
-import {computeFilterData} from "@util/catalog";
-import {SCROLL} from "@store";
-import {createNotFoundRoute} from "@util/router";
 
 const itemAnimationDelayDelta = 100;
 let counter = 0;
@@ -233,8 +227,16 @@ export default {
             console.log('onTogglePromoItem ', item)
             const {productId, code, variantGroups} = item
 
-            if (variantGroups) this.onPreview(code);
+            if (variantGroups) this.onPromoItemPreview(code);
             else this[TOGGLE_ITEM_REFERRER_PROMO](productId)
+        },
+
+        onPromoItemPreview(code) {
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.QUICK_PROMO_VARIANT,
+                open: true,
+                state: { code },
+            });
         },
 
         onPreview(code) {
