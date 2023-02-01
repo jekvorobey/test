@@ -21,7 +21,6 @@
                         <template v-if="characteristic.type === 'radio'">
                             <product-option-tag
                                 class="quick-variant-add-to-card-modal__option"
-                                :class="{'quick-variant-add-to-card-modal__option_inPromo': referralPartner && alreadyInPromo(productOptions.combinations[index].id)}"
                                 v-for="(option, index) in characteristic.options"
                                 :key="`${characteristic.code}-${option.value}`"
                                 :selected="isLocalSelected(characteristic.code) ? option.isSelected : false"
@@ -35,7 +34,6 @@
                         <template v-if="characteristic.type === 'color'">
                             <product-color-tag
                                 class="quick-variant-add-to-card-modal__option"
-                                :class="{'quick-variant-add-to-card-modal__option_inPromo': referralPartner && alreadyInPromo(productOptions.combinations[index].id)}"
                                 v-for="(option, index) in characteristic.options"
                                 :key="`${characteristic.code}-${option.value}`"
                                 :color="option.value"
@@ -46,11 +44,6 @@
                                 {{ option.name }}
                             </product-color-tag>
                         </template>
-                        <div v-if="referralPartner">
-                            <buy-button @click="toggleAllToPromo">{{ gluingText }}</buy-button>
-                            <buy-button @click="toggleOneToPromo" v-if="currentCode">{{ btnText }}</buy-button>
-                        </div>
-
                     </div>
                 </product-option-panel>
 
@@ -95,15 +88,6 @@ import BuyButton from '@components/BuyButton/BuyButton.vue';
 import VCounter from '@controls/VCounter/VCounter.vue';
 
 import './QuickVariantAddToCardModal.css';
-import {NAME as AUTH_MODULE, USER, REFERRAL_PARTNER} from '@store/modules/Auth';
-
-import { NAME as CATALOG_MODULE } from '@store/modules/Catalog';
-import {
-    TOGGLE_ALL_ITEMS_REFERRER_PROMO,
-    FETCH_ITEMS_REFERRER_PROMO,
-    TOGGLE_ITEM_REFERRER_PROMO
-} from '@store/modules/Catalog/actions';
-import { IS_IN_PROMO, IS_GLUING_IN_PROMO } from "@store/modules/Catalog/getters";
 
 const NAME = modalName.general.QUICK_VARIANT_ADD_TO_CARD;
 
@@ -123,16 +107,11 @@ export default {
         return {
             count: 1,
             localSelectedState: {},
-            currentCode: null,
             isLoading: true,
         };
     },
 
     computed: {
-        ...mapState(AUTH_MODULE, {
-            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false
-        }),
-
         ...mapState(MODAL_MODULE, {
             isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
             modalState: (state) => (state[MODALS][NAME] && state[MODALS][NAME].state) || {},
@@ -152,28 +131,6 @@ export default {
         ...mapGetters(CART_MODULE, {
             isInCart: IS_IN_CART,
         }),
-
-        ...mapGetters(CATALOG_MODULE, [IS_IN_PROMO, IS_GLUING_IN_PROMO]),
-
-        inPromo() {
-            const { productId } = this[PRODUCT_PREVIEW];
-            return this[IS_IN_PROMO](productId);
-        },
-
-        gluingInPromo() {
-            let res = []
-            this.productOptions.combinations.forEach(item => res.push(item.id))
-
-            return this[IS_GLUING_IN_PROMO](res)
-        },
-
-        btnText() {
-            return this.inPromo ? 'Удалить из промо' : 'Добавить в промо'
-        },
-
-        gluingText() {
-            return this.gluingInPromo ? 'Удалить всю склейку' : 'Добавить всю склейку'
-        },
 
         inCart() {
             const { id } = this[PRODUCT_PREVIEW];
@@ -211,7 +168,6 @@ export default {
     },
 
     methods: {
-        ...mapActions(CATALOG_MODULE, [FETCH_ITEMS_REFERRER_PROMO, TOGGLE_ITEM_REFERRER_PROMO, TOGGLE_ALL_ITEMS_REFERRER_PROMO]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(PREVIEW_MODULE, {
             fetchProductPreview: FETCH_PRODUCT_PREVIEW,
@@ -219,10 +175,6 @@ export default {
         ...mapActions(CART_MODULE, {
             addToCart: ADD_CART_ITEM,
         }),
-
-        alreadyInPromo(id) {
-            return this[IS_IN_PROMO](id);
-        },
 
         onClose() {
             this[CHANGE_MODAL_STATE]({ name: NAME, open: false, state: null });
@@ -234,7 +186,6 @@ export default {
 
         async onSelectOption(charCode, optValue) {
             const { code } = this.getNextCombination(charCode, optValue);
-            this.currentCode = code
             this.isLoading = true;
 
             try {
@@ -283,23 +234,6 @@ export default {
                 this.$router.push({ name: 'Cart' });
             }
         },
-
-        toggleAllToPromo() {
-            console.log('toggleAllToPromo')
-            console.log('this.productOptions ', this.productOptions)
-            console.log('this.productOptions.combinations ', this.productOptions.combinations)
-            let res = []
-            this.productOptions.combinations.forEach(item => res.push(item.id))
-            this[TOGGLE_ALL_ITEMS_REFERRER_PROMO](res)
-
-        },
-
-        toggleOneToPromo() {
-            console.log('toggleOneToPromo')
-            console.log('this.productPreview ', this.productPreview)
-            console.log('this[PRODUCT_PREVIEW] ', this[PRODUCT_PREVIEW])
-            this[TOGGLE_ITEM_REFERRER_PROMO](this.productPreview.productId)
-        }
     },
 };
 </script>

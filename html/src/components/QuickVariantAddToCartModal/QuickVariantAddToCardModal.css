@@ -19,9 +19,13 @@
 
     &__option {
         margin: 0 var(--gs) var(--gs) 0;
-        &_inPromo{
-             background-color: #6bff6b;
-         }
+
+        &-promo {
+            &_inPromo{
+                background-color: var(--cl-black);
+                color: var(--cl-white) !important;
+            }
+        }
     }
 
     &__buy-section {

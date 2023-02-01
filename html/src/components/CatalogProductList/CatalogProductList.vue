@@ -225,17 +225,18 @@ export default {
 
         onTogglePromoItem(item) {
             console.log('onTogglePromoItem ', item)
-            const {productId, code, variantGroups} = item
+            const {productId, id, code, variantGroups} = item
 
-            if (variantGroups) this.onPromoItemPreview(code);
+            if (variantGroups) this.onPromoItemPreview(id, code);
             else this[TOGGLE_ITEM_REFERRER_PROMO](productId)
         },
 
-        onPromoItemPreview(code) {
+        onPromoItemPreview(offerId, code) {
+            console.log('onPromoItemPreview')
             this[CHANGE_MODAL_STATE]({
                 name: modalName.general.QUICK_PROMO_VARIANT,
                 open: true,
-                state: { code },
+                state: { offerId, code },
             });
         },
 
