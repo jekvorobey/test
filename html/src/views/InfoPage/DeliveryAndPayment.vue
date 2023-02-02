@@ -122,10 +122,9 @@
 
                 <div class="container">
                     <h3 class="container container--tablet info-pages-block__subtitle">
-                            Ориентировочные сроки доставки заказов по часто встречающимся направлениям
-                            <br>
-                            Точные сроки доставки будут рассчитаны при оформлении заказа
+                        Ориентировочные сроки доставки заказов по часто встречающимся направлениям
                     </h3>
+                    <p> <strong>Точные сроки доставки будут рассчитаны при оформлении заказа</strong> </p>
                     <v-table
                             class="info-pages-block__table info-pages-block__table-no-mb"
                             key-field="region"
