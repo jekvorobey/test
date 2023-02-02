@@ -67,9 +67,10 @@
                         @click.prevent.stop="onTogglePromoItem"
                         tag="button"
                         class="catalog-product-list-card__mobile-cart-btn"
-                        style="right: 50px;"
+                        style="right: 40px; bottom: 0;"
                 >
-                    P
+                    <app-icon v-if="!inPromo" name="PromoBasketIcon" width="24" height="24"/>
+                    <app-icon v-else name="PromoBasketFilledIcon" width="24" height="24"/>
                 </v-link>
 
                 <div
@@ -80,8 +81,8 @@
                     <v-spinner width="24" height="24" :show="this.isBuyButtonClicked && !inCart"/>
                     <v-link tag="button" :disabled="this.isAddingToBasket">
                         <transition name="fade-absolute">
-                            <v-svg v-if="inCart" name="cart-filled" key="cart-filled" width="24" height="24" />
-                            <v-svg v-else name="cart" key="cart" width="24" height="24" />
+                            <v-svg v-if="inCart" name="cart-filled" key="cart-filled" width="22" height="22" />
+                            <v-svg v-else name="cart" key="cart" width="22" height="22" />
                         </transition>
                     </v-link>
                 </div>
@@ -133,12 +134,13 @@
                         :key="number"
                     />
                     <v-link
-                            v-if="referralPartner"
-                            @click.prevent="onTogglePromoItem"
+                            v-if="!$mq.tablet && referralPartner"
+                            @click.prevent.stop="onTogglePromoItem"
                             tag="button"
-                            class="catalog-product-list-card__controls-link"
+                            class="catalog-product-list-card__controls-link-promo"
                     >
-                        {{ promoBtnText }}
+                        <app-icon v-if="!inPromo" name="PromoBasketIcon" width="24" height="24"/>
+                        <app-icon v-else name="PromoBasketFilledIcon" width="24" height="24"/>
                     </v-link>
                 </div>
             </div>
@@ -174,6 +176,7 @@ import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 import NoPhotoStub from '@components/NoPhotoStub/NoPhotoStub.vue';
 import InstallmentPrice from "@components/InstallmentPrice/InstallmentPrice.vue";
+import AppIcon from "@components/icons/AppIcon.vue";
 
 import {mapGetters, mapState} from 'vuex';
 
@@ -208,6 +211,7 @@ export default {
         BuyButton,
         FavoritesButton,
         VSpinner,
+        AppIcon
     },
     data(){
         return{
@@ -279,10 +283,6 @@ export default {
 
         inPromo() {
             return this[IS_IN_PROMO](this.item.productId);
-        },
-
-        promoBtnText() {
-            return this.inPromo ? 'Удалить из промо' : 'Добавить в промо';
         },
 
         showBuyBtn() {

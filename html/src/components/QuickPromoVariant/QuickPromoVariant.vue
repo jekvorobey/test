@@ -1,7 +1,7 @@
 <template>
-    <pin-modal class="quick-variant-add-to-card-modal" :loading="isLoading" @close="onClose">
+    <pin-modal class="quick-variant-add-to-card-modal" :loading="isLoading" @close="onClose" :style="{'align-items': this.isTablet ? '' : 'center'}">
         <div class="quick-variant-add-to-card-modal__inner">
-            <h3>Добавьте товары на промо страницу</h3>
+            <h3>Добавить в промо</h3>
             <template v-if="productPreview && referralPartner">
                 <product-option-panel
                         class="quick-variant-add-to-card-modal__characteristic"
@@ -9,23 +9,23 @@
                         :key="characteristic.code"
                         :header="isLocalSelected(characteristic.code) ? characteristic.name : `Выберите ${characteristic.name}`"
                 >
-                    <div class="quick-variant-add-to-card-modal__options">
-                        <template v-if="characteristic.type === 'radio'">
-                            <product-option-tag
-                                    class="quick-variant-add-to-card-modal__option-promo"
-                                    :class="{'quick-variant-add-to-card-modal__option-promo_inPromo': referralPartner && alreadyInPromo(productOptions.combinations[index].id)}"
-                                    v-for="(option, index) in characteristic.options"
-                                    :key="`${characteristic.code}-${option.value}`"
-                                    :disabled="option.isDisabled"
-                                    @click.stop="onSelectOption(index)"
-                            >
-                                {{ option.name }}
-                            </product-option-tag>
-                        </template>
-                        <buy-button @click="toggleAllToPromo">{{ gluingText }}</buy-button>
+                    <div class="quick-variant-add-to-card-modal__options quick-variant-add-to-card-modal__options-promo">
+                        <product-option-tag
+                                class="quick-variant-add-to-card-modal__option-promo"
+                                :class="{'quick-variant-add-to-card-modal__option-promo__inPromo': referralPartner && alreadyInPromo(productOptions.combinations[index].id)}"
+                                v-for="(option, index) in characteristic.options"
+                                :key="`${characteristic.code}-${option.value}`"
+                                :disabled="option.isDisabled"
+                                @click.stop="onSelectOption(index)"
+                        >
+                            {{ option.name }}
+                            <span class="quick-variant-add-to-card-modal__option-promo__plus">
+                                {{ alreadyInPromo(productOptions.combinations[index].id) ? '-' : '+'}}
+                            </span>
+                        </product-option-tag>
                     </div>
+                    <buy-button @click="toggleAllToPromo">{{ gluingText }}</buy-button>
                 </product-option-panel>
-
             </template>
         </div>
     </pin-modal>
@@ -46,15 +46,13 @@
         TOGGLE_ITEM_REFERRER_PROMO
     } from "@store/modules/Catalog/actions";
     import {IS_GLUING_IN_PROMO, IS_IN_PROMO} from "@store/modules/Catalog/getters";
-
     import {mapActions, mapState, mapGetters} from 'vuex';
-
-    const NAME = modalName.general.QUICK_PROMO_VARIANT;
-
     import PinModal from "@components/PinModal/PinModal.vue";
     import BuyButton from "@components/BuyButton/BuyButton.vue";
     import ProductOptionPanel from "@components/product/ProductOptionPanel/ProductOptionPanel.vue";
     import ProductOptionTag from "@components/product/ProductOptionTag/ProductOptionTag.vue";
+
+    const NAME = modalName.general.QUICK_PROMO_VARIANT;
 
     export default {
         name: "quick-promo-variant",
@@ -92,6 +90,9 @@
             gluingText() {
                 return this.gluingInPromo ? 'Удалить всю склейку' : 'Добавить всю склейку'
             },
+            isTablet() {
+                return this.$mq.tablet;
+            },
         },
 
         methods: {
@@ -110,10 +111,12 @@
             onSelectOption(index) {
                 this[TOGGLE_ITEM_REFERRER_PROMO](this.productOptions.combinations[index].id)
             },
-            toggleAllToPromo() {
+            async toggleAllToPromo() {
+                this.isLoading = true;
                 let res = []
                 this.productOptions.combinations.forEach(item => res.push(item.id))
-                this[TOGGLE_ALL_ITEMS_REFERRER_PROMO](res)
+                await this[TOGGLE_ALL_ITEMS_REFERRER_PROMO](res)
+                this.isLoading = false;
             },
         },
         async beforeMount() {
