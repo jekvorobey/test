@@ -12,6 +12,7 @@ export const modalName = Object.freeze({
         AUTH: 'auth-modal',
         HOME_FIRST: 'home-first-modal',
         PROFESSIONAL_DISCLAIMER: 'professional-disclaimer-modal',
+        QUICK_PROMO_VARIANT: 'quick-promo-variant',
     },
 
     product: {

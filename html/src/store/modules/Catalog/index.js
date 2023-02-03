@@ -17,6 +17,7 @@ export const CATEGORIES = 'categories';
 export const FILTERS = 'filters';
 export const BANNER = 'banner';
 export const ITEMS = 'items';
+export const ITEMS_REFERRER_PROMO = 'itemsReferrerPromo';
 export const RANGE = 'range';
 export const RANGE_WITHOUT_UNION = 'rangeWithoutUnion';
 export const PRODUCT_GROUP = 'productGroup';
@@ -53,6 +54,7 @@ export default function createModule() {
             [FILTERS_STATE_MAP]: {},
 
             [ITEMS]: [],
+            [ITEMS_REFERRER_PROMO]: [],
             [RANGE]: 0,
             [RANGE_WITHOUT_UNION]: 0,
 

@@ -21,7 +21,7 @@
                         <template v-if="characteristic.type === 'radio'">
                             <product-option-tag
                                 class="quick-variant-add-to-card-modal__option"
-                                v-for="option in characteristic.options"
+                                v-for="(option, index) in characteristic.options"
                                 :key="`${characteristic.code}-${option.value}`"
                                 :selected="isLocalSelected(characteristic.code) ? option.isSelected : false"
                                 :disabled="option.isDisabled"
@@ -34,7 +34,7 @@
                         <template v-if="characteristic.type === 'color'">
                             <product-color-tag
                                 class="quick-variant-add-to-card-modal__option"
-                                v-for="option in characteristic.options"
+                                v-for="(option, index) in characteristic.options"
                                 :key="`${characteristic.code}-${option.value}`"
                                 :color="option.value"
                                 :selected="isLocalSelected(characteristic.code) ? option.isSelected : false"
@@ -107,7 +107,6 @@ export default {
         return {
             count: 1,
             localSelectedState: {},
-
             isLoading: true,
         };
     },
@@ -187,7 +186,6 @@ export default {
 
         async onSelectOption(charCode, optValue) {
             const { code } = this.getNextCombination(charCode, optValue);
-
             this.isLoading = true;
 
             try {

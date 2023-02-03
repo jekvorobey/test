@@ -15,10 +15,31 @@
     }
 
     &__options {
+        &-promo {
+             display: flex;
+             flex-wrap: wrap;
+             gap: 10px;
+             margin-bottom: 15px;
+         }
     }
 
     &__option {
         margin: 0 var(--gs) var(--gs) 0;
+
+        &-promo {
+            &:not(:last-child) {
+                 margin-right: 8px;
+             }
+            &__inPromo{
+                background-color: var(--cl-black);
+                color: var(--cl-white) !important;
+            }
+            &__plus{
+                 padding-left: 10px;
+                font-size: 18px;
+                font-weight: 700;
+             }
+        }
     }
 
     &__buy-section {

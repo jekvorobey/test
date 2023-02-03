@@ -30,6 +30,7 @@
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"
+                @toggle-promo-item="onTogglePromoItem(item)"
                 @click-event-triggered="registerSeoEvent(item, index)"
             />
         </transition-group>
@@ -47,6 +48,7 @@
                 @add-item="onAddToCart(item)"
                 @preview="onPreview(item.code)"
                 @toggle-favorite-item="onToggleFavorite(item.productId)"
+                @toggle-promo-item="onTogglePromoItem(item)"
                 @click-event-triggered="registerSeoEvent(item, index)"
             />
         </ul>
@@ -57,7 +59,7 @@
 import CatalogBannerListCard from './CatalogBannerListCard/CatalogBannerListCard.vue';
 import CatalogProductListCard from './CatalogProductListCard/CatalogProductListCard.vue';
 
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -70,9 +72,18 @@ import { IS_IN_CART } from '@store/modules/Cart/getters';
 import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
 
 import { modalName } from '@enums';
-import { cartItemTypes, catalogItemTypes } from '@enums/product';
+import {cartItemTypes, catalogItemTypes} from '@enums/product';
 import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
 import './CatalogProductList.css';
+
+import {
+    NAME as CATALOG_MODULE,
+    ITEMS_REFERRER_PROMO,
+} from '@store/modules/Catalog';
+import {
+    FETCH_ITEMS_REFERRER_PROMO,
+    TOGGLE_ITEM_REFERRER_PROMO
+} from '@store/modules/Catalog/actions';
 
 const itemAnimationDelayDelta = 100;
 let counter = 0;
@@ -120,6 +131,7 @@ export default {
     },
 
     computed: {
+        ...mapState(CATALOG_MODULE, [ITEMS_REFERRER_PROMO]),
         ...mapGetters(CART_MODULE, {
             isInCart: IS_IN_CART,
         }),
@@ -146,6 +158,7 @@ export default {
     },
 
     methods: {
+        ...mapActions(CATALOG_MODULE, [FETCH_ITEMS_REFERRER_PROMO, TOGGLE_ITEM_REFERRER_PROMO]),
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
         ...mapActions(CART_MODULE, {
@@ -210,6 +223,23 @@ export default {
             this[TOGGLE_FAVORITES_ITEM](productId);
         },
 
+        onTogglePromoItem(item) {
+            console.log('onTogglePromoItem ', item)
+            const {productId, id, code, variantGroups} = item
+
+            if (variantGroups) this.onPromoItemPreview(id, code);
+            else this[TOGGLE_ITEM_REFERRER_PROMO](productId)
+        },
+
+        onPromoItemPreview(offerId, code) {
+            console.log('onPromoItemPreview')
+            this[CHANGE_MODAL_STATE]({
+                name: modalName.general.QUICK_PROMO_VARIANT,
+                open: true,
+                state: { offerId, code },
+            });
+        },
+
         onPreview(code) {
             const { referralCode } = this;
 
@@ -221,6 +251,7 @@ export default {
         },
 
         async onAddToCart(item) {
+            console.log('onAddToCart ', item)
             const { referralCode } = this;
             const { code, type, stock, id, variantGroups } = item;
 
@@ -299,6 +330,14 @@ export default {
             const products = new ProductsBuilder().createForCatalogCardClick(params);
             seoEvents.click(products, 'Category');
         },
+    },
+    async created() {
+        try {
+            await this[FETCH_ITEMS_REFERRER_PROMO]();
+            console.log('ITEMS_REFERRER_PROMO ', this[ITEMS_REFERRER_PROMO]);
+        } catch (e) {
+            console.log(e)
+        }
     },
 };
 </script>
