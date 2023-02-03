@@ -6,6 +6,7 @@ import registerModule from '@router/middleware/registerModule';
 
 const ReferrerAsync = () => import(/* webpackChunkName: "referrer-view" */ './Referrer.vue');
 const ReferrerModuleAsync = () => import(/* webpackChunkName: "referrer-view" */ '@store/modules/Referrer');
+const CatalogModuleAsync = () => import(/* webpackChunkName: "catalog-view" */ '@store/modules/Catalog');
 
 /**
  * Модуль компонента Referrer
@@ -22,7 +23,7 @@ export default {
             component: ReferrerAsync,
 
             meta: {
-                middleware: [registerModule(ReferrerModuleAsync)],
+                middleware: [registerModule(ReferrerModuleAsync), registerModule(CatalogModuleAsync)],
                 skipScroll: true,
             },
         },
