@@ -23,6 +23,7 @@
                 :is="getComponent(item.type)"
                 :item="item"
                 :referral-code="referralCode"
+                :showReferralPromo="showReferralPromo"
                 :position="index + 1"
                 :mobile-order="calcMobileOrder(item, index)"
                 :in-cart="isInCart(cartItemTypes.PRODUCT, item.id)"
@@ -43,6 +44,7 @@
                 :is="getComponent(item.type)"
                 :item="item"
                 :referral-code="referralCode"
+                :showReferralPromo="showReferralPromo"
                 :mobile-order="calcMobileOrder(item, index)"
                 :in-cart="isInCart(cartItemTypes.PRODUCT, item.id)"
                 @add-item="onAddToCart(item)"
@@ -117,6 +119,12 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        showReferralPromo: {
+            type: Boolean,
+            default: true,
+            required: false,
+        }
     },
 
     components: {

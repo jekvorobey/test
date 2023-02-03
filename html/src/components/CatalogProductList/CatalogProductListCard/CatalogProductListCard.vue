@@ -63,7 +63,7 @@
                 </ul>
 
                 <v-link
-                        v-if="$mq.tablet && referralPartner"
+                        v-if="$mq.tablet && referralPartner && showReferralPromo"
                         @click.prevent.stop="onTogglePromoItem"
                         tag="button"
                         class="catalog-product-list-card__mobile-cart-btn"
@@ -134,7 +134,7 @@
                         :key="number"
                     />
                     <v-link
-                            v-if="!$mq.tablet && referralPartner"
+                            v-if="!$mq.tablet && referralPartner && showReferralPromo"
                             @click.prevent.stop="onTogglePromoItem"
                             tag="button"
                             class="catalog-product-list-card__controls-link-promo"
@@ -263,6 +263,12 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        showReferralPromo: {
+            type: Boolean,
+            default: true,
+            required: false,
+        }
     },
 
     computed: {
