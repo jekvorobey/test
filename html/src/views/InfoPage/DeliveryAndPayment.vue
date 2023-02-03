@@ -121,8 +121,47 @@
                 </div>
 
                 <div class="container">
-                    <p><strong>Точные сроки доставки будут рассчитаны при оформлении заказа</strong></p>
-                    <br />
+                    <h3 class="container container--tablet info-pages-block__subtitle">
+                        Ориентировочные сроки доставки заказов по часто встречающимся направлениям
+                    </h3>
+                    <p> <strong>Точные сроки доставки будут рассчитаны при оформлении заказа</strong> </p>
+                    <v-table
+                            class="info-pages-block__table info-pages-block__table-no-mb"
+                            key-field="region"
+                            v-if="!isTablet"
+                            :items="items2"
+                            :columns="columns2"
+                    >
+                        <colgroup>
+                            <col width="10%" />
+                            <col width="40%" />
+                            <col width="40%" />
+                        </colgroup>
+
+                        <template v-slot:thead-before>
+                            <tr class="v-table__row v-table__row--head">
+                                <th class="v-table__row-th">Город</th>
+                                <th class="v-table__row-th">Cроки доставки заказов без ограничений по первозке, дней</th>
+                                <th class="v-table__row-th">Cроки доставки заказов, содержащих Опасный груз*, дней</th>
+                            </tr>
+                        </template>
+
+                        <template v-slot:column-region>&nbsp;</template>
+                        <template v-slot:column-deliverydo>&nbsp;</template>
+                        <template v-slot:column-deliveryot>&nbsp;</template>
+                    </v-table>
+                    <template v-else>
+                        <div class="info-pages-block__card" v-for="item in items2" :key="item.region">
+                            <info-row name="Регион" :value="item.region" />
+                            <info-row name="Cроки доставки заказов без ограничений по первозке, дней" :value="item.deliverydo" />
+                            <info-row name="Cроки доставки заказов, содержащих Опасный груз*, дней" :value="item.deliveryot" />
+                        </div>
+                    </template>
+                    <p class="info-pages-block__table-small-text">
+                        *товары, имеющие отметку "Опасный груз" на упаковке, включая спиртосодержащую,
+                        легковоспламеняющуюся продукцию, лаки для ногтей, лаки для волос и другие виды
+                        аэрозольной упаковки. Указанные сроки приводятся исключительно в информационных целях
+                    </p>
                 </div>
             </section>
 
@@ -229,6 +268,7 @@ export default {
     data() {
         return {
             columns: ['region', 'deliverydo', 'deliveryot', 'pickupdo', 'pickupot', 'ot'],
+            columns2: ['region', 'deliverydo', 'deliveryot'],
             items: [
                 {
                     region: 'Москва',
@@ -329,6 +369,128 @@ export default {
                     pickupot: 549,
                     ot: 'Бесплатно',
                     timing: '7-14 дней',
+                },
+            ],
+            items2: [
+                {
+                    region: 'Москва',
+                    deliverydo: 2,
+                    deliveryot: 2,
+                },
+                {
+                    region: 'Санкт-Петербург',
+                    deliverydo: 3,
+                    deliveryot: 3,
+                },
+                {
+                    region: 'Новосибирск',
+                    deliverydo: 4,
+                    deliveryot: 7,
+                },
+                {
+                    region: 'Екатеринбург',
+                    deliverydo: 4,
+                    deliveryot: 7,
+                },
+                {
+                    region: 'Казань ',
+                    deliverydo: 3,
+                    deliveryot: 3,
+                },
+                {
+                    region: 'Нижний Новгород',
+                    deliverydo: 2,
+                    deliveryot: 2,
+                },
+                {
+                    region: 'Челябинск',
+                    deliverydo: 6,
+                    deliveryot: 6,
+                },
+                {
+                    region: 'Самара',
+                    deliverydo: 3,
+                    deliveryot: 3,
+                },
+                {
+                    region: 'Омск',
+                    deliverydo: 5,
+                    deliveryot: 10,
+                },
+                {
+                    region: 'Ростов-на-Дону',
+                    deliverydo: 3,
+                    deliveryot: 3,
+                },
+                {
+                    region: 'Уфа',
+                    deliverydo: 3,
+                    deliveryot: 3,
+                },
+                {
+                    region: 'Пермь',
+                    deliverydo: 5,
+                    deliveryot: 10,
+                },
+                {
+                    region: 'Красноярск',
+                    deliverydo: 4,
+                    deliveryot: 7,
+                },
+                {
+                    region: 'Воронеж',
+                    deliverydo: 2,
+                    deliveryot: 2,
+                },
+                {
+                    region: 'Волгоград',
+                    deliverydo: 3,
+                    deliveryot: 3,
+                },
+                {
+                    region: 'Краснодар',
+                    deliverydo: 3,
+                    deliveryot: 3,
+                },
+                {
+                    region: 'Саратов',
+                    deliverydo: 3,
+                    deliveryot: 3,
+                },
+                {
+                    region: 'Тюмень',
+                    deliverydo: 4,
+                    deliveryot: 7,
+                },
+                {
+                    region: 'Тольятти',
+                    deliverydo: 3,
+                    deliveryot: 3,
+                },
+                {
+                    region: 'Ижевск',
+                    deliverydo: 4,
+                    deliveryot: 4,
+                },
+                {
+                    region: 'Благовещенск',
+                    deliverydo: 10,
+                    deliveryot: 23,
+                },
+                {
+                    region: 'Петропавловск-Камча́тский ',
+                    deliverydo: 6,
+                    deliveryot: 30,
+                },
+                {
+                    region: 'Владивосток',
+                    deliverydo: 9,
+                    deliveryot: 22,
+                },
+                {
+                    region: 'Южно-Сахалинск',
+                    deliverydo: 12,
+                    deliveryot: 23,
                 },
             ],
         };
