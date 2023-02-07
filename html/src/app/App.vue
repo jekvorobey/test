@@ -28,6 +28,10 @@
         </transition>
 
         <transition name="fade-in">
+            <quick-promo-variant v-if="isQuickPromoVariant" />
+        </transition>
+
+        <transition name="fade-in">
             <quick-masterclass-add-to-cart-modal v-if="isQuickMasterclassAddToCardOpen" />
         </transition>
 
@@ -103,6 +107,7 @@ import NotificationModal from '@components/NotificationModal/NotificationModal.v
 import SnackNotificationModal from '@components/SnackNotificationModal/SnackNotificationModal.vue';
 import AuthModal from '@components/AuthModal/AuthModal.vue';
 import HomeFirstModal from '@components/HomeFirstModal/HomeFirstModal.vue';
+import QuickPromoVariant from "@components/QuickPromoVariant/QuickPromoVariant.vue";
 import QuickVariantAddToCardModal from '@components/QuickVariantAddToCartModal/QuickVariantAddToCardModal.vue';
 import QuickMasterclassAddToCartModal from '@components/QuickMasterclassAddToCartModal/QuickMasterclassAddToCartModal.vue';
 import ProfessionalDisclaimerModal from '@components/ProfessionalDisclaimerModal/ProfessionalDisclaimerModal.vue';
@@ -155,6 +160,7 @@ export default {
         HomeFirstModal,
         QuickVariantAddToCardModal,
         QuickMasterclassAddToCartModal,
+        QuickPromoVariant,
         ProfessionalDisclaimerModal,
     },
 
@@ -183,6 +189,9 @@ export default {
             isQuickVariantAddToCardOpen: (state) =>
                 state[MODALS][modalName.general.QUICK_VARIANT_ADD_TO_CARD] &&
                 state[MODALS][modalName.general.QUICK_VARIANT_ADD_TO_CARD].open,
+            isQuickPromoVariant: (state) =>
+                state[MODALS][modalName.general.QUICK_PROMO_VARIANT] &&
+                state[MODALS][modalName.general.QUICK_PROMO_VARIANT].open,
             isQuickMasterclassAddToCardOpen: (state) =>
                 state[MODALS][modalName.general.QUICK_MASTERCLASS_ADD_TO_CART] &&
                 state[MODALS][modalName.general.QUICK_MASTERCLASS_ADD_TO_CART].open,

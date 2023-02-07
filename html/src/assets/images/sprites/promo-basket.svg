@@ -1,0 +1,6 @@
+<svg width="26" height="22" viewBox="0 0 26 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M4.52403 19.3686L2.20493 7H23.7951L21.476 19.3686C21.2986 20.3145 20.4727 21 19.5102 21H6.48978C5.52735 21 4.7014 20.3145 4.52403 19.3686Z" stroke="black" stroke-width="2"/>
+<rect y="6" width="26" height="2" rx="1" fill="#141116"/>
+<line x1="5.7675" y1="6.60503" x2="9.60503" y2="1.2325" stroke="black" stroke-width="2" stroke-linecap="round"/>
+<line x1="1" y1="-1" x2="7.60233" y2="-1" transform="matrix(-0.581238 -0.813733 -0.813733 0.581238 20 8)" stroke="black" stroke-width="2" stroke-linecap="round"/>
+</svg>

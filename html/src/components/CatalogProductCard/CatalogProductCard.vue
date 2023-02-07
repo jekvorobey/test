@@ -221,7 +221,7 @@ export default {
         },
 
         limit: {
-            type: Number,
+            type: [Number, Boolean],
             default: false,
             reuired: false
         }

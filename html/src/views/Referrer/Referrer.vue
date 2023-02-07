@@ -26,6 +26,7 @@
                     :animation="!isTablet"
                     fullscreen
                     item-prop
+                    :show-referral-promo="false"
                 />
                 <p class="referrer-view__list-empty" v-else>Ничего не найдено</p>
             </div>

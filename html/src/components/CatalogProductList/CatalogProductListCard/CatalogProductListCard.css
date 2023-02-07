@@ -77,6 +77,11 @@
         button.link {
             display: flex;
         }
+
+        &-promo {
+             right: 35px;
+             bottom: -7px;
+         }
     }
     &__img-gray{
         &::before {
@@ -154,6 +159,10 @@
             @media (--tablet) {
                 display: none;
             }
+
+            &-promo {
+                 margin-left: 8px;
+             }
         }
     }
 
@@ -334,6 +343,7 @@
     &__rating {
         display: flex;
         justify-content: center;
+         align-items: center;
         opacity: 0;
 
         &-star {

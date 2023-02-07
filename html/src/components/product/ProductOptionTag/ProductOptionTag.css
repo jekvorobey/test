@@ -9,13 +9,15 @@
 
     &--selected {
         background-color: var(--cl-global);
-        color: var(--cl-white);
+        color: var(--cl-white) !important;
     }
 
-    &:hover {
-        background-color: var(--cl-grey);
-        color: var(--cl-white);
-    }
+     @media(min-width: 1024px) {
+         &:hover {
+             background-color: var(--cl-grey);
+             color: var(--cl-white);
+         }
+     }
 
     &:disabled {
         background-color: transparent;

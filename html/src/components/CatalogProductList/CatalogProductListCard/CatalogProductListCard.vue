@@ -62,6 +62,17 @@
                     </li>
                 </ul>
 
+                <v-link
+                        v-if="$mq.tablet && referralPartner && showReferralPromo"
+                        @click.prevent.stop="onTogglePromoItem"
+                        tag="button"
+                        class="catalog-product-list-card__mobile-cart-btn"
+                        style="right: 40px; bottom: 0;"
+                >
+                    <app-icon v-if="!inPromo" name="PromoBasketIcon" width="24" height="24"/>
+                    <app-icon v-else name="PromoBasketFilledIcon" width="24" height="24"/>
+                </v-link>
+
                 <div
                     v-if="$mq.tablet && !limitQtyToBuy"
                     class="catalog-product-list-card__mobile-cart-btn"
@@ -70,8 +81,8 @@
                     <v-spinner width="24" height="24" :show="this.isBuyButtonClicked && !inCart"/>
                     <v-link tag="button" :disabled="this.isAddingToBasket">
                         <transition name="fade-absolute">
-                            <v-svg v-if="inCart" name="cart-filled" key="cart-filled" width="24" height="24" />
-                            <v-svg v-else name="cart" key="cart" width="24" height="24" />
+                            <v-svg v-if="inCart" name="cart-filled" key="cart-filled" width="22" height="22" />
+                            <v-svg v-else name="cart" key="cart" width="22" height="22" />
                         </transition>
                     </v-link>
                 </div>
@@ -115,13 +126,22 @@
                     {{ item.name }}
                 </div>
 
-                <div class="catalog-product-list-card__rating" v-once>
+                <div class="catalog-product-list-card__rating">
                     <span
                         v-for="number in 5"
                         class="catalog-product-list-card__rating-star"
                         :class="{ 'catalog-product-list-card__rating-star--empty': number > item.rating }"
                         :key="number"
                     />
+                    <v-link
+                            v-if="!$mq.tablet && referralPartner && showReferralPromo"
+                            @click.prevent.stop="onTogglePromoItem"
+                            tag="button"
+                            class="catalog-product-list-card__controls-link-promo"
+                    >
+                        <app-icon v-if="!inPromo" name="PromoBasketIcon" width="24" height="24"/>
+                        <app-icon v-else name="PromoBasketFilledIcon" width="24" height="24"/>
+                    </v-link>
                 </div>
             </div>
 
@@ -156,13 +176,18 @@ import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 import NoPhotoStub from '@components/NoPhotoStub/NoPhotoStub.vue';
 import InstallmentPrice from "@components/InstallmentPrice/InstallmentPrice.vue";
+import AppIcon from "@components/icons/AppIcon.vue";
 
 import {mapGetters, mapState} from 'vuex';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { IS_IN_FAVORITES } from '@store/modules/Favorites/getters';
+import { NAME as CATALOG_MODULE } from '@store/modules/Catalog';
+import { IS_IN_PROMO} from "@store/modules/Catalog/getters";
 import {IS_ADDING_TO_BASKET, NAME as CART_MODULE} from "@store/modules/Cart";
 import { generateAbsoluteProductUrl, generateProductUrl, prepareProductImage } from '@util/catalog';
+
+import {NAME as AUTH_MODULE, USER, REFERRAL_PARTNER} from '@store/modules/Auth';
 
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
@@ -186,6 +211,7 @@ export default {
         BuyButton,
         FavoritesButton,
         VSpinner,
+        AppIcon
     },
     data(){
         return{
@@ -237,10 +263,21 @@ export default {
             type: Boolean,
             default: false,
         },
+
+        showReferralPromo: {
+            type: Boolean,
+            default: true,
+            required: false,
+        }
     },
 
     computed: {
+        ...mapState(AUTH_MODULE, {
+            [REFERRAL_PARTNER]: (state) => (state[USER] && state[USER][REFERRAL_PARTNER]) || false
+        }),
+
         ...mapGetters(FAVORITES_MODULE, [IS_IN_FAVORITES]),
+        ...mapGetters(CATALOG_MODULE, [IS_IN_PROMO]),
 
         ...mapState(CART_MODULE, {
             isAddingToBasket: (state) => state[IS_ADDING_TO_BASKET]
@@ -248,6 +285,10 @@ export default {
 
         inFavorites() {
             return this[IS_IN_FAVORITES](this.item.productId);
+        },
+
+        inPromo() {
+            return this[IS_IN_PROMO](this.item.productId);
         },
 
         showBuyBtn() {
@@ -449,6 +490,10 @@ export default {
     },
 
     methods: {
+        async onTogglePromoItem() {
+            this.$emit('toggle-promo-item');
+        },
+
         onBuyButtonClick() {
             // костыль инвалида по требованию, убрать после доработки
             if (!this.isAddingToBasket) {
