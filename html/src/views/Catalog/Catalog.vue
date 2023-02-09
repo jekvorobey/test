@@ -134,22 +134,25 @@
                         item-prop
                     />
 
-                    <div class="container containet--tablet catalog-view__main-controls mobile-pagination-padding" v-if="pagesCount > 1">
+                    <div
+                        id="showMoreBlockID"
+                        class="container containet--tablet catalog-view__main-controls mobile-pagination-padding"
+                        v-if="pagesCount > 1"
+                    >
+                        <v-pagination
+                                class="containet--tablet catalog-view__main-controls-pagination mb-20"
+                                :value="activePage"
+                                :page-count="pagesCount"
+                                @input="onPageChanged"
+                        />
                         <show-more-button
                             v-if="activePage < pagesCount"
                             btn-class="btn--outline catalog-view__main-controls-btn"
                             @click="onShowMore"
                             :show-preloader="showMore"
                         >
-                            Показать ещё
+                            Показать все
                         </show-more-button>
-
-                        <v-pagination
-                            class="containet--tablet catalog-view__main-controls-pagination"
-                            :value="activePage"
-                            :page-count="pagesCount"
-                            @input="onPageChanged"
-                        />
                     </div>
 
                     <template v-if="isSearchPage">
@@ -829,12 +832,31 @@ export default {
             this.$router.replace({ path, query });
         },
 
-        onShowMore() {
+        async onShowMore() {
             this.showMore = true;
-            this.$router.replace({
+            await this.$router.replace({
                 path: this.$route.path,
                 query: { ...this.$route.query, page: this.activePage + 1 },
             });
+
+            /**
+             * Listen to mousescroll event
+             *
+             * @type {HTMLElement} - the target of the event div:#showMoreBlockID
+             * @listens window.onscroll - the namespace and name of the event
+             * Обработчик для последующей подгрузки записей без нажатия на кнопку, а при скролле до блока пагинации
+             */
+            window.onscroll = () => {
+                // Расстояние блока #showMoreBlockID от верхней границы экрана
+                let showMoreBlock = document.getElementById("showMoreBlockID").offsetTop;
+                // Вычисляемая величина, проверка пересечения нижней видимой границы экрана с верхней границей блока
+                let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight / 2.5 >= showMoreBlock;
+                // При пересечении сбрасываем обработчик и запускаем подгрузку записей
+                if (bottomOfWindow) {
+                    window.onscroll = null;
+                    this.onShowMore()
+                }
+            }
         },
 
         onPageChanged(page) {
@@ -1113,7 +1135,6 @@ export default {
         const category = this[ACTIVE_CATEGORY] || null;
         if (category) $retailRocket.addCategoryView(category.id);
         this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
-
         this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
     },
 

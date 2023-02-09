@@ -279,7 +279,6 @@ export default {
     async [FETCH_ITEMS_REFERRER_PROMO]({commit}) {
         try {
             const data = await getProfilePromopageItemsIds();
-            console.log('action FETCH_ITEMS_REFERRER_PROMO', data)
             commit(SET_ITEMS_REFERRER_PROMO, data);
         } catch(e) {
             console.log(e)
@@ -289,7 +288,6 @@ export default {
     async [TOGGLE_ITEM_REFERRER_PROMO]({ dispatch, getters }, productId) {
         try {
             const exists = getters[IS_IN_PROMO](productId);
-            console.log('TOGGLE_ITEM_REFERRER_PROMO exists ', exists)
 
             if (!exists) await addProfilePromopageProductById(productId);
             else await deleteProfilePromopageProductById(productId);
