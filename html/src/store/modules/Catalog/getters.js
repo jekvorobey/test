@@ -91,8 +91,6 @@ export default {
     },
 
     [IS_GLUING_IN_PROMO]: (state) => (listIds) => {
-        console.log('listIds ', listIds)
-        console.log('state[ITEMS_REFERRER_PROMO] ', state[ITEMS_REFERRER_PROMO])
         for (let i = 0; i < listIds.length; i++) {
             if (!state[ITEMS_REFERRER_PROMO].includes(listIds[i])) {
                 return false
