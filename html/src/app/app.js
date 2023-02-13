@@ -52,10 +52,10 @@ export default function createApp(container, initialState = null) {
     if (initialState) store.replaceState(initialState);
 
     /* Подключение Sentry для vue-приложения */
+    const {SENTRY_DSN} = store.state.env;
     Sentry.init({
         Vue,
-        dsn: process.env.NODE_ENV === 'production' ?
-            'https://82da344cf71c4669bf3aa76aca01bd31@o880371.ingest.sentry.io/5849194' : '',
+        dsn: process.env.NODE_ENV === 'production' ? SENTRY_DSN : '',
         integrations: [
             new BrowserTracing(),
         ],
