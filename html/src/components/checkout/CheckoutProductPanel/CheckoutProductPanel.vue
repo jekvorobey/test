@@ -248,9 +248,9 @@
                                             class="checkout-product-panel__item-controls-input"
                                             type="number"
                                             min="0"
+                                            maxlength="10"
                                             placeholder="Сколько списать?"
                                             v-model="bonusAmount"
-                                            v-focus
                                             :max="maxAmountBonus"
                                             :disabled="isBonusPending"
                                             @keydown.enter.prevent="onAddBonus(bonusAmount)"
@@ -331,6 +331,7 @@
                                             class="checkout-product-panel__item-controls-input"
                                             type="number"
                                             min="0"
+                                            maxlength="10"
                                             placeholder="Сколько списать?"
                                             v-model="customCertAmount"
                                             v-focus
@@ -410,6 +411,7 @@
                                         v-model="certificateCode"
                                         class="checkout-product-panel__item-controls-input"
                                         placeholder="Введите номер сертификата"
+                                        maxlength="30"
                                         @keydown.enter.prevent="activateCertificate"
                                         :error="activateError"
                                         :success="activateSuccess"
@@ -741,9 +743,9 @@ export default {
 
     data() {
         return {
-            isBonusEdit: false,
+            isBonusEdit: true,
             isCertificateEdit: false,
-            bonusAmount: null,
+            bonusAmount: 0,
             certificateCode: null,
             recipientIndexToChange: null,
             certPrices: [],
@@ -751,7 +753,7 @@ export default {
             customCertAmount: null,
             activateError: '',
             activateSuccess: '',
-            selectedPayTypeID: null,
+            selectedPayTypeID: 1,
         };
     },
 
@@ -1275,7 +1277,7 @@ export default {
                 this.isBonusEdit = false;
                 this.isCertificateEdit = false;
                 this.customCertAmount = null;
-                this.selectedPayTypeID = (value || 0) === 0 ? null : 1; // bonus pay type - 1
+                // this.selectedPayTypeID = (value || 0) === 0 ? null : 1; // bonus pay type - 1
             } catch (error) {
                 this.isBonusEdit = true;
             }
@@ -1356,7 +1358,7 @@ export default {
                 Sentry.captureException(error);
             }
 
-            this.fetchCards();
+            await this.fetchCards();
         },
 
         // async activate() {
@@ -1413,14 +1415,8 @@ export default {
     async mounted() {
         this.debounce_scrollToError = _debounce(this.scrollToError, SCROLL_DEBOUNCE_TIME);
 
-        this.fetchCards();
-
-        if (this.maxAmountBonus > 0) {
-            await this.onAddBonus(this.maxAmountBonus);
-        } else {
-            this.bonusAmount = 0;
-        }
-
+        await this.fetchCards();
+        await this[ADD_BONUS](0);
         this.customCertAmount = this.maxCertificateDiscount;
     },
 };
