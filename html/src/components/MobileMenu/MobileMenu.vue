@@ -143,7 +143,7 @@
                             v-for="(item, index) in headerMenuItems"
                             :key="item.name"
                         >
-                            <v-link
+                            <!-- <v-link
                                 v-if="index === 0"
                                 class="mobile-menu__menu-link"
                                 :class="{ 'mobile-menu__menu-link--full': index !== 0 }"
@@ -151,9 +151,8 @@
                                 @click="showCategories = true"
                             >
                                 {{ item.name }}
-                            </v-link>
+                            </v-link> -->
                             <v-link
-                                v-else
                                 class="mobile-menu__menu-link"
                                 :to="item.url"
                                 :class="{ 'mobile-menu__menu-link--full': index !== 0 }"
