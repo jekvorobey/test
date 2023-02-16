@@ -375,6 +375,10 @@
 
         &--active {
             opacity: 1 !important;
+
+            &-desktop {
+                    top: 32px !important;
+            }
         }
     }
 }
