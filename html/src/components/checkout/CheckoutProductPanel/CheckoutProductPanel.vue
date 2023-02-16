@@ -248,6 +248,7 @@
                                             class="checkout-product-panel__item-controls-input"
                                             type="number"
                                             min="0"
+                                            maxlength="10"
                                             placeholder="Сколько списать?"
                                             v-model="bonusAmount"
                                             :max="maxAmountBonus"
@@ -330,6 +331,7 @@
                                             class="checkout-product-panel__item-controls-input"
                                             type="number"
                                             min="0"
+                                            maxlength="10"
                                             placeholder="Сколько списать?"
                                             v-model="customCertAmount"
                                             v-focus
@@ -409,6 +411,7 @@
                                         v-model="certificateCode"
                                         class="checkout-product-panel__item-controls-input"
                                         placeholder="Введите номер сертификата"
+                                        maxlength="30"
                                         @keydown.enter.prevent="activateCertificate"
                                         :error="activateError"
                                         :success="activateSuccess"
