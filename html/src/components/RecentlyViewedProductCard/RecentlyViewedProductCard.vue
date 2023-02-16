@@ -63,6 +63,16 @@
             <div class="recently-viewed-product-card__title">
                 {{ name }}
             </div>
+
+            <div class="catalog-product-list-card__tags" v-once>
+                <tag
+                        class="catalog-product-list-card__tags-item"
+                        v-for="badge in badgesUnique(item.badges)"
+                        :key="badge"
+                        :text="badge"
+                />
+            </div>
+
             <favorites-button
                     class="catalog-product-list-card__wishlist-btn"
                     :class="{ 'catalog-product-list-card__wishlist-btn--active': inFavorites }"
@@ -81,6 +91,7 @@ import BuyButton from '@components/BuyButton/BuyButton.vue';
 import FavoritesButton from '@components/FavoritesButton/FavoritesButton.vue';
 import VSpinner from '@controls/VSpinner/VSpinner.vue';
 import Price from '@components/Price/Price.vue';
+import Tag from "@components/Tag/Tag.vue";
 
 import { fileExtension } from '@enums';
 import { generatePictureSourcePath } from '@util/file';
@@ -98,7 +109,8 @@ export default {
         BuyButton,
         FavoritesButton,
         VSpinner,
-        Price
+        Price,
+        Tag
     },
 
     data(){
@@ -314,6 +326,10 @@ export default {
                         : null,
                 isPriceHidden: price.isPriceHidden,
             };
+        },
+
+        badgesUnique(badges) {
+            return badges ? badges.filter((v, i, a) => a.indexOf(v) === i) : [];
         },
 
         onPreview() {
