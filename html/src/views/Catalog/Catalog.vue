@@ -843,6 +843,20 @@
             this.$router.replace({ path, query });
         },
 
+        /*
+        * Обертка для window.onscroll для оптимизации работы
+        * Принимает callback который вызывается когда юзер прекратил scroll
+        * */
+        onWindowScroll(callback) {
+            let isScrolling;
+            window.onscroll = () => {
+                clearTimeout(isScrolling);
+                isScrolling = setTimeout(() => {
+                    callback();
+                }, 500);
+            }
+        },
+
         async onShowMore() {
             this.showMore = true;
             await this.$router.replace({
@@ -857,7 +871,7 @@
              * @listens window.onscroll - the namespace and name of the event
              * Обработчик для последующей подгрузки записей без нажатия на кнопку, а при скролле до блока пагинации
              */
-            window.onscroll = () => {
+            this.onWindowScroll(() => {
                 // Показывать кнопку скролла вверх
                 this.onScrollTopShow = document.documentElement.scrollTop + window.innerHeight >= 1000;
                 // Расстояние блока #showMoreBlockID от верхней границы экрана
@@ -865,11 +879,11 @@
                 // Вычисляемая величина, проверка пересечения нижней видимой границы экрана с верхней границей блока
                 let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight / 2.5 >= showMoreBlock;
                 // При пересечении сбрасываем обработчик и запускаем подгрузку записей
-                if (bottomOfWindow) {
+                if (bottomOfWindow && this.activePage < this.pagesCount) {
                     window.onscroll = null;
                     this.onShowMore()
                 }
-            }
+            });
         },
 
         onPageChanged(page) {
@@ -1098,6 +1112,13 @@
         // Закрыть модальное окно с фильтрами после выбора фильтра
         // this.filterModal = false;
 
+        // Если переход из каталога в категорию или из одной категории в другую то сбрасываем бесконечную пагинацию
+        if( (!from.params.code && to.params.code) || (from.params.code && from.params.code !== to.params.code) ) {
+            this.onWindowScroll(() => {
+                this.onScrollTopShow = document.documentElement.scrollTop + window.innerHeight >= 1000;
+            });
+        }
+
         const {
             params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch: toPathMatch },
             query: {
@@ -1142,10 +1163,6 @@
 
     created() {
         this.productGroupTypes = productGroupTypes;
-
-        window.onscroll = () => {
-            this.onScrollTopShow = document.documentElement.scrollTop + window.innerHeight >= 1000;
-        }
     },
 
     beforeMount() {
@@ -1158,6 +1175,10 @@
     mounted() {
         this.isMounted = true;
         this.runProfessionalDisclaimerModalInterval();
+
+        this.onWindowScroll(() => {
+            this.onScrollTopShow = document.documentElement.scrollTop + window.innerHeight >= 1000;
+        });
     },
 
     beforeDestroy() {
