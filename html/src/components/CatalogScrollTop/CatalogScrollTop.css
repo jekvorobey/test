@@ -1,7 +1,7 @@
 .catalog-scroll-top {
     transition: .5s all;
     position: fixed;
-    right: 35px;
+    right: 33px;
     bottom: 175px;
     z-index: 999999999;
 
