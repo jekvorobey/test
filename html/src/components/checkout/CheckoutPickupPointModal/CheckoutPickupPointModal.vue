@@ -467,7 +467,10 @@ export default {
         ...mapActions(CHECKOUT_MODULE, [SET_PICKUP_POINT, FETCH_CURRENT_PICKUP_POINT]),
 
         async onShowPoint(point) {
-            this.selectedPickupPoint = await this[FETCH_CURRENT_PICKUP_POINT](point.id)
+            const pointFetchedData = await this[FETCH_CURRENT_PICKUP_POINT](point.id);
+            pointFetchedData['startDate'] = point.startDate;
+
+            this.selectedPickupPoint = pointFetchedData;
             this.activeTab = 1;
             this.coords = point.map.coords;
         },
