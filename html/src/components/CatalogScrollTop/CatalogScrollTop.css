@@ -2,7 +2,7 @@
     transition: .5s all;
     position: fixed;
     right: 35px;
-    bottom: 20%;
+    bottom: 175px;
     z-index: 999999999;
 
     display: flex;
