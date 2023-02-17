@@ -246,7 +246,7 @@ import {NAME as GEO_MODULE, SELECTED_CITY} from '@store/modules/Geolocation';
 import { SELECTED_CITY_COORDS } from '@store/modules/Geolocation/getters';
 
 import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
-import { SET_PICKUP_POINT } from '@store/modules/Checkout/actions';
+import {FETCH_CURRENT_PICKUP_POINT, SET_PICKUP_POINT} from '@store/modules/Checkout/actions';
 import { PICKUP_POINTS, PICKUP_POINT_TYPES, METRO_STATIONS, METRO_LINES } from '@store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -464,10 +464,13 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(CHECKOUT_MODULE, [SET_PICKUP_POINT]),
+        ...mapActions(CHECKOUT_MODULE, [SET_PICKUP_POINT, FETCH_CURRENT_PICKUP_POINT]),
 
-        onShowPoint(point) {
-            this.selectedPickupPoint = point;
+        async onShowPoint(point) {
+            const pointFetchedData = await this[FETCH_CURRENT_PICKUP_POINT](point.id);
+            pointFetchedData['startDate'] = point.startDate;
+
+            this.selectedPickupPoint = pointFetchedData;
             this.activeTab = 1;
             this.coords = point.map.coords;
         },
