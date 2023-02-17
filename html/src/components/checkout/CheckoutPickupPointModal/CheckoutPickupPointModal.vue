@@ -260,8 +260,6 @@ import pin from '@images/icons/pin-filled.svg';
 import '@images/sprites/arrow-small.svg';
 import './CheckoutPickupPointModal.css';
 
-import _merge from 'lodash/merge';
-
 const NAME = modalName.checkout.PICKUP_POINT;
 const PER_PAGE = 20;
 
