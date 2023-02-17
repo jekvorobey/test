@@ -865,7 +865,7 @@
                 // Вычисляемая величина, проверка пересечения нижней видимой границы экрана с верхней границей блока
                 let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight / 2.5 >= showMoreBlock;
                 // При пересечении сбрасываем обработчик и запускаем подгрузку записей
-                if (bottomOfWindow) {
+                if (bottomOfWindow && this.activePage < this.pagesCount) {
                     window.onscroll = null;
                     this.onShowMore()
                 }
@@ -1098,6 +1098,13 @@
         // Закрыть модальное окно с фильтрами после выбора фильтра
         // this.filterModal = false;
 
+        // Если переход из каталога в категорию или из одной категории в другую то сбрасываем бесконечную пагинацию
+        if( (!from.params.code && to.params.code) || (from.params.code && from.params.code !== to.params.code) ) {
+            window.onscroll = () => {
+                this.onScrollTopShow = document.documentElement.scrollTop + window.innerHeight >= 1000;
+            }
+        }
+
         const {
             params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch: toPathMatch },
             query: {
@@ -1142,10 +1149,6 @@
 
     created() {
         this.productGroupTypes = productGroupTypes;
-
-        window.onscroll = () => {
-            this.onScrollTopShow = document.documentElement.scrollTop + window.innerHeight >= 1000;
-        }
     },
 
     beforeMount() {
@@ -1158,6 +1161,10 @@
     mounted() {
         this.isMounted = true;
         this.runProfessionalDisclaimerModalInterval();
+
+        window.onscroll = () => {
+            this.onScrollTopShow = document.documentElement.scrollTop + window.innerHeight >= 1000;
+        }
     },
 
     beforeDestroy() {
