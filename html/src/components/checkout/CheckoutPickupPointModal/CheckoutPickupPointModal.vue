@@ -246,7 +246,7 @@ import {NAME as GEO_MODULE, SELECTED_CITY} from '@store/modules/Geolocation';
 import { SELECTED_CITY_COORDS } from '@store/modules/Geolocation/getters';
 
 import { NAME as CHECKOUT_MODULE } from '@store/modules/Checkout';
-import { SET_PICKUP_POINT } from '@store/modules/Checkout/actions';
+import {FETCH_CURRENT_PICKUP_POINT, SET_PICKUP_POINT} from '@store/modules/Checkout/actions';
 import { PICKUP_POINTS, PICKUP_POINT_TYPES, METRO_STATIONS, METRO_LINES } from '@store/modules/Checkout/getters';
 
 import { NAME as MODAL_MODULE, MODALS } from '@store/modules/Modal';
@@ -259,6 +259,8 @@ import _ceil from 'lodash/ceil';
 import pin from '@images/icons/pin-filled.svg';
 import '@images/sprites/arrow-small.svg';
 import './CheckoutPickupPointModal.css';
+
+import _merge from 'lodash/merge';
 
 const NAME = modalName.checkout.PICKUP_POINT;
 const PER_PAGE = 20;
@@ -464,10 +466,10 @@ export default {
 
     methods: {
         ...mapActions(MODAL_MODULE, [CHANGE_MODAL_STATE]),
-        ...mapActions(CHECKOUT_MODULE, [SET_PICKUP_POINT]),
+        ...mapActions(CHECKOUT_MODULE, [SET_PICKUP_POINT, FETCH_CURRENT_PICKUP_POINT]),
 
-        onShowPoint(point) {
-            this.selectedPickupPoint = point;
+        async onShowPoint(point) {
+            this.selectedPickupPoint = await this[FETCH_CURRENT_PICKUP_POINT](point.id)
             this.activeTab = 1;
             this.coords = point.map.coords;
         },
