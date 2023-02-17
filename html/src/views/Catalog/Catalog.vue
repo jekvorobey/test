@@ -853,7 +853,7 @@
                 clearTimeout(isScrolling);
                 isScrolling = setTimeout(() => {
                     callback();
-                }, 500);
+                }, 100);
             }
         },
 
