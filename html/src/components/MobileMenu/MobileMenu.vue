@@ -1,13 +1,16 @@
 <template>
     <general-modal class="mobile-menu" :show-close-btn="false" type="fullscreen" :is-mobile="isTabletLg">
         <template v-slot:header>
-            <button
-                v-if="!showCategories"
-                class="mobile-menu__header-btn mobile-menu__header-btn--close"
-                @click="onSetMenu(false)"
-            >
-                <v-svg name="cross" width="24" height="24" />Меню
-            </button>
+            <template v-if="!showCategories">
+                <button
+                        class="mobile-menu__header-btn mobile-menu__header-btn--close"
+                        @click="onSetMenu(false)"
+                >
+                    <v-svg name="cross" width="24" height="24" />Меню
+                </button>
+                <v-svg v-if="isTablet" name="logo-text" width="200" height="20" />
+            </template>
+
             <template v-else class="container mobile-menu__header">
                 <button class="mobile-menu__header-btn mobile-menu__header-btn--arrow" @click.prevent="onBackClick">
                     <v-svg name="arrow-small" width="24" height="24" />
