@@ -4,6 +4,7 @@ import { storeErrorHandler } from '@util/store';
 import {
     getCheckoutOrder,
     getCheckoutData,
+    getCurrentDataPoint,
     setReceiveMethod,
     setAddress,
     setPickupPoint,
@@ -59,6 +60,7 @@ export const FETCH_PROFESSIONS = 'FETCH_PROFESSIONS';
 export const SET_RECEIVE_METHOD = 'SET_RECEIVE_METHOD';
 export const SET_DELIVERY_TYPE = 'SET_DELIVERY_TYPE';
 export const SET_PICKUP_POINT = 'SET_PICKUP_POINT';
+export const FETCH_CURRENT_PICKUP_POINT = 'FETCH_CURRENT_PICKUP_POINT'
 export const SET_PAYMENT_METHOD = 'SET_PAYMENT_METHOD';
 export const SET_PUBLIC_EVENT_PAYMENT_METHOD = 'SET_PUBLIC_EVENT_PAYMENT_METHOD';
 export const SET_AGREEMENT = 'SET_AGREEMENT';
@@ -168,6 +170,14 @@ export default {
         } catch (error) {
             commit(SET_STATUS, { name: ADDRESS_STATUS, value: requestStatus.ERROR });
             storeErrorHandler(SET_PICKUP_POINT, true)(error);
+        }
+    },
+
+    async [FETCH_CURRENT_PICKUP_POINT]({}, id) {
+        try {
+            return await getCurrentDataPoint(id);
+        } catch (error) {
+            storeErrorHandler(FETCH_CURRENT_PICKUP_POINT, true)(error);
         }
     },
 

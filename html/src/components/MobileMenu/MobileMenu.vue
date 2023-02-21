@@ -1,13 +1,16 @@
 <template>
     <general-modal class="mobile-menu" :show-close-btn="false" type="fullscreen" :is-mobile="isTabletLg">
         <template v-slot:header>
-            <button
-                v-if="!showCategories"
-                class="mobile-menu__header-btn mobile-menu__header-btn--close"
-                @click="onSetMenu(false)"
-            >
-                <v-svg name="cross" width="24" height="24" />Меню
-            </button>
+            <template v-if="!showCategories">
+                <button
+                        class="mobile-menu__header-btn mobile-menu__header-btn--close"
+                        @click="onSetMenu(false)"
+                >
+                    <v-svg name="cross" width="24" height="24" />Меню
+                </button>
+                <v-svg v-if="isTablet" name="logo-text" width="200" height="20" />
+            </template>
+
             <template v-else class="container mobile-menu__header">
                 <button class="mobile-menu__header-btn mobile-menu__header-btn--arrow" @click.prevent="onBackClick">
                     <v-svg name="arrow-small" width="24" height="24" />
@@ -40,6 +43,14 @@
                             @link-click="onHandleClick"
                         />
                     </ul>
+                    <remote-banner
+                            key="hardcoding-remoteBanner"
+                            class="nav-panel__main-banner"
+                            :banner="banner"
+                            :desktop-size="[392, 502]"
+                            :tablet-size="[515, 512]"
+                            :mobile-size="[392, 502]"
+                    />
                 </div>
                 <div class="mobile-menu__panel">
                     <div class="mobile-menu__panel-part">
@@ -135,7 +146,7 @@
                             v-for="(item, index) in headerMenuItems"
                             :key="item.name"
                         >
-                            <v-link
+                            <!-- <v-link
                                 v-if="index === 0"
                                 class="mobile-menu__menu-link"
                                 :class="{ 'mobile-menu__menu-link--full': index !== 0 }"
@@ -143,9 +154,8 @@
                                 @click="showCategories = true"
                             >
                                 {{ item.name }}
-                            </v-link>
+                            </v-link> -->
                             <v-link
-                                v-else
                                 class="mobile-menu__menu-link"
                                 :to="item.url"
                                 :class="{ 'mobile-menu__menu-link--full': index !== 0 }"
@@ -240,7 +250,6 @@
                         </ul>
                     </div>
                 </div>
-
                 <transition-group tag="ul" v-else class="mobile-menu__menu" name="fade-in" appear>
                     <li
                         class="container mobile-menu__menu-item mobile-menu__menu-item--separator"
@@ -275,6 +284,14 @@
                         </v-link>
                     </li>
                     <!-- Выгодно (захардкожено) -->
+                    <remote-banner
+                            key="hardcoding-remoteBanner"
+                            class="nav-panel__main-banner"
+                            :banner="banner"
+                            :desktop-size="[392, 502]"
+                            :tablet-size="[515, 512]"
+                            :mobile-size="[392, 502]"
+                    />
                 </transition-group>
             </transition>
         </template>
@@ -285,7 +302,7 @@
 import VSvg from '@controls/VSvg/VSvg.vue';
 import VLink from '@controls/VLink/VLink.vue';
 import VClamp from 'vue-clamp';
-
+import RemoteBanner from "@components/RemoteBanner/RemoteBanner.vue";
 //import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 import GeneralModal from '@components/GeneralModal/GeneralModal.vue';
 import HeaderUserPanel from '@components/VHeader/HeaderUserPanel/HeaderUserPanel.vue';
@@ -293,7 +310,7 @@ import SearchFilter from '@components/SearchFilter/SearchFilter.vue';
 import GroupList from '@components/GroupList/GroupList.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { CATEGORIES } from '@store';
+import { CATEGORIES, BANNER } from '@store';
 import { HEADER_MENU, HELP_MENU, CATEGORIES_CATALOG } from '@store/getters';
 import { SET_MENU_OPEN } from '@store/actions';
 
@@ -334,7 +351,7 @@ export default {
         VSvg,
         VLink,
         VClamp,
-
+        RemoteBanner,
         GeneralModal,
         //CatalogBannerCard,
         HeaderUserPanel,
@@ -381,7 +398,7 @@ export default {
     },
 
     computed: {
-        ...mapState([CATEGORIES]),
+        ...mapState([CATEGORIES, BANNER]),
         ...mapGetters([HEADER_MENU, HELP_MENU]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
         ...mapGetters(FAVORITES_MODULE, [FAVORITE_ITEMS_COUNT]),

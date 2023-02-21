@@ -139,7 +139,7 @@
 
         &-column {
             &--60 {
-                width: calc(calc(100% / 3 * 2) - var(--gs));
+                width: calc(calc(100% / 3 * 2) - var(--gs)) !important;
 
                 @media (--tablet) {
                     width: 100%;
@@ -147,7 +147,7 @@
             }
 
             &--30 {
-                width: calc(calc(100% / 3) - var(--gs));
+                width: calc(calc(100% / 3) - var(--gs)) !important;
 
                 @media (--tablet) {
                     width: 100%;

@@ -961,6 +961,10 @@ export function setPickupPoint(data) {
     return $http.post('/v1/checkout/pickup-point', data);
 }
 
+export function getCurrentDataPoint(id) {
+    return $http.get(`/v1/checkout/pickup-points/${id}`);
+}
+
 export function setPaymentMethod(data) {
     return $http.post('/v1/checkout/payment-method', data);
 }

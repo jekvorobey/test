@@ -156,7 +156,8 @@
 
             <favorites-button
                 class="catalog-product-list-card__wishlist-btn"
-                :class="{ 'catalog-product-list-card__wishlist-btn--active': inFavorites }"
+                :class="{ 'catalog-product-list-card__wishlist-btn--active': inFavorites,
+                'catalog-product-list-card__wishlist-btn--active-desktop': inFavorites && isOfferVariants && !isTablet }"
                 @click="onToggleFavorite"
                 :is-active="inFavorites"
             />

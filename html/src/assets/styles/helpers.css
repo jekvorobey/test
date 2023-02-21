@@ -99,6 +99,9 @@
     padding: 0 !important;
 }
 
+.mb-20 {
+    margin-bottom: 20px !important;
+}
 .network {
     display: flex;
 }

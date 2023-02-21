@@ -125,6 +125,11 @@
                         />
                     </transition-group>
 
+                    <catalog-scroll-top
+                            :show="onScrollTopShow"
+                            @onScrollTop="onScrollTop"
+                    />
+
                     <catalog-product-list
                         class="catalog-view__main-grid"
                         :key="type"
@@ -134,22 +139,25 @@
                         item-prop
                     />
 
-                    <div class="container containet--tablet catalog-view__main-controls mobile-pagination-padding" v-if="pagesCount > 1">
+                    <div
+                        id="showMoreBlockID"
+                        class="container containet--tablet catalog-view__main-controls mobile-pagination-padding"
+                        v-if="pagesCount > 1"
+                    >
+                        <v-pagination
+                                class="containet--tablet catalog-view__main-controls-pagination mb-20"
+                                :value="activePage"
+                                :page-count="pagesCount"
+                                @input="onPageChanged"
+                        />
                         <show-more-button
                             v-if="activePage < pagesCount"
                             btn-class="btn--outline catalog-view__main-controls-btn"
                             @click="onShowMore"
                             :show-preloader="showMore"
                         >
-                            Показать ещё
+                            Показать все
                         </show-more-button>
-
-                        <v-pagination
-                            class="containet--tablet catalog-view__main-controls-pagination"
-                            :value="activePage"
-                            :page-count="pagesCount"
-                            @input="onPageChanged"
-                        />
                     </div>
 
                     <template v-if="isSearchPage">
@@ -275,91 +283,91 @@
 </template>
 
 <script>
-import VSvg from '@controls/VSvg/VSvg.vue';
-import VButton from '@controls/VButton/VButton.vue';
-import VPagination from '@controls/VPagination/VPagination.vue';
-import VSelect from '@controls/VSelect/VSelect.vue';
-import VSticky from '@controls/VSticky/VSticky.vue';
-import VSidebar from '@controls/VSidebar/VSidebar.vue';
-import Modal from '@controls/modal/modal.vue';
+    import VSvg from '@controls/VSvg/VSvg.vue';
+    import VButton from '@controls/VButton/VButton.vue';
+    import VPagination from '@controls/VPagination/VPagination.vue';
+    import VSelect from '@controls/VSelect/VSelect.vue';
+    import VSticky from '@controls/VSticky/VSticky.vue';
+    import VSidebar from '@controls/VSidebar/VSidebar.vue';
+    import Modal from '@controls/modal/modal.vue';
+    import CatalogScrollTop from "@components/CatalogScrollTop/CatalogScrollTop.vue";
+    import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
+    import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
 
-import Breadcrumbs from '@components/Breadcrumbs/Breadcrumbs.vue';
-import BreadcrumbItem from '@components/Breadcrumbs/BreadcrumbItem/BreadcrumbItem.vue';
+    import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
 
-import CatalogBannerCard from '@components/CatalogBannerCard/CatalogBannerCard.vue';
+    import FilterButton from '@components/FilterButton/FilterButton.vue';
+    import TagItem from '@components/TagItem/TagItem.vue';
+    import CategoryTreeItem from '@components/CategoryTreeItem/CategoryTreeItem.vue';
+    import CatalogFilter from '@components/CatalogFilter/CatalogFilter.vue';
+    import MobileCategoryFilter from '@components/MobileCategoryFilter/MobileCategoryFilter.vue';
+    import CatalogProductList from '@components/CatalogProductList/CatalogProductList.vue';
+    import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
+    import HistoryPanel from '@components/HistoryPanel/HistoryPanel.vue';
 
-import FilterButton from '@components/FilterButton/FilterButton.vue';
-import TagItem from '@components/TagItem/TagItem.vue';
-import CategoryTreeItem from '@components/CategoryTreeItem/CategoryTreeItem.vue';
-import CatalogFilter from '@components/CatalogFilter/CatalogFilter.vue';
-import MobileCategoryFilter from '@components/MobileCategoryFilter/MobileCategoryFilter.vue';
-import CatalogProductList from '@components/CatalogProductList/CatalogProductList.vue';
-import ShowMoreButton from '@components/ShowMoreButton/ShowMoreButton.vue';
-import HistoryPanel from '@components/HistoryPanel/HistoryPanel.vue';
+    import _debounce from 'lodash/debounce';
+    import {mapActions, mapGetters, mapState} from 'vuex';
+    import {$progress, $retailRocket, $store} from '@services';
+    import {ProductsBuilder, seoEvents} from '@services/SeoEventsService';
 
-import _debounce from 'lodash/debounce';
-import { mapState, mapActions, mapGetters } from 'vuex';
-import { $store, $progress, $retailRocket } from '@services';
-import { seoEvents, ProductsBuilder } from '@services/SeoEventsService';
+    import {RECENTLY_VIEWED_PRODUCTS, SCROLL} from '@store';
+    import {FETCH_RECENTLY_VIEWED_PRODUCTS} from '@store/actions';
 
-import { SCROLL, RECENTLY_VIEWED_PRODUCTS } from '@store';
-import { FETCH_RECENTLY_VIEWED_PRODUCTS } from '@store/actions';
+    import {NAME as CART_MODULE} from '@store/modules/Cart';
+    import {ADD_CART_ITEM} from '@store/modules/Cart/actions';
 
-import { NAME as CART_MODULE } from '@store/modules/Cart';
-import { ADD_CART_ITEM } from '@store/modules/Cart/actions';
+    import {NAME as MODAL_MODULE} from '@store/modules/Modal';
+    import {MODAL_SHOW_COUNT} from '@store/modules/Modal/getters';
+    import {CHANGE_MODAL_STATE, SAVE_MODAL_OPENING_HISTORY} from '@store/modules/Modal/actions';
 
-import { NAME as MODAL_MODULE } from '@store/modules/Modal';
-import { MODAL_SHOW_COUNT } from '@store/modules/Modal/getters';
-import { CHANGE_MODAL_STATE, SAVE_MODAL_OPENING_HISTORY } from '@store/modules/Modal/actions';
+    import {
+        BANNER,
+        CATEGORIES,
+        CATEGORY_CODE,
+        ENTITY_CODE,
+        ITEMS,
+        NAME as CATALOG_MODULE,
+        PRODUCT_GROUP,
+        RANGE,
+        RANGE_WITHOUT_UNION,
+        TYPE,
+    } from '@store/modules/Catalog';
+    import {FETCH_CATALOG_DATA, REFRESH_CATALOG_DATA, SET_LOAD_PATH} from '@store/modules/Catalog/actions';
+    import {CAN_BUY, HAS_SESSION, NAME as AUTH_MODULE, USER} from '@store/modules/Auth';
+    import {
+        ACTIVE_CATEGORY,
+        ACTIVE_PAGE,
+        ACTIVE_TAGS,
+        BREADCRUMBS,
+        PAGES_COUNT,
+        ROUTE_SEGMENTS,
+    } from '@store/modules/Catalog/getters';
 
-import {
-    NAME as CATALOG_MODULE,
-    TYPE,
-    ITEMS,
-    BANNER,
-    CATEGORIES,
-    PRODUCT_GROUP,
-    RANGE,
-    RANGE_WITHOUT_UNION,
-    ENTITY_CODE,
-    CATEGORY_CODE,
-} from '@store/modules/Catalog';
-import { SET_LOAD_PATH, FETCH_CATALOG_DATA, REFRESH_CATALOG_DATA } from '@store/modules/Catalog/actions';
-import { NAME as AUTH_MODULE, HAS_SESSION, CAN_BUY, USER } from '@store/modules/Auth';
-import {
-    ACTIVE_TAGS,
-    ACTIVE_CATEGORY,
-    ACTIVE_PAGE,
-    PAGES_COUNT,
-    ROUTE_SEGMENTS,
-    BREADCRUMBS,
-} from '@store/modules/Catalog/getters';
+    import {convertObjectToMetaProperties, pluralize} from '@util';
+    import {
+        computeFilterData,
+        concatCatalogRoutePath,
+        generateCategoryUrl,
+        generateProductGroupUrl,
+        generateProductUrl,
+        generateSearchUrl,
+    } from '@util/catalog';
+    import {generateFileOriginalPath, generatePictureSourcePath, getImageType} from '@util/file';
+    import {createNotFoundRoute} from '@util/router';
+    import {productGroupTypes} from '@enums/product';
+    import {sortFields} from '@enums/catalog';
+    import {bannerType, fileExtension, httpCodes, modalName, sortDirections} from '@enums';
+    import {DEFAULT_PAGE, MIN_SCROLL_VALUE} from '@constants';
+    import metaMixin from '@plugins/meta';
 
-import { convertObjectToMetaProperties, pluralize } from '@util';
-import {
-    concatCatalogRoutePath,
-    generateCategoryUrl,
-    computeFilterData,
-    generateProductUrl,
-    generateSearchUrl,
-    generateProductGroupUrl,
-} from '@util/catalog';
-import { generatePictureSourcePath, generateFileOriginalPath, getImageType } from '@util/file';
-import { createNotFoundRoute } from '@util/router';
-import { productGroupTypes } from '@enums/product';
-import { sortFields } from '@enums/catalog';
-import { sortDirections, fileExtension, httpCodes, bannerType, modalName } from '@enums';
-import { MIN_SCROLL_VALUE, DEFAULT_PAGE } from '@constants';
-import metaMixin from '@plugins/meta';
+    import '@plugins/sticky';
+    import '@images/sprites/cross-small.svg';
+    import '@images/sprites/home.svg';
+    import './Catalog.css';
+    import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
+    import RemoteBannerPlacement from '@components/RemoteBanner/RemoteBannerPlacement.vue';
 
-import '@plugins/sticky';
-import '@images/sprites/cross-small.svg';
-import '@images/sprites/home.svg';
-import './Catalog.css';
-import RetailRocketContainer from '@components/RetailRocketContainer/RetailRocketContainer.vue';
-import RemoteBannerPlacement from '@components/RemoteBanner/RemoteBannerPlacement.vue';
-
-export default {
+    export default {
     name: 'catalog',
     mixins: [metaMixin],
 
@@ -374,6 +382,7 @@ export default {
         VSticky,
         VSidebar,
         Modal,
+        CatalogScrollTop,
 
         Breadcrumbs,
         BreadcrumbItem,
@@ -429,6 +438,7 @@ export default {
         ];
 
         return {
+            onScrollTopShow: false,
             isMounted: false,
             sortValue: null,
             sortOptions: sortOptions,
@@ -777,6 +787,10 @@ export default {
             if (!this.$isServer) window.scrollTo(options);
         },
 
+        onScrollTop() {
+            document.getElementById('app').scrollIntoView({ behavior: 'smooth' });
+        },
+
         generateBreadcrumbUrl(categoryCode) {
             const { type, entityCode } = this;
             return { path: generateCategoryUrl(type, entityCode, categoryCode) };
@@ -829,11 +843,46 @@ export default {
             this.$router.replace({ path, query });
         },
 
-        onShowMore() {
+        /*
+        * Обертка для window.onscroll для оптимизации работы
+        * Принимает callback который вызывается когда юзер прекратил scroll
+        * */
+        onWindowScroll(callback) {
+            let isScrolling;
+            window.onscroll = () => {
+                clearTimeout(isScrolling);
+                isScrolling = setTimeout(() => {
+                    callback();
+                }, 100);
+            }
+        },
+
+        async onShowMore() {
             this.showMore = true;
-            this.$router.replace({
+            await this.$router.replace({
                 path: this.$route.path,
                 query: { ...this.$route.query, page: this.activePage + 1 },
+            });
+
+            /**
+             * Listen to mousescroll event
+             *
+             * @type {HTMLElement} - the target of the event div:#showMoreBlockID
+             * @listens window.onscroll - the namespace and name of the event
+             * Обработчик для последующей подгрузки записей без нажатия на кнопку, а при скролле до блока пагинации
+             */
+            this.onWindowScroll(() => {
+                // Показывать кнопку скролла вверх
+                this.onScrollTopShow = document.documentElement.scrollTop + window.innerHeight >= 1000;
+                // Расстояние блока #showMoreBlockID от верхней границы экрана
+                let showMoreBlock = document.getElementById("showMoreBlockID").offsetTop;
+                // Вычисляемая величина, проверка пересечения нижней видимой границы экрана с верхней границей блока
+                let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight / 2.5 >= showMoreBlock;
+                // При пересечении сбрасываем обработчик и запускаем подгрузку записей
+                if (bottomOfWindow && this.activePage < this.pagesCount) {
+                    window.onscroll = null;
+                    this.onShowMore()
+                }
             });
         },
 
@@ -1063,6 +1112,13 @@ export default {
         // Закрыть модальное окно с фильтрами после выбора фильтра
         // this.filterModal = false;
 
+        // Если переход из каталога в категорию или из одной категории в другую то сбрасываем бесконечную пагинацию
+        if( (!from.params.code && to.params.code) || (from.params.code && from.params.code !== to.params.code) ) {
+            this.onWindowScroll(() => {
+                this.onScrollTopShow = document.documentElement.scrollTop + window.innerHeight >= 1000;
+            });
+        }
+
         const {
             params: { code: toCode, entityCode: toEntityCode, type: toType, pathMatch: toPathMatch },
             query: {
@@ -1113,17 +1169,21 @@ export default {
         const category = this[ACTIVE_CATEGORY] || null;
         if (category) $retailRocket.addCategoryView(category.id);
         this.debounce_fetchCatalog = _debounce(this.fetchCatalog, 500);
-
         this[FETCH_RECENTLY_VIEWED_PRODUCTS]();
     },
 
     mounted() {
         this.isMounted = true;
         this.runProfessionalDisclaimerModalInterval();
+
+        this.onWindowScroll(() => {
+            this.onScrollTopShow = document.documentElement.scrollTop + window.innerHeight >= 1000;
+        });
     },
 
     beforeDestroy() {
         clearInterval(this.professionalDisclaimerInterval);
+        window.onscroll = null;
     },
 };
 </script>

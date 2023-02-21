@@ -232,7 +232,6 @@ export default {
         },
 
         onTogglePromoItem(item) {
-            console.log('onTogglePromoItem ', item)
             const {productId, id, code, variantGroups} = item
 
             if (variantGroups) this.onPromoItemPreview(id, code);
@@ -240,7 +239,6 @@ export default {
         },
 
         onPromoItemPreview(offerId, code) {
-            console.log('onPromoItemPreview')
             this[CHANGE_MODAL_STATE]({
                 name: modalName.general.QUICK_PROMO_VARIANT,
                 open: true,
@@ -259,7 +257,6 @@ export default {
         },
 
         async onAddToCart(item) {
-            console.log('onAddToCart ', item)
             const { referralCode } = this;
             const { code, type, stock, id, variantGroups } = item;
 
@@ -342,7 +339,6 @@ export default {
     async created() {
         try {
             await this[FETCH_ITEMS_REFERRER_PROMO]();
-            console.log('ITEMS_REFERRER_PROMO ', this[ITEMS_REFERRER_PROMO]);
         } catch (e) {
             console.log(e)
         }
