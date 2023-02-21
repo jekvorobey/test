@@ -217,7 +217,7 @@ const main = {
         },
 
         title: {
-            masterClasses: 'Мастер-классы с этим продуктом',
+            masterClasses: 'Рекомендуемые мастер-классы',
             characteristics: 'Характеристики',
             ingredients: 'Состав',
             reviews: 'Отзывы',
