@@ -56,7 +56,7 @@
                     </template>
                     <template v-else>В корзине {{ $tc('cart.items', cartItemsCount) }}</template>
                 </div>
-                <v-link class="btn--outline add-to-cart-modal__panel-link" @click="onClose">Продолжить</v-link>
+                <v-button class="add-to-cart-modal__panel-btn" @click="onClose">Продолжить</v-button>
                 <v-button v-if="!isCart" class="add-to-cart-modal__panel-btn" to="/cart">Перейти в корзину</v-button>
             </div>
         </template>

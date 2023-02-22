@@ -160,36 +160,39 @@
                         </show-more-button>
                     </div>
 
-                    <template v-if="isSearchPage">
+                    <div class="catalog-retail-rocket-block">
+                        <template v-if="isSearchPage">
+                            <retail-rocket-container
+                                    v-if="range > 0"
+                                    data-retailrocket-markup-block="5f21668797a5282edc07d7c8"
+                                    :data-search-phrase="$route.query.search_string"
+                                    :data-auth="hasSession ? 'true' : 'false'"
+                                    :data-user-moderation="canBuy ? 'true' : 'false'"
+                            />
+                            <retail-rocket-container
+                                    v-else
+                                    data-retailrocket-markup-block="5f21669197a5282edc07d7c9"
+                                    :data-search-phrase="$route.query.search_string"
+                                    :data-auth="hasSession ? 'true' : 'false'"
+                                    :data-user-moderation="canBuy ? 'true' : 'false'"
+                            />
+                        </template>
                         <retail-rocket-container
-                            v-if="range > 0"
-                            data-retailrocket-markup-block="5f21668797a5282edc07d7c8"
-                            :data-search-phrase="$route.query.search_string"
-                            :data-auth="hasSession ? 'true' : 'false'"
-                            :data-user-moderation="canBuy ? 'true' : 'false'"
+                                v-else-if="isBrandPage"
+                                data-retailrocket-markup-block="5efdc55a97a52833a0d00baa"
+                                :data-vendor="entityCode"
+                                :data-auth="hasSession ? 'true' : 'false'"
+                                :data-user-moderation="canBuy ? 'true' : 'false'"
                         />
                         <retail-rocket-container
-                            v-else
-                            data-retailrocket-markup-block="5f21669197a5282edc07d7c9"
-                            :data-search-phrase="$route.query.search_string"
-                            :data-auth="hasSession ? 'true' : 'false'"
-                            :data-user-moderation="canBuy ? 'true' : 'false'"
+                                v-else
+                                data-retailrocket-markup-block="5efda10697a52833a0d006df"
+                                :data-category-id="activeCategory && activeCategory.id"
+                                :data-auth="hasSession ? 'true' : 'false'"
+                                :data-user-moderation="canBuy ? 'true' : 'false'"
                         />
-                    </template>
-                    <retail-rocket-container
-                        v-else-if="isBrandPage"
-                        data-retailrocket-markup-block="5efdc55a97a52833a0d00baa"
-                        :data-vendor="entityCode"
-                        :data-auth="hasSession ? 'true' : 'false'"
-                        :data-user-moderation="canBuy ? 'true' : 'false'"
-                    />
-                    <retail-rocket-container
-                        v-else
-                        data-retailrocket-markup-block="5efda10697a52833a0d006df"
-                        :data-category-id="activeCategory && activeCategory.id"
-                        :data-auth="hasSession ? 'true' : 'false'"
-                        :data-user-moderation="canBuy ? 'true' : 'false'"
-                    />
+                    </div>
+
                 </div>
             </div>
         </section>
