@@ -243,6 +243,12 @@
         }
     }
 
+    .catalog-retail-rocket-block {
+        .rr-items {
+            margin: 0 !important;
+        }
+    }
+
     &__modal-category-filter {
         padding: calc(var(--gs) * 1.5) 0;
         border-top: 1px solid var(--cl-divider-grey);
