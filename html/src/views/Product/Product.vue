@@ -362,7 +362,6 @@
                 </div>
             </div>
         </section>
-
         <section class="product-view__section product-view__bundles" v-if="productBundles" ref="bundleSection">
             <div class="container product-view__bundles">
                 <h2 class="product-bundle-panel__title" v-if="productBundles.length === 1">Выгодный комплект</h2>
@@ -1693,6 +1692,10 @@
             seoEvents.detail(products, actionField);
 
             this.checkProductID();
+
+            if (this.productBundles && this.productBundles.length > 0 && this.$route.query.isScroll) {
+                this.onScrollTo(this.$refs[this.$route.query.isScroll])
+            }
         },
 
         updated() {
