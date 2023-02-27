@@ -305,17 +305,6 @@
             </div>
         </section>
 
-        <section class="section product-view__section">
-            <div class="container">
-                <retail-rocket-container
-                        data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
-                        :data-product-id="getProductId"
-                        :data-auth="hasSession ? 'true' : 'false'"
-                        :data-user-moderation="[CAN_USER_BUY] ? 'true' : 'false'"
-                />
-            </div>
-        </section>
-
         <section v-if="product.profitable" class="section product-view__section">
             <div class="container product-view__profitable">
                 <h2 class="product-view__section-hl product-view__profitable-hl">
@@ -374,6 +363,17 @@
                         :price="bundle.price"
                         :old-price="bundle.oldPrice"
                         @add-bundle="onAddCartBundle"
+                />
+            </div>
+        </section>
+
+        <section class="section product-view__section">
+            <div class="container">
+                <retail-rocket-container
+                        data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
+                        :data-product-id="getProductId"
+                        :data-auth="hasSession ? 'true' : 'false'"
+                        :data-user-moderation="[CAN_USER_BUY] ? 'true' : 'false'"
                 />
             </div>
         </section>
@@ -1694,7 +1694,9 @@
             this.checkProductID();
 
             if (this.productBundles && this.productBundles.length > 0 && this.$route.query.isScroll) {
-                this.onScrollTo(this.$refs[this.$route.query.isScroll])
+                setTimeout( () => {
+                    this.onScrollTo(this.$refs[this.$route.query.isScroll])
+                }, 200)
             }
         },
 
