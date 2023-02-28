@@ -365,6 +365,7 @@
                         @add-bundle="onAddCartBundle"
                 />
             </div>
+            <div ref="bundleSectionMobile"></div>
         </section>
 
         <section class="section product-view__section">
@@ -1693,9 +1694,12 @@
 
             this.checkProductID();
 
+            // если в url есть query parameter isScroll=name_block
             if (this.productBundles && this.productBundles.length > 0 && this.$route.query.isScroll) {
                 setTimeout( () => {
-                    this.onScrollTo(this.$refs[this.$route.query.isScroll])
+                    const { isTablet } = this;
+                    if (isTablet) this.onScrollTo(this.$refs.bundleSectionMobile, -400)
+                    else this.onScrollTo(this.$refs[this.$route.query.isScroll])
                 }, 200)
             }
         },
