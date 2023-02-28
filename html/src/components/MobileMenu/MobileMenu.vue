@@ -418,16 +418,10 @@ export default {
 
         currentCategories() {
             const categories = this.selectedCategory ? this.selectedCategory.items : this.categories;
-            console.log('currentCategories ', categories.map((c) => ({ ...c, url: generateCategoryUrl(productGroupTypes.CATALOG, null, c.code) })))
             return categories.map((c) => ({ ...c, url: generateCategoryUrl(productGroupTypes.CATALOG, null, c.code) }));
         },
 
         selectedCategory() {
-            console.log('selectedCategory ',
-                this.selectedCategories.length > 0
-                    ? this.selectedCategories[this.selectedCategories.length - 1]
-                    : null
-            )
             return this.selectedCategories.length > 0
                 ? this.selectedCategories[this.selectedCategories.length - 1]
                 : null;
@@ -455,8 +449,8 @@ export default {
 
     watch: {
         selectedCategories() {
+            // На проде не перерисовывается блок меню при смене категории
             this.categoryRandomKey = Math.floor(Math.random() * (100000 - 1 + 1) + 1)
-            console.log('watch categoryRandomKey ', this.categoryRandomKey)
             this.$forceUpdate();
         }
     },
@@ -471,7 +465,6 @@ export default {
 
         onCategoryClick(item) {
             this.selectedCategories.push(item);
-            console.log('onCategoryClick ', this.selectedCategories)
         },
 
         onOpenCitySelection() {
@@ -506,14 +499,5 @@ export default {
             }
         },
     },
-
-    mounted() {
-        try {
-            console.log('this.categories ', this.categories)
-            console.log('this[CATEGORIES] ', this[CATEGORIES])
-        } catch(e) {
-            console.log(e)
-        }
-    }
 };
 </script>
