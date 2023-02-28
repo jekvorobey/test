@@ -80,13 +80,49 @@ export function generateThankPageUrl(orderId) {
     return `${$context.baseURL}/thank-you/${orderId}`;
 }
 
-export function loadCreditWidget() {
+export function loadCreditLineWidget() {
     return new Promise((resolve, reject) => {
         const scriptElement = document.createElement('script');
 
         scriptElement.setAttribute('src', 'https://online.pp.credit/assets_widget/l-kredit.js');
         scriptElement.onload = () => {
             if (typeof window.CLObject !== 'undefined') {
+                return resolve();
+            } else {
+                return reject();
+            }
+        };
+
+        document.querySelector('body').appendChild(scriptElement);
+    });
+}
+
+export function loadPosCreditWidget() {
+    return new Promise((resolve, reject) => {
+
+        //Id заказа. Заполняется при формировании заявки в PosCredit
+        window.poscreditOrderId = null;
+
+        window.poscreditCheckStatus = function (result) {
+            //Один из вариантов возможного использования функции
+            if(result === 1) console.log('Клиент ушел не оформив заявку до конца');
+            if(result === 2) console.log('Клиенту отказали в кредите предложенные банки');
+            if(result === 3) console.log('Клиент сам отказался от кредита после получения решения');
+            if(result === 4) console.log('Заявка ушла в обработку кредитным инспекторам или перешла на ручной ввод');
+            if(result === 5) console.log('Получено одобрение по заявке, но клиент не подтвердил выбор банка');
+            if(result === 6) console.log('Клиент завершил оформление заявки и подтвердил выбор банка');
+        };
+
+        window.poscreditSaveProfile = function (poscreditId) {
+            //Полученный poscreditId и poscreditOrderId заявки нужно отправить на backEnd
+            console.log("Номеру заказа:" + poscreditOrderId +" присовена заявка: " + poscreditId);
+        };
+
+        const scriptElement = document.createElement('script');
+
+        scriptElement.setAttribute('src', 'https://api.b2pos.ru/shop/v2/connect.js');
+        scriptElement.onload = () => {
+            if (typeof window.poscreditServices === "function") {
                 return resolve();
             } else {
                 return reject();
