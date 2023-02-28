@@ -1154,9 +1154,9 @@ export function getCustomPageData(path) {
 // poscredit
 
 export function setPoscreditSaveProfile(payload) {
-    return $http.post('/v1/checkout/receive-method', payload);
+    return $http.post('/v1/poscredit/save-profile', payload);
 }
 
 export function setPoscreditCheckStatus(payload) {
-    return $http.post('/v1/checkout/receive-method', payload);
+    return $http.post('/v1/poscredit/check-status', payload);
 }
