@@ -159,7 +159,7 @@
                                 class="mobile-menu__menu-link"
                                 :to="item.url"
                                 :class="{ 'mobile-menu__menu-link--full': index !== 0 }"
-                                @click="onSetMenu(false)"
+                                @click.prevent="showCategories = true"
                             >
                                 {{ item.name }}
                             </v-link>
@@ -421,6 +421,11 @@ export default {
         },
 
         selectedCategory() {
+            console.log('selectedCategory ',
+                this.selectedCategories.length > 0
+                    ? this.selectedCategories[this.selectedCategories.length - 1]
+                    : null
+            )
             return this.selectedCategories.length > 0
                 ? this.selectedCategories[this.selectedCategories.length - 1]
                 : null;
@@ -490,5 +495,14 @@ export default {
             }
         },
     },
+
+    mounted() {
+        try {
+            console.log('this.categories ', this.categories)
+            console.log('this[CATEGORIES] ', this[CATEGORIES])
+        } catch(e) {
+            console.log(e)
+        }
+    }
 };
 </script>
