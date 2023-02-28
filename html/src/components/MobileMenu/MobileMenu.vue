@@ -159,7 +159,7 @@
                                 class="mobile-menu__menu-link"
                                 :to="item.url"
                                 :class="{ 'mobile-menu__menu-link--full': index !== 0 }"
-                                @click="onSetMenu(false)"
+                                @click.prevent="showCategories = true"
                             >
                                 {{ item.name }}
                             </v-link>
@@ -250,11 +250,11 @@
                         </ul>
                     </div>
                 </div>
-                <transition-group tag="ul" v-else class="mobile-menu__menu" name="fade-in" appear>
+                <transition-group tag="ul" v-else class="mobile-menu__menu" name="fade-in" appear :key="categoryRandomKey">
                     <li
                         class="container mobile-menu__menu-item mobile-menu__menu-item--separator"
                         v-for="category in currentCategories"
-                        :key="category.id"
+                        :key="category.id + category.code + categoryRandomKey"
                     >
                         <v-link
                             class="mobile-menu__menu-link"
@@ -361,6 +361,7 @@ export default {
 
     data() {
         return {
+            categoryRandomKey: 0,
             showCategories: false,
             selectedCategories: [],
 
@@ -444,6 +445,14 @@ export default {
         isTablet() {
             return this.$mq.tablet;
         },
+    },
+
+    watch: {
+        selectedCategories() {
+            // На проде не перерисовывается блок меню при смене категории
+            this.categoryRandomKey = Math.floor(Math.random() * (100000 - 1 + 1) + 1)
+            this.$forceUpdate();
+        }
     },
 
     methods: {
