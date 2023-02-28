@@ -159,7 +159,7 @@
                                 class="mobile-menu__menu-link"
                                 :to="item.url"
                                 :class="{ 'mobile-menu__menu-link--full': index !== 0 }"
-                                @click="showCategories = true"
+                                @click.prevent="showCategories = true"
                             >
                                 {{ item.name }}
                             </v-link>
