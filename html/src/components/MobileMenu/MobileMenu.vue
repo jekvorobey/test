@@ -254,7 +254,7 @@
                     <li
                         class="container mobile-menu__menu-item mobile-menu__menu-item--separator"
                         v-for="category in currentCategories"
-                        :key="category.id"
+                        :key="category.id + category.code"
                     >
                         <v-link
                             class="mobile-menu__menu-link"
@@ -417,6 +417,7 @@ export default {
 
         currentCategories() {
             const categories = this.selectedCategory ? this.selectedCategory.items : this.categories;
+            console.log('currentCategories ', categories.map((c) => ({ ...c, url: generateCategoryUrl(productGroupTypes.CATALOG, null, c.code) })))
             return categories.map((c) => ({ ...c, url: generateCategoryUrl(productGroupTypes.CATALOG, null, c.code) }));
         },
 
@@ -461,6 +462,7 @@ export default {
 
         onCategoryClick(item) {
             this.selectedCategories.push(item);
+            console.log('onCategoryClick ', this.selectedCategories)
         },
 
         onOpenCitySelection() {
