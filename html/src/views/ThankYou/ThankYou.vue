@@ -7,7 +7,11 @@
                 {{ title }}
             </h1>
 
-            <h2 v-if="canCreditPayment" class="thank-you-view__redirect">
+            <h2 v-if="canCreditLinePayment" class="thank-you-view__redirect">
+                Сейчас вы будете перенаправлены на страницу оформления рассрочки
+            </h2>
+
+            <h2 v-if="canPosCreditPayment" class="thank-you-view__redirect">
                 Сейчас вы будете перенаправлены на страницу оформления рассрочки
             </h2>
         </div>
@@ -88,13 +92,23 @@
                                 </v-button>
 
                                 <v-button
-                                    v-if="canCreditPayment && creditWidgetIsInitialized"
-                                    ref="buyCreditButton"
+                                    v-if="canCreditLinePayment && creditLineWidgetIsInitialized"
+                                    ref="buyCreditLineButton"
                                     type="button"
                                     class="thank-you-view__panel-btn"
-                                    id="buy-credit"
+                                    id="buy-creditline"
                                 >
                                     Купить в кредит
+                                </v-button>
+
+                                <v-button
+                                    v-if="canPosCreditPayment && posCreditWidgetIsInitialized"
+                                    ref="buyPosCreditButton"
+                                    type="button"
+                                    class="thank-you-view__panel-btn"
+                                    id="buy-poscredit"
+                                >
+                                    Купить в кредит (Pos Credit)
                                 </v-button>
 
                                 <v-link
@@ -242,7 +256,7 @@ import { generatePictureSourcePath, generateFileOriginalPath } from '@util/file'
 import { generateMasterclassUrl, generateProductUrl } from '@util/catalog';
 import metaMixin from '@plugins/meta';
 import './ThankYou.css';
-import { loadCreditWidget } from '@util/order';
+import { loadCreditLineWidget, loadPosCreditWidget } from '@util/order';
 
 const ORDERS_MODULE_PATH = `${PROFILE_MODULE}/${ORDERS_MODULE}`;
 
@@ -275,7 +289,8 @@ export default {
 
     data() {
         return {
-            creditWidgetIsInitialized: false,
+            creditLineWidgetIsInitialized: false,
+            posCreditWidgetIsInitialized: false,
             paymentTypes: paymentTypes,
         };
     },
@@ -297,12 +312,24 @@ export default {
             return payment_status === orderPaymentStatus.NOT_PAID && payment_url;
         },
 
-        canCreditPayment: function () {
+        canCreditLinePayment: function () {
             const {
-                order: { orderCreditInfo },
+                order: { orderCreditLineInfo },
             } = this;
 
-            if (typeof orderCreditInfo !== 'undefined' && orderCreditInfo && Array.isArray(orderCreditInfo.goods)) {
+            if (typeof orderCreditLineInfo !== 'undefined' && orderCreditLineInfo && Array.isArray(orderCreditLineInfo.goods)) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+
+        canPosCreditPayment: function () {
+            const {
+                order: { orderPosCreditInfo },
+            } = this;
+
+            if (typeof orderPosCreditInfo !== 'undefined' && orderPosCreditInfo && Array.isArray(orderPosCreditInfo.products)) {
                 return true;
             } else {
                 return false;
@@ -524,20 +551,44 @@ export default {
             return 'доставок';
         },
 
-        async initializeCreditPayment() {
+        async initializeCreditLinePayment() {
             if (typeof window.CLObject === 'undefined') {
-                await loadCreditWidget();
+                await loadCreditLineWidget();
             }
 
-            this.creditWidgetIsInitialized = true;
+            this.creditLineWidgetIsInitialized = true;
 
             this.$nextTick(() => {
                 window.CLObject.create({
-                    ...this.order.orderCreditInfo,
-                    elm: 'buy-credit',
+                    ...this.order.orderCreditLineInfo,
+                    elm: 'buy-creditline',
                 });
 
-                this.$refs.buyCreditButton.click();
+                this.$refs.buyCreditLineButton.click();
+            });
+        },
+
+        async initializePosCreditPayment() {
+            if (typeof window.poscreditServices !== "function") {
+                await loadPosCreditWidget();
+            }
+
+            this.posCreditWidgetIsInitialized = true;
+
+            this.$nextTick(() => {
+                let orderPosCreditInfo = JSON.parse(JSON.stringify(this.order.orderPosCreditInfo));
+                window.poscreditOrderId = orderPosCreditInfo.orderId;
+                let accessId = orderPosCreditInfo.accessId;
+                delete orderPosCreditInfo.orderId;
+                delete orderPosCreditInfo.accessId;
+
+                window.poscreditServices('creditProcess', accessId, orderPosCreditInfo, function(result){
+                    if (result.success === false) {
+                        console.log('Произошла ошибка при попытке оформить кредит. Попробуйте позднее...');
+                    }
+                });
+
+                this.$refs.buyPosCreditButton.click();
             });
         },
 
@@ -612,8 +663,12 @@ export default {
             $store.dispatch(`${THANKYOU_MODULE}/${SET_COMPLETED_ORDERS}`, this.id);
         }
 
-        if (this.canCreditPayment) {
-            this.initializeCreditPayment();
+        if (this.canCreditLinePayment) {
+            this.initializeCreditLinePayment();
+        }
+
+        if (this.canPosCreditPayment) {
+            this.initializePosCreditPayment();
         }
     },
 };

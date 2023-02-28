@@ -108,9 +108,19 @@
                     </template>
 
                     <v-button
-                        v-if="canCreditPayment"
-                        ref="buyCreditButton"
-                        id="buy-credit"
+                        v-if="canCreditLinePayment"
+                        ref="buyCreditLineButton"
+                        id="buy-creditline"
+                        class="order-details-view__details-controls-btn"
+                        :disabled="isDisabled"
+                    >
+                        Оплатить в кредит
+                    </v-button>
+
+                    <v-button
+                        v-if="canPosCreditPayment"
+                        ref="buyPosCreditButton"
+                        id="buy-poscredit"
                         class="order-details-view__details-controls-btn"
                         :disabled="isDisabled"
                     >
@@ -293,7 +303,8 @@ import {
     getOrderStatusColorClass,
     getDeliveryStatusColorClass,
     generateThankPageUrl,
-    loadCreditWidget,
+    loadCreditLineWidget,
+    loadPosCreditWidget,
 } from '@util/order';
 import { orderStatus as orderStatusNames } from '@enums/order';
 import metaMixin from '@plugins/meta';
@@ -339,7 +350,8 @@ export default {
     data() {
         return {
             isDisabled: false,
-            creditWidgetIsInitialized: false,
+            creditLineWidgetIsInitialized: false,
+            posCreditWidgetIsInitialized: false,
             paymentTypes: paymentTypes,
         };
     },
@@ -421,7 +433,7 @@ export default {
             return payment_status === orderPaymentStatus.NOT_PAID && payments.length !== 0;
         },
 
-        canCreditPayment: function () {
+        canCreditLinePayment: function () {
             /** @see https://bitrix24.ibt.ru/extranet/workgroups/group/21/tasks/task/view/6740/ */
             return false;
             /*
@@ -440,6 +452,11 @@ export default {
                 return false;
             }
             */
+        },
+
+
+        canPosCreditPayment: function () {
+            return false;
         },
 
         orderStatusClass() {
@@ -632,18 +649,30 @@ export default {
             return { ...p, note, url: generateProductUrl(category_code, code) };
         },
 
-        async initializeCreditPayment() {
+        async initializeCreditLinePayment() {
             if (typeof window.CLObject === 'undefined') {
-                await loadCreditWidget();
+                await loadCreditLineWidget();
             }
 
-            this.creditWidgetIsInitialized = true;
+            this.creditLineWidgetIsInitialized = true;
 
             this.$nextTick(() => {
                 window.CLObject.create({
-                    ...this.order.order_credit_info,
-                    elm: 'buy-credit',
+                    ...this.order.orderCreditLineInfo,
+                    elm: 'buy-creditline',
                 });
+            });
+        },
+
+        async initializePosCreditPayment() {
+            if (typeof window.poscreditServices !== "function") {
+                await loadPosCreditWidget();
+            }
+
+            this.posCreditWidgetIsInitialized = true;
+
+            this.$nextTick(() => {
+                /*ToDo PosCredit create*/
             });
         },
 
@@ -701,8 +730,11 @@ export default {
     },
 
     mounted() {
-        if (this.canCreditPayment) {
-            this.initializeCreditPayment();
+        if (this.canCreditLinePayment) {
+            this.initializeCreditLinePayment();
+        }
+        if (this.canPosCreditPayment) {
+            this.initializePosCreditPayment();
         }
     },
 };
