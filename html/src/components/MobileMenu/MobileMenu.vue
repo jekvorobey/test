@@ -250,11 +250,11 @@
                         </ul>
                     </div>
                 </div>
-                <transition-group tag="ul" v-else class="mobile-menu__menu" name="fade-in" appear>
+                <transition-group tag="ul" v-else class="mobile-menu__menu" name="fade-in" appear :key="categoryRandomKey">
                     <li
                         class="container mobile-menu__menu-item mobile-menu__menu-item--separator"
                         v-for="category in currentCategories"
-                        :key="category.id + category.code"
+                        :key="category.id + category.code + categoryRandomKey"
                     >
                         <v-link
                             class="mobile-menu__menu-link"
@@ -361,6 +361,7 @@ export default {
 
     data() {
         return {
+            categoryRandomKey: 0,
             showCategories: false,
             selectedCategories: [],
 
@@ -450,6 +451,14 @@ export default {
         isTablet() {
             return this.$mq.tablet;
         },
+    },
+
+    watch: {
+        selectedCategories() {
+            this.categoryRandomKey = Math.floor(Math.random() * (100000 - 1 + 1) + 1)
+            console.log('watch categoryRandomKey ', this.categoryRandomKey)
+            this.$forceUpdate();
+        }
     },
 
     methods: {
