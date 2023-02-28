@@ -421,6 +421,11 @@ export default {
         },
 
         selectedCategory() {
+            console.log('selectedCategory ',
+                this.selectedCategories.length > 0
+                    ? this.selectedCategories[this.selectedCategories.length - 1]
+                    : null
+            )
             return this.selectedCategories.length > 0
                 ? this.selectedCategories[this.selectedCategories.length - 1]
                 : null;
@@ -490,5 +495,14 @@ export default {
             }
         },
     },
+
+    mounted() {
+        try {
+            console.log('this.categories ', this.categories)
+            console.log('this[CATEGORIES] ', this[CATEGORIES])
+        } catch(e) {
+            console.log(e)
+        }
+    }
 };
 </script>
