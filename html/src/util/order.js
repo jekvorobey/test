@@ -2,6 +2,9 @@ import { $context, $store } from '@services';
 import { orderStatus, deliveryStatus, filterField } from '@enums/order';
 import { dateToString } from '@util/index';
 import { CAN_BUY, HAS_SESSION, NAME as AUTH_MODULE, STATUS, USER } from '@store/modules/Auth';
+import {NAME as CHECKOUT_MODULE} from '@store/modules/Checkout';
+import { SET_POSCREDIT_SAVE_PROFILE, SET_POSCREDIT_CHECK_STATUS } from '@store/modules/Checkout/actions';
+
 import { userStatus } from '@enums/profile';
 import { NAME as MODAL_MODULE } from '@store/modules/Modal';
 import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
@@ -111,11 +114,17 @@ export function loadPosCreditWidget() {
             if(result === 4) console.log('Заявка ушла в обработку кредитным инспекторам или перешла на ручной ввод');
             if(result === 5) console.log('Получено одобрение по заявке, но клиент не подтвердил выбор банка');
             if(result === 6) console.log('Клиент завершил оформление заявки и подтвердил выбор банка');
+
+            // Передаем данные на бэкенд
+            $store.dispatch(`${CHECKOUT_MODULE}/${SET_POSCREDIT_CHECK_STATUS}`, {poscreditOrderId, result})
         };
 
         window.poscreditSaveProfile = function (poscreditId) {
             //Полученный poscreditId и poscreditOrderId заявки нужно отправить на backEnd
             console.log("Номеру заказа:" + poscreditOrderId +" присовена заявка: " + poscreditId);
+
+            // Передаем данные на бэкенд
+            $store.dispatch(`${CHECKOUT_MODULE}/${SET_POSCREDIT_SAVE_PROFILE}`, {poscreditOrderId, poscreditId})
         };
 
         const scriptElement = document.createElement('script');

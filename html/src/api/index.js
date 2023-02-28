@@ -1150,3 +1150,13 @@ export function getCustomPageData(path) {
         }, 300);
     });
 }
+
+// poscredit
+
+export function setPoscreditSaveProfile(payload) {
+    return $http.post('/v1/checkout/receive-method', payload);
+}
+
+export function setPoscreditCheckStatus(payload) {
+    return $http.post('/v1/checkout/receive-method', payload);
+}
