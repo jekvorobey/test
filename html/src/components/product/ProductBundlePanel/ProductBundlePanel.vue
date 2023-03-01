@@ -64,7 +64,7 @@
 
                 <div class="product-bundle-panel__total-controls">
                     <buy-button class="product-bundle-panel__btn" @click.prevent="onAddBundle">
-                        Добавить в корзину
+                        Купить комплект
                     </buy-button>
                 </div>
             </div>
