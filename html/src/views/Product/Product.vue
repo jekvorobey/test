@@ -368,17 +368,6 @@
             <div ref="bundleSectionMobile"></div>
         </section>
 
-        <section class="section product-view__section">
-            <div class="container">
-                <retail-rocket-container
-                        data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
-                        :data-product-id="getProductId"
-                        :data-auth="hasSession ? 'true' : 'false'"
-                        :data-user-moderation="[CAN_USER_BUY] ? 'true' : 'false'"
-                />
-            </div>
-        </section>
-
         <section
                 class="section product-view__section product-view__info"
                 v-if="
@@ -656,6 +645,17 @@
             </div>
         </section>
 
+        <section class="section product-view__section">
+            <div class="container">
+                <retail-rocket-container
+                        data-retailrocket-markup-block="5efda11097a5253518ebbf1d"
+                        :data-product-id="getProductId"
+                        :data-auth="hasSession ? 'true' : 'false'"
+                        :data-user-moderation="[CAN_USER_BUY] ? 'true' : 'false'"
+                />
+            </div>
+        </section>
+        
         <section
                 class="section product-view__section product-view__history"
                 v-if="recentlyViewed && recentlyViewed.length > 0"
