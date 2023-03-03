@@ -1,9 +1,13 @@
 <template>
     <transition name="slip">
-        <div class="cookie-alert" :class="{'cookie-alert-show': show, 'cookie-alert-product': isProductPage && !isOnBottom && show}">
-            <div class="cookie-alert__wrapper">
+        <div class="cookie-alert"
+             :class="{'container': !isTablet, 'cookie-alert-show': show, 'cookie-alert-product': isProductPage && !isOnBottom && show}"
+        >
+            <div class="cookie-alert__wrapper"
+                 :class="{'margin-aside': !isTablet}"
+            >
                 <div class="cookie-alert__text">
-                    {{ textToShow }}
+                    <span>{{ textToShow }}</span>
                     <router-link to="/agreements/privacy-policy">Политикой конфиденциальности</router-link>
                 </div>
                 <button @click="onClose" class="cookie-alert_btn">
