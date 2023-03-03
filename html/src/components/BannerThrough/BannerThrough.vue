@@ -5,6 +5,7 @@
         <v-slider :options="sliderOptions"
                   :controls="false"
                   name="through-slider-banner"
+                  class="banner-through__swiper"
         >
             <v-link
                     v-for="item in items"
@@ -60,11 +61,8 @@
     import {generatePictureSourcePath} from "@util/file";
 
     const sliderOptions = {
-        slidesPerView: 1,
-        grabCursor: true,
-        loop: true,
         autoplay: {
-            delay: 10000,
+            delay: 2000,
         },
     }
 
@@ -255,6 +253,9 @@
             },
         },
         computed: {
+            sliderOptions() {
+                return sliderOptions;
+            },
             items() {
                 return this.banners && this.banners.map(b => ({
                     ...b,
@@ -263,6 +264,13 @@
                     desktopImage: this.desktopImage(b),
                     defaultImage: this.defaultImage(b),
                 }));
+            }
+        },
+        watch: {
+            banners(){
+                if(this.banners && this.banners.length > 0) {
+                    this.$emit('isBannerThrough')
+                }
             }
         },
         async beforeCreate() {

@@ -1,9 +1,15 @@
 .banner-through {
-    transition: 1s all;
+    transition: .5s all;
     max-height: 0;
 
     &__active {
         max-height: 3000px;
      }
+
+     &__swiper {
+        .swiper-wrapper {
+            height: 48px;
+        }
+      }
 }
 
