@@ -180,7 +180,7 @@
                         <retail-rocket-container
                                 v-else-if="isBrandPage"
                                 data-retailrocket-markup-block="5efdc55a97a52833a0d00baa"
-                                :data-vendor="entityCode"
+                                :data-vendor="catalogTitle"
                                 :data-auth="hasSession ? 'true' : 'false'"
                                 :data-user-moderation="canBuy ? 'true' : 'false'"
                         />
