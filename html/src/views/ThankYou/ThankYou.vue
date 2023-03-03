@@ -577,12 +577,13 @@ export default {
 
             this.$nextTick(() => {
                 let orderPosCreditInfo = JSON.parse(JSON.stringify(this.order.orderPosCreditInfo));
-                window.poscreditOrderId = orderPosCreditInfo.orderId;
-                let accessId = orderPosCreditInfo.accessId;
-                delete orderPosCreditInfo.orderId;
-                delete orderPosCreditInfo.accessId;
+                window.poscreditOrderId = orderPosCreditInfo.orderID;
+                let accessID = orderPosCreditInfo.accessID;
+                
+                delete orderPosCreditInfo.orderID;
+                delete orderPosCreditInfo.accessID;
 
-                window.poscreditServices('creditProcess', accessId, orderPosCreditInfo, function(result){
+                window.poscreditServices('creditProcess', accessID, orderPosCreditInfo, function(result) {
                     if (result.success === false) {
                         console.log('Произошла ошибка при попытке оформить кредит. Попробуйте позднее...');
                     }
