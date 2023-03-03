@@ -20,6 +20,8 @@ import {
     changeCheckoutMasterclassTickets,
     getProfessions,
     getCheckoutReceiveMethods,
+    setPoscreditSaveProfile,
+    setPoscreditCheckStatus
 } from '@api';
 
 import {
@@ -98,6 +100,9 @@ export const ADD_TICKET = 'ADD_TICKET';
 export const CHANGE_TICKET = 'CHANGE_TICKET';
 
 export const FETCH_CHECKOUT_ORDER = 'FETCH_CHECKOUT_ORDER';
+
+export const SET_POSCREDIT_SAVE_PROFILE = 'SET_POSCREDIT_SAVE_PROFILE';
+export const SET_POSCREDIT_CHECK_STATUS = 'SET_POSCREDIT_CHECK_STATUS';
 
 export default {
     async [FETCH_PROFESSIONS]({ commit }) {
@@ -384,7 +389,22 @@ export default {
             storeErrorHandler(FETCH_CHECKOUT_ORDER, true)(error);
         }
     },
-
+    async [SET_POSCREDIT_SAVE_PROFILE]({}, payload) {
+        console.log('SET_POSCREDIT_SAVE_PROFILE payload ', payload)
+        try {
+            await setPoscreditSaveProfile(payload);
+        } catch (error) {
+            storeErrorHandler(SET_POSCREDIT_SAVE_PROFILE, true)(error);
+        }
+    },
+    async [SET_POSCREDIT_CHECK_STATUS]({}, payload) {
+        console.log('SET_POSCREDIT_CHECK_STATUS payload ', payload)
+        try {
+            await setPoscreditCheckStatus(payload);
+        } catch (error) {
+            storeErrorHandler(SET_POSCREDIT_CHECK_STATUS, true)(error);
+        }
+    },
     async [FETCH_CHECKOUT_DATA]({ commit }, type) {
         try {
             const data = await getCheckoutData(type);
@@ -420,4 +440,6 @@ export default {
     [SET_SELECTED_PICKUP_POINT]({ commit }, payload) {
         commit(M_SET_SELECTED_PICKUP_POINT, payload);
     },
+
+
 };
