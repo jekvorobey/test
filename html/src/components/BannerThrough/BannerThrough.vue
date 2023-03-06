@@ -1,5 +1,5 @@
 <template>
-    <div :class="{'banner-through__active': banners}"
+    <div :class="{'banner-through__active': isBannerThrough}"
          class="banner-through"
     >
         <v-slider :options="sliderOptions"
@@ -52,13 +52,15 @@
 </template>
 
 <script>
-    import {getBannersByCode} from "@api";
-    import {bannerType, fileExtension} from "@enums";
+    import {fileExtension} from "@enums";
     import './BannerThrough.css'
 
     import VSlider from "@controls/VSlider/VSlider.vue";
     import VLink from "@controls/VLink/VLink.vue";
     import {generatePictureSourcePath} from "@util/file";
+    import {FETCH_BANNER_THROUGH} from "@store/actions";
+    import {mapActions, mapGetters} from 'vuex';
+    import {BANNER_THROUGH, IS_BANNER_THROUGH} from "@store/getters";
 
     const sliderOptions = {
         autoplay: {
@@ -68,16 +70,19 @@
 
     export default {
         name: "BannerThrough",
+
         components: {VSlider, VLink},
+
         data() {
             return {
-                banners: null,
                 desktopSize: [1224, 420],
                 tabletSize: [1024, 533],
                 mobileSize: [768, 653],
             }
         },
+
         methods: {
+            ...mapActions([FETCH_BANNER_THROUGH]),
             mobileImage(banner) {
                 const image = banner.mobileImage || banner.tabletImage || banner.desktopImage;
                 const imageRetina = banner.mobileImageRetina || banner.tabletImageRetina;
@@ -252,12 +257,14 @@
                 return result;
             },
         },
+
         computed: {
+            ...mapGetters([BANNER_THROUGH, IS_BANNER_THROUGH]),
             sliderOptions() {
                 return sliderOptions;
             },
             items() {
-                return this.banners && this.banners.map(b => ({
+                return this.bannerThrough && this.bannerThrough.map(b => ({
                     ...b,
                     mobileImage: this.mobileImage(b),
                     tabletImage: this.tabletImage(b),
@@ -265,16 +272,6 @@
                     defaultImage: this.defaultImage(b),
                 }));
             }
-        },
-        watch: {
-            banners(){
-                if(this.banners && this.banners.length > 0) {
-                    this.$emit('isBannerThrough')
-                }
-            }
-        },
-        async beforeCreate() {
-            this.banners = await getBannersByCode(bannerType.THROUGH, false, this.$route.path);
-        },
+        }
     }
 </script>

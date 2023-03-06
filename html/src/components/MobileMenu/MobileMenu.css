@@ -7,6 +7,10 @@
         }
     }
 
+    &__through {
+         margin-top: 48px;
+     }
+
     &__header {
         display: flex;
         justify-content: space-between;
@@ -202,6 +206,10 @@
                     margin-left: calc(var(--gs) * 2);
                 }
             }
+
+            &-through {
+                 margin-bottom: 48px;
+             }
         }
     }
 }

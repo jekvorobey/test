@@ -2,8 +2,8 @@
         <header class="v-header" :class="[{ sticky: isSticky }, { 'v-header--search': search }]">
             <header-top class="v-header__top" />
             <header-middle class="v-header__middle" ref="middle" />
-            <banner-through @isBannerThrough="isBannerThrough"/>
-            <header-bottom :class="{'v-header__bottom-through': bannerThrough && !scrollFromTop}" class="v-header__bottom" ref="bottom" />
+            <banner-through/>
+            <header-bottom :class="{'v-header__bottom-through': isBannerThrough && !scrollFromTop}" class="v-header__bottom" ref="bottom" />
             <transition name="fade">
                 <mobile-menu class="v-header__modal-menu" v-if="isMenuOpen && isTabletLg" />
             </transition>
@@ -36,6 +36,7 @@ import { NAME as SEARCH_MODULE, SEARCH } from '@store/modules/Search';
 
 import './VHeader.critical.css';
 import './VHeader.css';
+import {IS_BANNER_THROUGH} from "@store/getters";
 
 export default {
     name: 'v-header',
@@ -53,7 +54,6 @@ export default {
 
     data() {
         return {
-            bannerThrough: false,
             scrollFromTop: false,
         }
     },
@@ -66,6 +66,7 @@ export default {
     },
 
     computed: {
+        ...mapGetters([IS_BANNER_THROUGH]),
         ...mapState([SCROLL, IS_MENU_OPEN, IS_CITY_CONFIRMATION_OPEN]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
 
@@ -76,12 +77,6 @@ export default {
         showMask() {
             return this[SEARCH] || (this[IS_MENU_OPEN] && !this.isTabletLg);
         },
-    },
-
-    methods: {
-        isBannerThrough() {
-            this.bannerThrough = true
-        }
     },
 
     mounted() {
