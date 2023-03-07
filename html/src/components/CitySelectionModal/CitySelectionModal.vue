@@ -179,7 +179,7 @@ export default {
             }
         },
 
-        findAddress(type, query, count, locations) {
+        findAddress(type, query, count, locations=null, guid=null) {
             let from_bound = { value: type };
             let to_bound;
 
@@ -196,19 +196,33 @@ export default {
                     to_bound = { value: type };
             }
 
+            if (guid) {
+                return $dadata.post('/suggest/address', {
+                    query: guid,
+                    count,
+                    locations,
+                    from_bound,
+                    to_bound
+                });
+            }
+
             return $dadata.post('/suggest/address', {
                 query,
                 count,
                 locations,
                 from_bound,
-                to_bound,
+                to_bound
             });
         },
 
         async onSubmit(suggestion) {
             if (this.isAddressPending) return;
             try {
-                const { suggestions } = await this.findAddress(suggestionTypes.CITY, suggestion.value, 1);
+                const {settlement_fias_id, city_fias_id} = suggestion.data;
+                const guid = settlement_fias_id || city_fias_id;
+
+                const { suggestions } = await this.findAddress(suggestionTypes.CITY, suggestion.value, 1, null, guid);
+
                 const selectedCitySuggestion = suggestions[0];
                 if (selectedCitySuggestion) {
                     this.isAddressPending = true;
