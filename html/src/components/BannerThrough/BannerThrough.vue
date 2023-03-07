@@ -46,7 +46,7 @@
                         alt=""
                         loading="lazy"
                 />
-                <banner-through-counter dead-line="Sep 26, 2023 00:00:00" class="banner-through__counter"/>
+                <banner-through-counter dead-line="2023-12-12 00:00:00" class="banner-through__counter"/>
             </v-link>
         </v-slider>
     </div>
