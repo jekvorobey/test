@@ -41,6 +41,10 @@
         @media (--tablet-min) {
             padding: calc(var(--gs) * 4) calc(var(--gs) * 5);
         }
+
+        span {
+            background-color: unset;
+        }
     }
 
     &__description-switcher {

@@ -11,7 +11,7 @@
                     v-for="item in items"
                     :key="item.id"
                     :to="item.url"
-                    class="swiper-slide"
+                    class="swiper-slide banner-through__slide"
             >
                 <template v-if="item.desktopImage">
                     <source
@@ -46,6 +46,7 @@
                         alt=""
                         loading="lazy"
                 />
+                <banner-through-counter dead-line="Sep 26, 2023 00:00:00" class="banner-through__counter"/>
             </v-link>
         </v-slider>
     </div>
@@ -57,6 +58,8 @@
 
     import VSlider from "@controls/VSlider/VSlider.vue";
     import VLink from "@controls/VLink/VLink.vue";
+    import BannerThroughCounter from "@components/BannerThroughCounter/BannerThroughCounter.vue";
+
     import {generatePictureSourcePath} from "@util/file";
     import {FETCH_BANNER_THROUGH} from "@store/actions";
     import {mapActions, mapGetters} from 'vuex';
@@ -71,7 +74,7 @@
     export default {
         name: "BannerThrough",
 
-        components: {VSlider, VLink},
+        components: {VSlider, VLink, BannerThroughCounter},
 
         data() {
             return {

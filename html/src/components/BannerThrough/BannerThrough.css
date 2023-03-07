@@ -1,6 +1,8 @@
 .banner-through {
-    transition: .5s all;
+    transition: .2s all;
     max-height: 0;
+    max-width: 1224px;
+    margin: 0 auto;
 
     &__active {
         max-height: 3000px;
@@ -10,6 +12,18 @@
         .swiper-wrapper {
             height: 48px;
         }
+      }
+
+    &__slide {
+        position: relative;
+     }
+
+     &__counter {
+        position: absolute;
+        top: 11px;
+        right: 45px;
+        text-transform: initial;
+        min-width: 110px;
       }
 }
 
