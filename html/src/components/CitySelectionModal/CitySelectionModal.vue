@@ -218,8 +218,8 @@ export default {
         async onSubmit(suggestion) {
             if (this.isAddressPending) return;
             try {
-                const {settlement_fias_id, city_type} = suggestion.data;
-                const guid = settlement_fias_id || city_type;
+                const {settlement_fias_id, city_fias_id} = suggestion.data;
+                const guid = settlement_fias_id || city_fias_id;
 
                 const { suggestions } = await this.findAddress(suggestionTypes.CITY, suggestion.value, 1, null, guid);
 
