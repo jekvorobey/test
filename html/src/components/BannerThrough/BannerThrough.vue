@@ -10,7 +10,6 @@
             <v-link
                     v-for="item in items"
                     :key="item.id"
-                    v-if="showBannerThrough(item)"
                     :to="item.url"
                     class="swiper-slide banner-through__slide"
             >
@@ -278,25 +277,6 @@
                   )
               )
             },
-            showBannerThrough(banner) {
-              let toHidePathTemplates = banner.hide_path_templates.split(/\r?\n/)
-                      .map(str => str.replace(/\/+\*/g, "").replace('/', "")),
-                  toShowPathTemplates = banner.path_templates ?
-                      banner.path_templates.split(/\r?\n/).map(str => str.replace(/\/+\*/g, "").replace('/', "")) : null,
-                  pageUrlPath = this.$route.path.split('/')[1];
-
-              console.log('toHidePathTemplates ', toHidePathTemplates)
-              console.log('toShowPathTemplates ', toShowPathTemplates)
-              console.log('pageUrlPath ', pageUrlPath)
-
-              if(toShowPathTemplates) {
-                return toShowPathTemplates.includes(pageUrlPath) && !toHidePathTemplates.includes(pageUrlPath)
-              } else if(!toShowPathTemplates) {
-                return !toHidePathTemplates.includes(pageUrlPath)
-              } else if(!toShowPathTemplates && !toHidePathTemplates) {
-                return true
-              }
-            },
             dateToFuckingIOS(dateString) {
               if(dateString.indexOf('-') > 0) {
                 let arr = dateString.split(/[- :]/);
@@ -322,6 +302,16 @@
                     defaultImage: this.defaultImage(b),
                 }));
             },
+        },
+
+        watch:{
+          async $route (to, from){
+            await this[FETCH_BANNER_THROUGH](this.$route.path)
+          }
+        },
+
+        async beforeMount() {
+            await this[FETCH_BANNER_THROUGH](this.$route.path)
         }
     }
 </script>

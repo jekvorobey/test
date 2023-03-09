@@ -285,7 +285,6 @@ export default {
     async serverPrefetch() {
         try {
             await Promise.all([this[FETCH_COMMON_DATA](), this[CHECK_SESSION](true)]);
-            if (!this.bannerThrough) await this[FETCH_BANNER_THROUGH](this.$route.path)
             await this[FETCH_CART_DATA]();
             await this[FETCH_FAVORITES_ALL]();
 
