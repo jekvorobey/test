@@ -37,6 +37,7 @@
                     data-retailrocket-markup-block="5f21670297a5282edc07d7cc"
                     :data-auth="hasSession ? 'true' : 'false'"
                     :data-user-moderation="canBuy ? 'true' : 'false'"
+                    :data-search-phrase="searchString"
                 />
 
                 <template v-if="!isTablet && products && products.length > 0">

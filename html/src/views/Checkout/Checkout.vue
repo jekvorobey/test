@@ -313,7 +313,10 @@ export default {
         },
 
         checkoutCommitButtonText() {
-            if (this[SELECTED_PAYMENT_METHOD_ID] === paymentTypes.CREDIT) {
+            if (this[SELECTED_PAYMENT_METHOD_ID] === paymentTypes.CREDITLINE_PAID) {
+                return 'Перейти к оформлению';
+            }
+            if (this[SELECTED_PAYMENT_METHOD_ID] === paymentTypes.POSCREDIT_PAID) {
                 return 'Перейти к оформлению';
             }
 
