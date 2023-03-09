@@ -1,8 +1,10 @@
 <template>
-    <div v-html="timerOutput"></div>
+    <div v-html="timerOutput" class="banner-through-counter"></div>
 </template>
 
 <script>
+    import './BannerThroughCounter.css';
+
     export default {
         name: "BannerThroughCounter",
         props: {
