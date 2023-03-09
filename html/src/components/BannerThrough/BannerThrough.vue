@@ -10,6 +10,7 @@
             <v-link
                     v-for="item in items"
                     :key="item.id"
+                    v-if="showBannerThrough(item)"
                     :to="item.url"
                     class="swiper-slide banner-through__slide"
             >
@@ -46,7 +47,11 @@
                         alt=""
                         loading="lazy"
                 />
-                <banner-through-counter dead-line="2023-12-12 00:00:00" class="banner-through__counter"/>
+                <banner-through-counter
+                    v-if="showCounterThrough(item)"
+                    :dead-line="item.countdown.date_to"
+                    class="banner-through__counter"
+                />
             </v-link>
         </v-slider>
     </div>
@@ -259,6 +264,48 @@
                 }
                 return result;
             },
+            showCounterThrough(banner) {
+              return (banner.countdown && (
+                      banner.countdown.date_from && banner.countdown.date_to && (
+                          Date.parse(this.dateToFuckingIOS(banner.countdown.date_from)) <= Date.parse(new Date())
+                      ) && (
+                          Date.parse(new Date()) < Date.parse(this.dateToFuckingIOS(banner.countdown.date_to))
+                      )
+                  )
+              )  || (
+                  banner.countdown && banner.countdown.date_to && (
+                      Date.parse(new Date()) < Date.parse(this.dateToFuckingIOS(banner.countdown.date_to))
+                  )
+              )
+            },
+            showBannerThrough(banner) {
+              let toHidePathTemplates = banner.hide_path_templates.split(/\r?\n/)
+                      .map(str => str.replace(/\/+\*/g, "").replace('/', "")),
+                  toShowPathTemplates = banner.path_templates ?
+                      banner.path_templates.split(/\r?\n/).map(str => str.replace(/\/+\*/g, "").replace('/', "")) : null,
+                  pageUrlPath = this.$route.path.split('/')[1];
+
+              console.log('toHidePathTemplates ', toHidePathTemplates)
+              console.log('toShowPathTemplates ', toShowPathTemplates)
+              console.log('pageUrlPath ', pageUrlPath)
+
+              if(toShowPathTemplates) {
+                return toShowPathTemplates.includes(pageUrlPath) && !toHidePathTemplates.includes(pageUrlPath)
+              } else if(!toShowPathTemplates) {
+                return !toHidePathTemplates.includes(pageUrlPath)
+              } else if(!toShowPathTemplates && !toHidePathTemplates) {
+                return true
+              }
+            },
+            dateToFuckingIOS(dateString) {
+              if(dateString.indexOf('-') > 0) {
+                let arr = dateString.split(/[- :]/);
+                return new Date(arr[0], arr[1]-1, arr[2], arr[3], arr[4], arr[5]);
+              } else {
+                let arr = dateString.split(/[. :]/);
+                return new Date(arr[2], arr[1] - 1, arr[0], arr[3], arr[4], arr[5]);
+              }
+            },
         },
 
         computed: {
@@ -274,7 +321,7 @@
                     desktopImage: this.desktopImage(b),
                     defaultImage: this.defaultImage(b),
                 }));
-            }
+            },
         }
     }
 </script>
