@@ -39,6 +39,7 @@ export const CATEGORIES = 'categories';
 export const FREQUENT_CATEGORIES = 'frequentCategories';
 export const RECENTLY_VIEWED_PRODUCTS = 'recentlyViewedProducts';
 export const BANNER = 'banner';
+export const BANNER_THROUGH = 'bannerThrough';
 
 export const LOCALIZATIONS = 'localizations';
 export const LOCALE = 'locale';
@@ -65,6 +66,7 @@ export default function createStore(container) {
             [FREQUENT_CATEGORIES]: [],
             [RECENTLY_VIEWED_PRODUCTS]: [],
             [BANNER]: {},
+            [BANNER_THROUGH]: false,
 
             [LOCALE]: ruLocale.LOCALE,
             [FALLBACK_LOCALE]: enLocale.LOCALE,
