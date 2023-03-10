@@ -5,23 +5,23 @@
                 {{ pageTitle }}
             </h2>
 
-            <image-picker
-                class="cabinet-view__avatar"
-                :image="avatar"
-                :valid-types-map="avatarAcceptedTypes"
-                @changed="onImageChanged"
-                @delete="onImageDelete"
-            >
-                <div
-                    class="cabinet-view__avatar-placeholder"
-                    :class="{ 'cabinet-view__avatar-placeholder--empty': !avatarPlaceholder }"
-                >
-                    <template v-if="avatarPlaceholder">
-                        {{ avatarPlaceholder }}
-                    </template>
-                    <v-svg v-else name="account-middle" width="32" height="32" />
-                </div>
-            </image-picker>
+<!--            <image-picker-->
+<!--                class="cabinet-view__avatar"-->
+<!--                :image="avatar"-->
+<!--                :valid-types-map="avatarAcceptedTypes"-->
+<!--                @changed="onImageChanged"-->
+<!--                @delete="onImageDelete"-->
+<!--            >-->
+<!--                <div-->
+<!--                    class="cabinet-view__avatar-placeholder"-->
+<!--                    :class="{ 'cabinet-view__avatar-placeholder&#45;&#45;empty': !avatarPlaceholder }"-->
+<!--                >-->
+<!--                    <template v-if="avatarPlaceholder">-->
+<!--                        {{ avatarPlaceholder }}-->
+<!--                    </template>-->
+<!--                    <v-svg v-else name="account-middle" width="32" height="32" />-->
+<!--                </div>-->
+<!--            </image-picker>-->
         </div>
 
         <attention-panel v-if="!canBuy" class="cabinet-view__attention">

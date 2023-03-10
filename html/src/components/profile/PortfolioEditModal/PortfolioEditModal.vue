@@ -31,56 +31,56 @@
                     </v-input>
                 </div>
             </transition>
-            <transition name="fade" mode="out-in">
-                <div v-if="!editablePortfolio[0].link && !files.length" class="portfolio-edit-modal__divider">
-                    <div class="portfolio-edit-modal__divider-line"></div>
-                    <span class="portfolio-edit-modal__divider-text">или</span>
-                    <div class="portfolio-edit-modal__divider-line"></div>
-                </div>
-            </transition>
-            <transition name="fade" mode="out-in">
-                <div v-if="!editablePortfolio[0].link" class="portfolio-edit-modal__section">
-                    <p class="portfolio-edit-modal__info--no-margin">
-                        Загрузи скан профильного диплома, либо другого подтверждающего документа
-                    </p>
-                    <p class="text-grey portfolio-edit-modal__info-formats">Файлы форматов jpeg, png, pdf, doc, docx</p>
-                    <v-file
-                        class="portfolio-edit-modal__files"
-                        :files="files"
-                        :accepted-types="fileAcceptedTypes"
-                        :max-file-size="5242880"
-                        :max-files="1"
-                        @change="onFilesChanged"
-                        @error="onHandleError"
-                    >
-                        <template v-slot:file="{ file }">
-                            <v-file-item
-                                ref="fileItem"
-                                class="v-file__item portfolio-edit-modal__file-item"
-                                :class="{ 'portfolio-edit-modal__file-item--loaded': fileLoaded }"
-                                :key="file.name"
-                                :file="file"
-                                :has-mask="false"
-                                @load="onFileLoad"
-                            />
-                            <div class="portfolio-edit-modal__files-info">
-                                <span class="portfolio-edit-modal__files-info-name">{{ file.name }}</span>
-                                <span
-                                    class="text-grey portfolio-edit-modal__files-info-delete"
-                                    @click.stop="onDeleteFile"
-                                >
-                                    Удалить
-                                </span>
-                            </div>
-                        </template>
-                    </v-file>
-                    <div class="status-color-error">
-                        <transition name="slide-in-bottom">
-                            <span v-if="error" key="error">{{ error }}</span>
-                        </transition>
-                    </div>
-                </div>
-            </transition>
+<!--            <transition name="fade" mode="out-in">-->
+<!--                <div v-if="!editablePortfolio[0].link && !files.length" class="portfolio-edit-modal__divider">-->
+<!--                    <div class="portfolio-edit-modal__divider-line"></div>-->
+<!--                    <span class="portfolio-edit-modal__divider-text">или</span>-->
+<!--                    <div class="portfolio-edit-modal__divider-line"></div>-->
+<!--                </div>-->
+<!--            </transition>-->
+<!--            <transition name="fade" mode="out-in">-->
+<!--                <div v-if="!editablePortfolio[0].link" class="portfolio-edit-modal__section">-->
+<!--                    <p class="portfolio-edit-modal__info&#45;&#45;no-margin">-->
+<!--                        Загрузи скан профильного диплома, либо другого подтверждающего документа-->
+<!--                    </p>-->
+<!--                    <p class="text-grey portfolio-edit-modal__info-formats">Файлы форматов jpeg, png, pdf, doc, docx</p>-->
+<!--                    <v-file-->
+<!--                        class="portfolio-edit-modal__files"-->
+<!--                        :files="files"-->
+<!--                        :accepted-types="fileAcceptedTypes"-->
+<!--                        :max-file-size="5242880"-->
+<!--                        :max-files="1"-->
+<!--                        @change="onFilesChanged"-->
+<!--                        @error="onHandleError"-->
+<!--                    >-->
+<!--                        <template v-slot:file="{ file }">-->
+<!--                            <v-file-item-->
+<!--                                ref="fileItem"-->
+<!--                                class="v-file__item portfolio-edit-modal__file-item"-->
+<!--                                :class="{ 'portfolio-edit-modal__file-item&#45;&#45;loaded': fileLoaded }"-->
+<!--                                :key="file.name"-->
+<!--                                :file="file"-->
+<!--                                :has-mask="false"-->
+<!--                                @load="onFileLoad"-->
+<!--                            />-->
+<!--                            <div class="portfolio-edit-modal__files-info">-->
+<!--                                <span class="portfolio-edit-modal__files-info-name">{{ file.name }}</span>-->
+<!--                                <span-->
+<!--                                    class="text-grey portfolio-edit-modal__files-info-delete"-->
+<!--                                    @click.stop="onDeleteFile"-->
+<!--                                >-->
+<!--                                    Удалить-->
+<!--                                </span>-->
+<!--                            </div>-->
+<!--                        </template>-->
+<!--                    </v-file>-->
+<!--                    <div class="status-color-error">-->
+<!--                        <transition name="slide-in-bottom">-->
+<!--                            <span v-if="error" key="error">{{ error }}</span>-->
+<!--                        </transition>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </transition>-->
 
             <div class="portfolio-edit-modal__submit">
                 <v-button
