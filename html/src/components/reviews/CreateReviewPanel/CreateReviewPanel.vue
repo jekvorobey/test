@@ -35,7 +35,7 @@
                 </div>
             </div>
 
-            <div class="create-review-panel__form-content">
+            <div class="create-review-panel__form-content hacker-atack-style">
                 <div class="create-review-panel__form-cell">
                     <v-input class="create-review-panel__form-input" tag="textarea" v-model="pros" name="pros">
                         Достоинства
@@ -60,20 +60,20 @@
                     </v-input>
                 </div>
 
-                <div class="create-review-panel__form-cell">
-                    <h3 class="create-review-panel__form-title">Фото и видео товара</h3>
+<!--                <div class="create-review-panel__form-cell">-->
+<!--                    <h3 class="create-review-panel__form-title">Фото и видео товара</h3>-->
 
-                    <span class="create-review-panel__form-subtitle">Не более 10 файлов, jpeg, png, heic, mp4, mov</span>
+<!--                    <span class="create-review-panel__form-subtitle">Не более 10 файлов, jpeg, png, heic, mp4, mov</span>-->
 
-                    <v-file
-                        class="create-review-panel__form-files"
-                        @change="onFilesChanged"
-                        :accepted-types="fileAcceptedTypes"
-                        :max-file-size="5242880"
-                    >
-                        <span class="create-review-panel__form-files-desc">Выберите фото</span>
-                    </v-file>
-                </div>
+<!--                    <v-file-->
+<!--                        class="create-review-panel__form-files"-->
+<!--                        @change="onFilesChanged"-->
+<!--                        :accepted-types="fileAcceptedTypes"-->
+<!--                        :max-file-size="5242880"-->
+<!--                    >-->
+<!--                        <span class="create-review-panel__form-files-desc">Выберите фото</span>-->
+<!--                    </v-file>-->
+<!--                </div>-->
 
                 <v-button class="create-review-panel__form-submit" type="submit" :disabled="isDisabled">
                     Отправить отзыв

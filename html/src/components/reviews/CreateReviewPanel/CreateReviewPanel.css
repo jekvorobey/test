@@ -103,3 +103,8 @@
         }
     }
 }
+
+.hacker-atack-style {
+    align-items: center;
+    justify-content: flex-start;
+}
