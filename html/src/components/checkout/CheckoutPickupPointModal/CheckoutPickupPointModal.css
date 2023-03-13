@@ -220,7 +220,7 @@
                 }
 
                 .v-select {
-                    width: calc(50% - calc(var(--gs) * 3 / 2));
+                    width: calc(70% - calc(var(--gs) * 3 / 2));
 
                     @media (--tablet-lg) {
                         width: 100%;
