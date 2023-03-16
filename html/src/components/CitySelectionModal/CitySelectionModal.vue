@@ -110,7 +110,7 @@ import './CitySelectionModal.css';
 import { NAME as CHECKOUT_MODULE, CHECKOUT_DATA } from '@store/modules/Checkout';
 import { SET_ADDRESS, SET_ADDRESS_NO_LK, SET_CITY_FIAS } from '@store/modules/Checkout/actions';
 
-import { ADDRESSES } from '@store/modules/Checkout/getters';
+import { ADDRESSES, CHECKOUT_STATUS } from '@store/modules/Checkout/getters';
 
 import { $store } from '@services';
 
@@ -144,7 +144,7 @@ export default {
             isOpen: (state) => state[MODALS][NAME] && state[MODALS][NAME].open,
         }),
 
-        ...mapGetters(CHECKOUT_MODULE, [ADDRESSES]),
+        ...mapGetters(CHECKOUT_MODULE, [ADDRESSES, CHECKOUT_STATUS]),
 
         header() {
             return 'Выберите город';
@@ -279,12 +279,15 @@ export default {
                             });
                         }
                     }
-
                     // перезагружаем, если находимся в сессии
                     if (this[HAS_SESSION]) await this[FETCH_CART_DATA]();
                 }
             } catch (error) {
                 $logger.log(error);
+                if (this[CHECKOUT_STATUS] && this[CHECKOUT_STATUS].addressStatus === 'error') {
+                  this[CHANGE_MODAL_STATE]({ name: modalName.checkout.PICKUP_POINT, open: false });
+                  window.location.reload()
+                }
             }
 
             this.isAddressPending = false;
