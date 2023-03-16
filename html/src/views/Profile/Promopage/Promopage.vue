@@ -199,7 +199,7 @@ export default {
         ...mapState(AUTH_MODULE, {
             [REFERRAL_CODE]: (state) => (state[USER] && state[USER][REFERRAL_CODE]) || null,
         }),
-
+        ...mapState(AUTH_MODULE, [USER]),
         ...mapState(MODAL_MODULE, {
             isNameEditOpen: (state) =>
                 state[MODALS][modalName.profile.PROMO_EDIT] && state[MODALS][modalName.profile.PROMO_EDIT].open,
@@ -304,8 +304,16 @@ export default {
             });
         },
     },
-
-    beforeRouteEnter(to, from, next) {
+    async created() {
+      try {
+        if(this[USER] && this[USER].referralPartner) {
+          await this[FETCH_PROMOPAGE]({})
+        }
+      } catch(e) {
+        console.log(e)
+      }
+    },
+  beforeRouteEnter(to, from, next) {
         function proceed() {
             if ($store.state[PROFILE_MODULE] && $store.state[PROFILE_MODULE][PROMOPAGE_MODULE]) {
                 const {
