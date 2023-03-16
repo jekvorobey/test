@@ -274,15 +274,15 @@
                         </v-link>
                     </li>
                     <!-- Выгодно (захардкожено) -->
-                    <li class="container mobile-menu__menu-item mobile-menu__menu-item--separator" key="hardcoding">
-                        <v-link
-                                class="link mobile-menu__menu-link mobile-menu__menu-link--final"
-                                to="/catalog/filters/vigodno-povrezhdena_upakovka/vigodno-povrezhden_flakon/vigodno-ostatochnyy_srok_godnosti_6_3_mesyaca/vigodno-ostatochnyy_srok_godnosti_3_1_mesyaca/vigodno-vitrinnyj_obrazec/"
-                                @click="onSetMenu(false)"
-                        >
-                            Выгодно
-                        </v-link>
-                    </li>
+<!--                    <li class="container mobile-menu__menu-item mobile-menu__menu-item&#45;&#45;separator" key="hardcoding">-->
+<!--                        <v-link-->
+<!--                                class="link mobile-menu__menu-link mobile-menu__menu-link&#45;&#45;final"-->
+<!--                                to="/catalog/filters/vigodno-povrezhdena_upakovka/vigodno-povrezhden_flakon/vigodno-ostatochnyy_srok_godnosti_6_3_mesyaca/vigodno-ostatochnyy_srok_godnosti_3_1_mesyaca/vigodno-vitrinnyj_obrazec/"-->
+<!--                                @click="onSetMenu(false)"-->
+<!--                        >-->
+<!--                            Выгодно-->
+<!--                        </v-link>-->
+<!--                    </li>-->
                     <!-- Выгодно (захардкожено) -->
                     <remote-banner
                             key="hardcoding-remoteBanner"
