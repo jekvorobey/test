@@ -11,8 +11,7 @@ export default {
     async [FETCH_REVIEWS_DATA](
         { commit },
         {
-            type,
-            code,
+            product_id,
             sortField,
             sortDirection,
             page = DEFAULT_PAGE,
@@ -22,8 +21,7 @@ export default {
     ) {
         try {
             const { rating, reviewsCount: range, reviews: items } = await getReviews(
-                type,
-                code,
+                product_id,
                 sortField,
                 sortDirection,
                 page,
@@ -37,10 +35,10 @@ export default {
         }
     },
 
-    async [CREATE_REVIEW]({ dispatch }, { type, code, formData }) {
+    async [CREATE_REVIEW]({ dispatch }, { formData, product_id }) {
         try {
             await addReview(formData);
-            dispatch(FETCH_REVIEWS_DATA, { type, code });
+            dispatch(FETCH_REVIEWS_DATA, { product_id });
         } catch (error) {
             storeErrorHandler(CREATE_REVIEW, true)(error);
         }

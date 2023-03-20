@@ -106,6 +106,8 @@ import { NAME as REVIEWS_MODULE, RANGE, REVIEWS, RATING, ACTIVE_PAGE } from '@st
 import { PAGES_COUNT } from '@store/modules/Reviews/getters';
 import { FETCH_REVIEWS_DATA, CREATE_REVIEW } from '@store/modules/Reviews/actions';
 
+import { NAME as PRODUCT_MODULE, PRODUCT } from '@store/modules/Product';
+
 import { sortDirections, modalName } from '@enums';
 import './ReviewsPanel.css';
 
@@ -169,6 +171,7 @@ export default {
     },
 
     computed: {
+        ...mapState(PRODUCT_MODULE, [PRODUCT]),
         ...mapState(REVIEWS_MODULE, [REVIEWS, RANGE, ACTIVE_PAGE, RATING]),
         ...mapGetters(REVIEWS_MODULE, [PAGES_COUNT]),
 
@@ -187,8 +190,9 @@ export default {
 
     watch: {
         selectedSortDirection(newValue) {
-            const { code, type } = this;
-            this[FETCH_REVIEWS_DATA]({ code, type, sortDirection: newValue.value });
+            const productId = this[PRODUCT].productId;
+
+            this[FETCH_REVIEWS_DATA]({ product_id: productId, sortDirection: newValue.value });
         },
     },
 
@@ -198,12 +202,11 @@ export default {
 
         async onShowMoreReviews() {
             try {
-                const { code, type, activePage, selectedSortDirection } = this;
-
+                const { activePage, selectedSortDirection } = this;
+                const productId = this[PRODUCT].productId;
                 this.isLoadingMoreReviews = true;
                 await this[FETCH_REVIEWS_DATA]({
-                    code,
-                    type,
+                    product_id: productId,
                     page: activePage + 1,
                     sortDirection: selectedSortDirection.value,
                     showMore: true,
@@ -215,12 +218,12 @@ export default {
         },
 
         async onCreateReview(formData) {
-            const { code, type } = this;
+            formData.append('prdouct_id', this[PRODUCT].productId);
             let message = null;
 
             try {
                 this.isAddingReview = false;
-                await this[CREATE_REVIEW]({ code, type, formData });
+                await this[CREATE_REVIEW]({ formData, product_id: this[PRODUCT].productId });
                 message = 'Спасибо за ваш отзыв! Будет размещен после проверки';
             } catch (error) {
                 message = 'Не удалось отправить отзыв.';
@@ -237,6 +240,7 @@ export default {
 
         onShowPanel() {
             if (this.canAdd) this.isAddingReview = true;
+            if (this.canAdd) this.isAddingReview = true;
             else
                 this[CHANGE_MODAL_STATE]({
                     name: modalName.general.NOTIFICATION,
@@ -250,8 +254,8 @@ export default {
 
     async mounted() {
         try {
-            const { code, type } = this;
-            await this[FETCH_REVIEWS_DATA]({ code, type });
+            const productId = this[PRODUCT].productId;
+            await this[FETCH_REVIEWS_DATA]({ product_id: productId });
         } catch (error) {}
         this.mounted = true;
     },

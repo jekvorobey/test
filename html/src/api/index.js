@@ -1106,8 +1106,7 @@ export function getMasterclassFilters(excludedFilters) {
 
 // Reviews
 export function getReviews(
-    object_type,
-    object_code,
+    product_id,
     sort_field = 'created_at',
     sort_direction = 'desc',
     page = 1,
@@ -1115,8 +1114,7 @@ export function getReviews(
 ) {
     return $http.get('/v1/reviews', {
         params: {
-            object_type,
-            object_code,
+            product_id,
             sort_field,
             sort_direction,
             page,

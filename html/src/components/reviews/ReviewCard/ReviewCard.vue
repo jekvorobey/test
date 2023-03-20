@@ -46,26 +46,28 @@
                 </div>
             </div>
         </div>
-        <div class="review-card__controls">
-            <session-check-button
-                component="button"
-                class="btn--transparent review-card__controls-btn"
-                :class="{ 'review-card__controls-btn--like': vote === reviewOpinion.LIKE }"
-                @click="onChangeVote(reviewOpinion.LIKE)"
-            >
-                <v-svg id="review-card-like" name="like" width="22" height="21" />
-                &nbsp;{{ computedLikes }}
-            </session-check-button>
-            <session-check-button
-                component="button"
-                class="btn--transparent review-card__controls-btn"
-                :class="{ 'review-card__controls-btn--dislike': vote === reviewOpinion.DISLIKE }"
-                @click="onChangeVote(reviewOpinion.DISLIKE)"
-            >
-                <v-svg id="review-card-dislike" name="dislike" width="22" height="21" />
-                &nbsp;{{ computedDislikes }}
-            </session-check-button>
-        </div>
+          <!--        <div class="review-card__controls">-->
+          <!-- Оценки отзыва(лайки дазлайки) пока убираем (не готов функционал на бэкенде) -->
+              <!--            <session-check-button-->
+              <!--                component="button"-->
+              <!--                class="btn&#45;&#45;transparent review-card__controls-btn"-->
+              <!--                :class="{ 'review-card__controls-btn&#45;&#45;like': vote === reviewOpinion.LIKE }"-->
+              <!--                @click="onChangeVote(reviewOpinion.LIKE)"-->
+              <!--            >-->
+              <!--                <v-svg id="review-card-like" name="like" width="22" height="21" />-->
+              <!--                &nbsp;{{ computedLikes }}-->
+              <!--            </session-check-button>-->
+              <!--            <session-check-button-->
+              <!--                component="button"-->
+              <!--                class="btn&#45;&#45;transparent review-card__controls-btn"-->
+              <!--                :class="{ 'review-card__controls-btn&#45;&#45;dislike': vote === reviewOpinion.DISLIKE }"-->
+              <!--                @click="onChangeVote(reviewOpinion.DISLIKE)"-->
+              <!--            >-->
+              <!--                <v-svg id="review-card-dislike" name="dislike" width="22" height="21" />-->
+              <!--                &nbsp;{{ computedDislikes }}-->
+              <!--            </session-check-button>-->
+          <!-- Оценки отзыва(лайки дазлайки) пока убираем (не готов функционал на бэкенде) -->
+          <!--        </div>-->
         <template v-if="answers.length > 0">
             <div class="review-card__answer" :key="answer.id" v-for="answer in answers">
                 <div class="review-card__answer-container">
@@ -125,7 +127,7 @@ export default {
 
     props: {
         id: {
-            type: String,
+            type: [String, Number],
         },
 
         tag: {
