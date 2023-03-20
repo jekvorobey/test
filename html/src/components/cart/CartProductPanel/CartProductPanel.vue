@@ -59,6 +59,72 @@
                     />
                 </li>
             </transition-group>
+
+            <template v-if="filteredProducts.merchantDiploma.length > 0">
+                <div class="cart-product-panel__list-header">
+                    <div class="cart-product-panel__list-header-title">Товары для прошедших обучение</div>
+                    <div class="cart-product-panel__list-header-hint">
+                        Товары для прошедших обучение
+                    </div>
+                </div>
+
+                <transition-group
+                    v-if="filteredProducts.merchantDiploma.length > 0"
+                    class="cart-product-panel__list"
+                    tag="ul"
+                    name="cart-item"
+                    @before-enter="onBeforeEnterItems"
+                    @enter="onEnterItems"
+                    @after-enter="onAfterEnterItems"
+                    @leave="onLeaveItems"
+                >
+                    <li
+                        class="cart-product-panel__list-item"
+                        v-for="({ p: product, count, type }, index) in filteredProducts.merchantDiploma"
+                        :key="product.id"
+                    >
+                        <cart-product-card
+                            v-if="type === cartItemTypes.PRODUCT"
+                            :data-index="index"
+                            :offer-id="product.id"
+                            :product-id="product.productId"
+                            :type="product.type"
+                            :name="product.name"
+                            :image="product.image"
+                            :price="product.price"
+                            :bonus="product.bonus"
+                            :old-price="product.oldPrice"
+                            :count="count"
+                            :max-count="product.stock && product.stock.qty"
+                            :href="product.url"
+                            :is-active="product.active"
+                            :user-can-buy="product.userCanBuy"
+                            show-count
+                            show-controls
+                            @toggle-favorite-item="onToggleFavorite(product)"
+                            @countChange="onAddCartItem(product.id, product.stock.storeId, $event.count)"
+                            @deleteItem="onDeleteCartItem(product.id, product.stock.storeId)"
+                        />
+
+                        <cart-bundle-product-card
+                            v-else-if="type === cartItemTypes.BUNDLE_PRODUCT"
+                            :bundle-id="product.id"
+                            :name="product.name"
+                            :price="product.price"
+                            :bonus="product.bonus"
+                            :old-price="product.oldPrice"
+                            :items="product.items"
+                            :count="count"
+                            :is-active="product.active"
+                            :user-can-buy="product.userCanBuy"
+                            show-count
+                            show-controls
+                            @countChange="onAddCartBundleItem(product.id, $event.count)"
+                            @deleteBundle="onDeleteCartBundleItem(product.id)"
+                        />
+                    </li>
+                </transition-group>
+            </template>
         </template>
 
         <template v-else>
@@ -263,13 +329,15 @@ export default {
             let products = {
                 common: [],
                 professional: [],
+                merchantDiploma: [],
             };
-
             for (const product of this.products) {
                 if (product.type === cartItemTypes.BUNDLE_PRODUCT) {
                     products.common.push(product);
                 } else {
-                    if (product.p.isOnlyForProfessional === true) {
+                    if (product.p.isNeedMerchantDiploma === true) {
+                        products.merchantDiploma.push(product);
+                    } else if (product.p.isOnlyForProfessional === true) {
                         products.professional.push(product);
                     } else {
                         products.common.push(product);
