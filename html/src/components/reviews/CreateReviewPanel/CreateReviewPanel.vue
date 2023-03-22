@@ -179,6 +179,9 @@ export default {
             const formData = new FormData(e.target);
             for (const file of this.files) formData.append('files[]', file, file.name);
 
+            // Хардкодинг для теста, убрать после доработок на бэкенде
+            formData.append('status', '1');
+            formData.append('customer_id', '75')
             this.$emit('create-review', formData);
         },
 
