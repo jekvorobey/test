@@ -5,7 +5,7 @@
                 <h2 class="reviews-panel__header-hl">
                     {{ $t('product.title.reviews') }}
                     <span class="text-grey reviews-panel__header-hl-count" v-if="range">
-                        {{ range }}&nbsp;<v-spinner width="24" height="24" :show="!mounted" />
+                        {{ range }}&nbsp;<v-spinner width="24" height="24" :show="!mounted"/>
                     </span>
 
                     <session-check-button class="btn--outline reviews-panel__link" @click="onShowPanel">
@@ -24,10 +24,10 @@
 
                         <v-rating :value="rating" readonly>
                             <template v-slot:activeLabel>
-                                <v-svg name="star-small" width="16" height="16" />
+                                <v-svg name="star-small" width="16" height="16"/>
                             </template>
                             <template v-slot:inactiveLabel>
-                                <v-svg name="star-empty-small" width="16" height="16" />
+                                <v-svg name="star-empty-small" width="16" height="16"/>
                             </template>
                         </v-rating>
                     </div>
@@ -76,10 +76,10 @@
             </template>
         </div>
 
-        <create-review-panel v-else :code="code" :type="type" @create-review="onCreateReview" />
+        <create-review-panel v-else :code="code" :type="type" @create-review="onCreateReview"/>
 
         <transition name="fade-in">
-            <review-modal v-if="reviewModalIsOpen" />
+            <review-modal v-if="reviewModalIsOpen"/>
         </transition>
     </div>
 </template>
@@ -97,18 +97,18 @@ import SessionCheckButton from '@components/SessionCheckButton/SessionCheckButto
 import CreateReviewPanel from '@components/reviews/CreateReviewPanel/CreateReviewPanel.vue';
 import ReviewCard from '@components/reviews/ReviewCard/ReviewCard.vue';
 
-import { mapActions, mapState, mapGetters } from 'vuex';
+import {mapActions, mapState, mapGetters} from 'vuex';
 
-import { MODALS, NAME as MODAL_MODULE } from '@store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+import {MODALS, NAME as MODAL_MODULE} from '@store/modules/Modal';
+import {CHANGE_MODAL_STATE} from '@store/modules/Modal/actions';
 
-import { NAME as REVIEWS_MODULE, RANGE, REVIEWS, RATING, ACTIVE_PAGE } from '@store/modules/Reviews';
-import { PAGES_COUNT } from '@store/modules/Reviews/getters';
-import { FETCH_REVIEWS_DATA, CREATE_REVIEW } from '@store/modules/Reviews/actions';
+import {NAME as REVIEWS_MODULE, RANGE, REVIEWS, RATING, ACTIVE_PAGE} from '@store/modules/Reviews';
+import {PAGES_COUNT} from '@store/modules/Reviews/getters';
+import {FETCH_REVIEWS_DATA, CREATE_REVIEW} from '@store/modules/Reviews/actions';
 
-import { NAME as PRODUCT_MODULE, PRODUCT } from '@store/modules/Product';
+import {NAME as PRODUCT_MODULE, PRODUCT} from '@store/modules/Product';
 
-import { sortDirections, modalName } from '@enums';
+import {sortDirections, modalName} from '@enums';
 import './ReviewsPanel.css';
 
 export default {
@@ -192,7 +192,7 @@ export default {
         selectedSortDirection(newValue) {
             const productId = this[PRODUCT].productId;
 
-            this[FETCH_REVIEWS_DATA]({ product_id: productId, sortDirection: newValue.value });
+            this[FETCH_REVIEWS_DATA]({product_id: productId, sortDirection: newValue.value});
         },
     },
 
@@ -202,7 +202,7 @@ export default {
 
         async onShowMoreReviews() {
             try {
-                const { activePage, selectedSortDirection } = this;
+                const {activePage, selectedSortDirection} = this;
                 const productId = this[PRODUCT].productId;
                 this.isLoadingMoreReviews = true;
                 await this[FETCH_REVIEWS_DATA]({
@@ -218,12 +218,12 @@ export default {
         },
 
         async onCreateReview(formData) {
-            formData.append('prdouct_id', this[PRODUCT].productId);
+            formData.append('product_id', this[PRODUCT].productId);
             let message = null;
 
             try {
                 this.isAddingReview = false;
-                await this[CREATE_REVIEW]({ formData, product_id: this[PRODUCT].productId });
+                await this[CREATE_REVIEW]({formData, product_id: this[PRODUCT].productId});
                 message = 'Спасибо за ваш отзыв! Будет размещен после проверки';
             } catch (error) {
                 message = 'Не удалось отправить отзыв.';
@@ -255,8 +255,9 @@ export default {
     async mounted() {
         try {
             const productId = this[PRODUCT].productId;
-            await this[FETCH_REVIEWS_DATA]({ product_id: productId });
-        } catch (error) {}
+            await this[FETCH_REVIEWS_DATA]({product_id: productId});
+        } catch (error) {
+        }
         this.mounted = true;
     },
 };

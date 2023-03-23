@@ -38,7 +38,8 @@
 
             <div class="create-review-panel__form-content hacker-atack-style">
                 <div class="create-review-panel__form-cell">
-                    <v-input class="create-review-panel__form-input" tag="textarea" v-model="advantages" name="advantages">
+                    <v-input class="create-review-panel__form-input" tag="textarea" v-model="advantages"
+                             name="advantages">
                         Достоинства
                     </v-input>
                 </div>
@@ -56,25 +57,27 @@
                 </div>
 
                 <div class="create-review-panel__form-cell">
-                    <v-input class="create-review-panel__form-input" tag="textarea" v-model="disadvantages" name="disadvantages">
+                    <v-input class="create-review-panel__form-input" tag="textarea" v-model="disadvantages"
+                             name="disadvantages">
                         Недостатки
                     </v-input>
                 </div>
 
-                                <div class="create-review-panel__form-cell">
-                                    <h3 class="create-review-panel__form-title">Фото и видео товара</h3>
+                <div class="create-review-panel__form-cell">
+                    <h3 class="create-review-panel__form-title">Фото и видео товара</h3>
 
-                                    <span class="create-review-panel__form-subtitle">Не более 10 файлов, jpeg, png, heic, mp4, mov</span>
+                    <span
+                        class="create-review-panel__form-subtitle">Не более 10 файлов, jpeg, png, heic, mp4, mov</span>
 
-                                    <v-file
-                                        class="create-review-panel__form-files"
-                                        @change="onFilesChanged"
-                                        :accepted-types="fileAcceptedTypes"
-                                        :max-file-size="5242880"
-                                    >
-                                        <span class="create-review-panel__form-files-desc">Выберите фото</span>
-                                    </v-file>
-                                </div>
+                    <v-file
+                        class="create-review-panel__form-files"
+                        @change="onFilesChanged"
+                        :accepted-types="fileAcceptedTypes"
+                        :max-file-size="5242880"
+                    >
+                        <span class="create-review-panel__form-files-desc">Выберите фото</span>
+                    </v-file>
+                </div>
 
                 <v-button class="create-review-panel__form-submit" type="submit" :disabled="isDisabled">
                     Отправить отзыв
@@ -178,10 +181,6 @@ export default {
 
             const formData = new FormData(e.target);
             for (const file of this.files) formData.append('files[]', file, file.name);
-
-            // Хардкодинг для теста, убрать после доработок на бэкенде
-            formData.append('status', '1');
-            formData.append('customer_id', '75')
             this.$emit('create-review', formData);
         },
 
