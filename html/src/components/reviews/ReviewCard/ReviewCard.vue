@@ -2,14 +2,14 @@
     <component :is="tag" class="review-card">
         <div class="review-card__header">
             <h4 class="review-card__header-name">
-                {{ name }} <span class="text-grey text-sm review-card__header-date">{{ computedDate }}</span>
+                {{ name }} <span class="text-grey text-sm review-card__header-date">{{ formatDate(created_at) }}</span>
             </h4>
             <v-rating class="review-card__header-rating" :value="rating" readonly>
                 <template v-slot:activeLabel>
-                    <v-svg name="star-small" width="16" height="16" />
+                    <v-svg name="star-small" width="16" height="16"/>
                 </template>
                 <template v-slot:inactiveLabel>
-                    <v-svg name="star-empty-small" width="16" height="16" />
+                    <v-svg name="star-empty-small" width="16" height="16"/>
                 </template>
             </v-rating>
             <!-- #62705 -->
@@ -40,45 +40,45 @@
                         @click="onShowReviewModal(item.id)"
                     >
                         <v-picture class="v-picture">
-                            <img class="blur-up lazyload v-picture__img" :data-src="item.defaultImg" />
+                            <img class="blur-up lazyload v-picture__img" :data-src="item.defaultImg"/>
                         </v-picture>
                     </div>
                 </div>
             </div>
         </div>
-          <!--        <div class="review-card__controls">-->
-          <!-- Оценки отзыва(лайки дазлайки) пока убираем (не готов функционал на бэкенде) -->
-              <!--            <session-check-button-->
-              <!--                component="button"-->
-              <!--                class="btn&#45;&#45;transparent review-card__controls-btn"-->
-              <!--                :class="{ 'review-card__controls-btn&#45;&#45;like': vote === reviewOpinion.LIKE }"-->
-              <!--                @click="onChangeVote(reviewOpinion.LIKE)"-->
-              <!--            >-->
-              <!--                <v-svg id="review-card-like" name="like" width="22" height="21" />-->
-              <!--                &nbsp;{{ computedLikes }}-->
-              <!--            </session-check-button>-->
-              <!--            <session-check-button-->
-              <!--                component="button"-->
-              <!--                class="btn&#45;&#45;transparent review-card__controls-btn"-->
-              <!--                :class="{ 'review-card__controls-btn&#45;&#45;dislike': vote === reviewOpinion.DISLIKE }"-->
-              <!--                @click="onChangeVote(reviewOpinion.DISLIKE)"-->
-              <!--            >-->
-              <!--                <v-svg id="review-card-dislike" name="dislike" width="22" height="21" />-->
-              <!--                &nbsp;{{ computedDislikes }}-->
-              <!--            </session-check-button>-->
-          <!-- Оценки отзыва(лайки дазлайки) пока убираем (не готов функционал на бэкенде) -->
-          <!--        </div>-->
+        <!--        <div class="review-card__controls">-->
+        <!-- Оценки отзыва(лайки дазлайки) пока убираем (не готов функционал на бэкенде) -->
+        <!--            <session-check-button-->
+        <!--                component="button"-->
+        <!--                class="btn&#45;&#45;transparent review-card__controls-btn"-->
+        <!--                :class="{ 'review-card__controls-btn&#45;&#45;like': vote === reviewOpinion.LIKE }"-->
+        <!--                @click="onChangeVote(reviewOpinion.LIKE)"-->
+        <!--            >-->
+        <!--                <v-svg id="review-card-like" name="like" width="22" height="21" />-->
+        <!--                &nbsp;{{ computedLikes }}-->
+        <!--            </session-check-button>-->
+        <!--            <session-check-button-->
+        <!--                component="button"-->
+        <!--                class="btn&#45;&#45;transparent review-card__controls-btn"-->
+        <!--                :class="{ 'review-card__controls-btn&#45;&#45;dislike': vote === reviewOpinion.DISLIKE }"-->
+        <!--                @click="onChangeVote(reviewOpinion.DISLIKE)"-->
+        <!--            >-->
+        <!--                <v-svg id="review-card-dislike" name="dislike" width="22" height="21" />-->
+        <!--                &nbsp;{{ computedDislikes }}-->
+        <!--            </session-check-button>-->
+        <!-- Оценки отзыва(лайки дазлайки) пока убираем (не готов функционал на бэкенде) -->
+        <!--        </div>-->
         <template v-if="answers.length > 0">
             <div class="review-card__answer" :key="answer.id" v-for="answer in answers">
                 <div class="review-card__answer-container">
                     <div class="review-card__answer-title">
                         <div class="review-card__answer-title-icon">
-                            <v-svg name="bonus" width="24" height="24" />
+                            <v-svg name="bonus" width="24" height="24"/>
                         </div>
-                        <div class="review-card__answer-title-text">{{ answer.authorName }}</div>
-                        <div class="review-card__answer-title-date">{{ getAnswerDate(answer.createdAt) }}</div>
+                        <div class="review-card__answer-title-text">{{ getDefaultAnswerAuthor() }}</div>
+                        <div class="review-card__answer-title-date">{{ formatDate(answer.created_at) }}</div>
                     </div>
-                    <div class="review-card__body-item-value">{{ answer.text }}</div>
+                    <div class="review-card__body-item-value">{{ answer.answer }}</div>
                 </div>
             </div>
         </template>
@@ -94,23 +94,25 @@ import VPicture from '@controls/VPicture/VPicture.vue';
 import SessionCheckButton from '@components/SessionCheckButton/SessionCheckButton.vue';
 import ReviewModal from '@components/reviews/ReviewModal/ReviewModal.vue';
 
-import { mapActions, mapState } from 'vuex';
-import { LOCALE } from '@store';
-import { NAME as REVIEWS_MODULE } from '@store/modules/Reviews';
-import { CHANGE_REVIEW_VOTE } from '@store/modules/Reviews/actions';
-import { NAME as MODAL_MODULE } from '@store/modules/Modal';
-import { CHANGE_MODAL_STATE } from '@store/modules/Modal/actions';
+import {mapActions, mapState} from 'vuex';
+import {LOCALE} from '@store';
+import {NAME as REVIEWS_MODULE} from '@store/modules/Reviews';
+import {CHANGE_REVIEW_VOTE} from '@store/modules/Reviews/actions';
+import {NAME as MODAL_MODULE} from '@store/modules/Modal';
+import {CHANGE_MODAL_STATE} from '@store/modules/Modal/actions';
 
-import { getDate } from '@util';
-import { reviewOpinion, modalName } from '@enums';
-import { generatePictureSourcePath } from '@util/file';
-import { monthLongDateSettings } from '@settings';
+import {getDate} from '@util';
+import {reviewOpinion, modalName} from '@enums';
+import {generatePictureSourcePath} from '@util/file';
+import {monthLongDateSettings} from '@settings';
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
 import '@images/sprites/like.svg';
 import '@images/sprites/dislike.svg';
 import '@images/sprites/payment/bonus.svg';
 import './ReviewCard.css';
+
+const ANSWER_AUTHOR = 'Бессовестно Талантливый';
 
 export default {
     name: 'review-card',
@@ -139,7 +141,7 @@ export default {
             type: String,
         },
 
-        date: {
+        created_at: {
             type: String,
         },
 
@@ -201,11 +203,6 @@ export default {
     computed: {
         ...mapState([LOCALE]),
 
-        computedDate() {
-            const { date } = this;
-            return date && getDate(date).toLocaleString(this[LOCALE], monthLongDateSettings);
-        },
-
         reviewImages() {
             const images = this.images || [];
             return images.map((i) => ({
@@ -258,9 +255,9 @@ export default {
             if (this.vote || this.disableVote) return;
 
             try {
-                const { id } = this;
+                const {id} = this;
                 this.disableVote = true;
-                await this[CHANGE_REVIEW_VOTE]({ id, opinion });
+                await this[CHANGE_REVIEW_VOTE]({id, opinion});
                 this.vote = opinion;
                 this.disableVote = false;
             } catch (error) {
@@ -268,8 +265,12 @@ export default {
             }
         },
 
-        getAnswerDate(date) {
+        formatDate(date) {
             return date && getDate(date).toLocaleString(this[LOCALE], monthLongDateSettings);
+        },
+
+        getDefaultAnswerAuthor() {
+            return ANSWER_AUTHOR;
         },
     },
 
