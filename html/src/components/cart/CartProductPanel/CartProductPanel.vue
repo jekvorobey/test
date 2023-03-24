@@ -18,6 +18,7 @@
                     class="cart-product-panel__list-item"
                     v-for="({ p: product, count, type }, index) in products"
                     :key="product.id"
+                    v-if="!product.isNeedMerchantDiploma"
                 >
                     <cart-product-card
                         v-if="type === cartItemTypes.PRODUCT"
@@ -63,8 +64,24 @@
             <template v-if="filteredProducts.merchantDiploma.length > 0">
                 <div class="cart-product-panel__list-header">
                     <div class="cart-product-panel__list-header-title">Товары для прошедших обучение</div>
-                    <div class="cart-product-panel__list-header-hint">
-                        Товары для прошедших обучение
+                    <div class="cart-product-panel__list-header-hint">Товары для прошедших обучение</div>
+                    <div v-if="isDiplomaStructureReady" :key="isDiplomaStructureReady">
+                        <div v-if="diplomaCodes && diplomaCodes.length > 0"
+                             v-for="(item, index) in diplomaCodes"
+                             :key="item.brand"
+                        >
+                            <span>{{ item.brand }}</span>
+                            <v-input
+                                class="checkout-product-panel__item-controls-input"
+                                placeholder="Введите код своего диплома"
+                                v-model="item.value"
+                                :error="item.error"
+                            />
+                            <v-button
+                                :disabled="item.value === ''"
+                                @click="sendDiploma(item.brand, index)"
+                            >Отправить</v-button>
+                        </div>
                     </div>
                 </div>
 
@@ -257,7 +274,8 @@
 <script>
 import CartProductCard from '@components/CartProductCard/CartProductCard.vue';
 import CartBundleProductCard from '@components/CartBundleProductCard/CartBundleProductCard.vue';
-
+import VInput from '@controls/VInput/VInput.vue';
+import VButton from '@controls/VButton/VButton.vue';
 import AttentionPanel from '@components/AttentionPanel/AttentionPanel.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
@@ -265,7 +283,13 @@ import { LOCALE } from '@store';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { DELIVERY_INFO } from '@store/modules/Cart/getters';
-import { ADD_CART_ITEM, DELETE_CART_ITEM, DELETE_CART_BUNDLE, ADD_CART_BUNDLE } from '@store/modules/Cart/actions';
+import {
+  ADD_CART_ITEM,
+  DELETE_CART_ITEM,
+  DELETE_CART_BUNDLE,
+  ADD_CART_BUNDLE,
+  CHECK_DIPLOMA_CODE
+} from '@store/modules/Cart/actions';
 
 import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
@@ -284,7 +308,8 @@ export default {
 
     components: {
         AttentionPanel,
-
+        VInput,
+        VButton,
         CartProductCard,
         CartBundleProductCard,
     },
@@ -302,7 +327,12 @@ export default {
             default: false,
         },
     },
-
+    data() {
+        return {
+            isDiplomaStructureReady: false,
+            diplomaCodes: [],
+        };
+    },
     computed: {
         ...mapState([LOCALE]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),
@@ -335,11 +365,11 @@ export default {
                 if (product.type === cartItemTypes.BUNDLE_PRODUCT) {
                     products.common.push(product);
                 } else {
-                    if (product.p.isNeedMerchantDiploma === true) {
+                    if (product.p.isNeedMerchantDiploma) {
                         products.merchantDiploma.push(product);
-                    } else if (product.p.isOnlyForProfessional === true) {
+                    } else if (product.p.isOnlyForProfessional && !product.p.isNeedMerchantDiploma) {
                         products.professional.push(product);
-                    } else {
+                    } else if (!product.p.isOnlyForProfessional && !product.p.isNeedMerchantDiploma) {
                         products.common.push(product);
                     }
                 }
@@ -347,10 +377,23 @@ export default {
 
             return products;
         },
+        // Получение массива уникальных брендов
+        uniqBrandsDiploma() {
+            const items =
+                this.filteredProducts.merchantDiploma &&
+                this.filteredProducts.merchantDiploma.map((item) => item.p.brandCode);
+
+            return items.reduce((acc, item) => {
+                if (acc.includes(item)) {
+                    return acc;
+                }
+                return [...acc, item];
+            }, []);
+        },
     },
 
     methods: {
-        ...mapActions(CART_MODULE, [ADD_CART_ITEM, ADD_CART_BUNDLE, DELETE_CART_ITEM, DELETE_CART_BUNDLE]),
+        ...mapActions(CART_MODULE, [ADD_CART_ITEM, ADD_CART_BUNDLE, DELETE_CART_ITEM, DELETE_CART_BUNDLE, CHECK_DIPLOMA_CODE]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
         generateItemProductUrl(product) {
@@ -418,10 +461,51 @@ export default {
                 done();
             });
         },
+        // Создание базовой структуры для соотвествия каждого инпута своему бренду
+        initDiplomaCodesStructure() {
+          if(this.uniqBrandsDiploma && this.uniqBrandsDiploma.length > 0) {
+            this.uniqBrandsDiploma.forEach(brand => this.diplomaCodes.push({brand, value: ""}))
+            this.isDiplomaStructureReady = true;
+          }
+        },
+        // Получение массива offer_id по выбранному бренду
+        getOfferIdsList(code) {
+          if (
+              this.filteredProducts &&
+              this.filteredProducts.merchantDiploma &&
+              this.filteredProducts.merchantDiploma.length > 0
+          ) {
+            let filteredMerchantsDiploma = this.filteredProducts.merchantDiploma.filter(merchant => merchant.p.brandCode === code )
+
+            return filteredMerchantsDiploma.map(item => item.p.id)
+          }
+        },
+        async sendDiploma(brandCode, index) {
+            const payload = {
+              offer_ids: this.getOfferIdsList(brandCode),
+              diploma_code: this.diplomaCodes[index].value
+            };
+
+            const error = await this[CHECK_DIPLOMA_CODE](payload);
+            this.diplomaCodes[index].value = "";
+
+            if (error) {
+              this.diplomaCodes[index].error = error.message;
+              setTimeout(() => {
+                this.diplomaCodes[index].error = null;
+              }, 1000)
+            }
+        },
     },
 
     created() {
         this.cartItemTypes = cartItemTypes;
     },
+
+    mounted() {
+        this.$nextTick(() => {
+          this.initDiplomaCodesStructure();
+        })
+    }
 };
 </script>

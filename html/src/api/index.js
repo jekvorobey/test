@@ -842,6 +842,10 @@ export function checkCartData(type) {
     });
 }
 
+export function checkDiplomaCode(payload) {
+    return $http.post('/v1/cart/merchant-diploma', payload);
+}
+
 export function deleteAllItems(type) {
     switch (type) {
         case cartItemTypes.MASTERCLASS:
