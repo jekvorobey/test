@@ -64,21 +64,30 @@
             <template v-if="filteredProducts.merchantDiploma.length > 0">
                 <div class="cart-product-panel__list-header">
                     <div class="cart-product-panel__list-header-title">Товары для прошедших обучение</div>
-                    <div class="cart-product-panel__list-header-hint">Товары для прошедших обучение</div>
+                    <div class="cart-product-panel__list-header-hint">
+                      Для приобретения данных товаров вы должны иметь
+                      сертификат о завершении обучения
+                    </div>
                     <div v-if="isDiplomaStructureReady" :key="isDiplomaStructureReady">
                         <div v-if="diplomaCodes && diplomaCodes.length > 0"
                              v-for="(item, index) in diplomaCodes"
                              :key="item.brand"
+                             class="diploma-codes"
                         >
-                            <span>{{ item.brand }}</span>
-                            <v-input
-                                class="checkout-product-panel__item-controls-input"
-                                placeholder="Введите код своего диплома"
-                                v-model="item.value"
-                                :error="item.error"
-                            />
+                            <div class="diploma-codes__input">
+                              <span>Бренд: <strong>{{ item.brand }}</strong></span>
+                              <v-input
+                                  class="checkout-product-panel__item-controls-input"
+                                  placeholder="Введите код своего диплома"
+                                  v-model="item.value"
+                                  :error="item.error"
+                                  @input="clearDiplomaError(index)"
+                              />
+                            </div>
                             <v-button
+                                class="diploma-codes__btn"
                                 :disabled="item.value === ''"
+                                :loading="item.loading"
                                 @click="sendDiploma(item.brand, index)"
                             >Отправить</v-button>
                         </div>
@@ -381,7 +390,7 @@ export default {
         uniqBrandsDiploma() {
             const items =
                 this.filteredProducts.merchantDiploma &&
-                this.filteredProducts.merchantDiploma.map((item) => item.p.brandCode);
+                this.filteredProducts.merchantDiploma.map((item) => item.p.brandName);
 
             return items.reduce((acc, item) => {
                 if (acc.includes(item)) {
@@ -461,10 +470,21 @@ export default {
                 done();
             });
         },
+        // Убрать ошибку при вводе новых данных
+        clearDiplomaError(index) {
+          this.diplomaCodes[index].error = null;
+        },
         // Создание базовой структуры для соотвествия каждого инпута своему бренду
         initDiplomaCodesStructure() {
+          this.diplomaCodes = [];
+
           if(this.uniqBrandsDiploma && this.uniqBrandsDiploma.length > 0) {
-            this.uniqBrandsDiploma.forEach(brand => this.diplomaCodes.push({brand, value: ""}))
+            this.uniqBrandsDiploma.forEach(brand => this.diplomaCodes.push({
+              brand,
+              value: "",
+              loading: false,
+              error: null
+            }));
             this.isDiplomaStructureReady = true;
           }
         },
@@ -475,7 +495,7 @@ export default {
               this.filteredProducts.merchantDiploma &&
               this.filteredProducts.merchantDiploma.length > 0
           ) {
-            let filteredMerchantsDiploma = this.filteredProducts.merchantDiploma.filter(merchant => merchant.p.brandCode === code )
+            let filteredMerchantsDiploma = this.filteredProducts.merchantDiploma.filter(merchant => merchant.p.brandName === code )
 
             return filteredMerchantsDiploma.map(item => item.p.id)
           }
@@ -486,14 +506,19 @@ export default {
               diploma_code: this.diplomaCodes[index].value
             };
 
+            this.diplomaCodes[index].loading = true;
             const error = await this[CHECK_DIPLOMA_CODE](payload);
             this.diplomaCodes[index].value = "";
+            this.diplomaCodes[index].loading = false;
 
             if (error) {
               this.diplomaCodes[index].error = error.message;
               setTimeout(() => {
                 this.diplomaCodes[index].error = null;
-              }, 1000)
+              }, 5000)
+            } else {
+              // Заново пересобрать структуру инпутов кодов диплома по брендам
+              this.initDiplomaCodesStructure()
             }
         },
     },
@@ -503,6 +528,7 @@ export default {
     },
 
     mounted() {
+        // Подготовка начальной структуры для ввода кодов диплома по брендам
         this.$nextTick(() => {
           this.initDiplomaCodesStructure();
         })
