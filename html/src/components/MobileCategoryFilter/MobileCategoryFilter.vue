@@ -1,5 +1,6 @@
 <template>
     <div class="mobile-category-filter">
+        <div class="container catalog-view__modal-filter-sort-title">Категории</div>
         <transition-group tag="ul" name="fade-in" appear>
             <li v-if="selectedCategories.length > 0" key="back" class="container mobile-category-filter__item">
                 <v-link class="mobile-category-filter__back-button" tag="button" @click="back">

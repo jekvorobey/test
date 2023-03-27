@@ -60,6 +60,7 @@
                 >
                     <template v-slot:sticky>
                         <ul class="catalog-view__side-panel-categories">
+                            <h3>Категории</h3>
                             <category-tree-item
                                 class="catalog-view__side-panel-categories-item"
                                 v-for="category in categories"
