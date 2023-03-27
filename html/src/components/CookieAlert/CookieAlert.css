@@ -5,25 +5,26 @@
     position: fixed;
     z-index: 10160;
     bottom: -300px;
-    background: var(--cl-global);
     color: var(--cl-white);
     &__wrapper {
-         overflow: hidden;
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         padding: 15px;
-         font-size: .875rem;
-         line-height: 1.5rem;
-         font-weight: 400;
-         letter-spacing: .04em;
+        background: var(--cl-global);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        font-size: .875rem;
+        line-height: 1.5rem;
+        font-weight: 400;
+        letter-spacing: .04em;
      }
-    &__text{
-         margin-right: 30px;
-     }
+
     &_btn {
          height: 23px;
      }
+}
+.margin-aside {
+    margin: 0 10px;
 }
 .cookie-alert-show {
     bottom: 10px;
