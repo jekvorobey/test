@@ -86,6 +86,7 @@ import {
     FETCH_ITEMS_REFERRER_PROMO,
     TOGGLE_ITEM_REFERRER_PROMO
 } from '@store/modules/Catalog/actions';
+import { NAME as AUTH_MODULE, USER } from '@store/modules/Auth';
 
 const itemAnimationDelayDelta = 100;
 let counter = 0;
@@ -143,6 +144,7 @@ export default {
         ...mapGetters(CART_MODULE, {
             isInCart: IS_IN_CART,
         }),
+        ...mapState(AUTH_MODULE, [USER]),
 
         itemPropSettings() {
             const { itemProp, items = [] } = this;
@@ -338,7 +340,9 @@ export default {
     },
     async created() {
         try {
+          if(this[USER] && this[USER].referralPartner) {
             await this[FETCH_ITEMS_REFERRER_PROMO]();
+          }
         } catch (e) {
             console.log(e)
         }
