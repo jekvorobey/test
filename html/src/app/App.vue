@@ -112,9 +112,9 @@ import QuickVariantAddToCardModal from '@components/QuickVariantAddToCartModal/Q
 import QuickMasterclassAddToCartModal from '@components/QuickMasterclassAddToCartModal/QuickMasterclassAddToCartModal.vue';
 import ProfessionalDisclaimerModal from '@components/ProfessionalDisclaimerModal/ProfessionalDisclaimerModal.vue';
 
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 
-import { SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN } from '@store/actions';
+import {SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN, FETCH_BANNER_THROUGH} from '@store/actions';
 
 import { NAME as CART_MODULE } from '@store/modules/Cart';
 import { FETCH_CART_DATA, CLEAR_CART_DATA } from '@store/modules/Cart/actions';
@@ -136,6 +136,7 @@ import { eventName, interval, modalName, cookieNames } from '@enums';
 import { SCROLL, IS_MENU_OPEN } from '@store';
 
 import moment from 'moment';
+import {BANNER_THROUGH} from "@store/getters";
 
 Vue.use(SocialSharing);
 Vue.component('v-svg', VSvg);
@@ -171,6 +172,7 @@ export default {
     },
 
     computed: {
+        ...mapGetters([BANNER_THROUGH]),
         ...mapState([SCROLL, IS_MENU_OPEN]),
         ...mapState(AUTH_MODULE, [HAS_SESSION, USER]),
 
@@ -214,6 +216,7 @@ export default {
     },
 
     methods: {
+        ...mapActions([FETCH_BANNER_THROUGH]),
         ...mapActions([SET_SCROLL, FETCH_COMMON_DATA, SET_CITY_CONFIRMATION_OPEN]),
         ...mapActions(AUTH_MODULE, [CHECK_SESSION, FETCH_USER, FETCH_UNREAD_MESSAGES]),
         ...mapActions(CART_MODULE, [FETCH_CART_DATA, CLEAR_CART_DATA]),
@@ -282,7 +285,6 @@ export default {
     async serverPrefetch() {
         try {
             await Promise.all([this[FETCH_COMMON_DATA](), this[CHECK_SESSION](true)]);
-
             await this[FETCH_CART_DATA]();
             await this[FETCH_FAVORITES_ALL]();
 

@@ -5,6 +5,7 @@ export const SET_MENU_OPEN = 'SET_MENU_OPEN';
 export const SET_CITY_CONFIRMATION_OPEN = 'SET_CITY_CONFIRMATION_OPEN';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const SET_BANNER = 'SET_BANNER';
+export const SET_BANNER_THROUGH = 'SET_BANNER_THROUGH';
 export const SET_MENU = 'SET_MENU';
 export const SET_FREQUENT_CATEGOIRES = 'SET_FREQUENT_CATEGOIRES';
 export const SET_RECENTLY_VIEWED_PRODUCTS = 'SET_RECENTLY_VIEWED_PRODUCTS';
@@ -45,6 +46,10 @@ export default {
 
     [SET_BANNER](state, payload) {
         state.banner = payload;
+    },
+
+    [SET_BANNER_THROUGH](state, payload) {
+        state.bannerThrough = payload;
     },
 
     [SET_MENU](state, payload) {

@@ -1,4 +1,5 @@
 .v-header {
+    transition: .5s all;
     height: auto;
 
     &--masked {
@@ -14,11 +15,19 @@
         }
     }
 
+    &__bottom {
+         transition: .5s all;
+     }
+
     &.sticky &__bottom {
         position: fixed;
         z-index: 1000;
         top: 0;
         width: 100%;
+
+        &-through {
+             top: 48px !important;
+         }
     }
 
     &__middle {

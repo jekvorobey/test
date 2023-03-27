@@ -1,5 +1,10 @@
 <template>
-    <general-modal class="mobile-menu" :show-close-btn="false" type="fullscreen" :is-mobile="isTabletLg">
+    <general-modal  :is-mobile="isTabletLg"
+                    :show-close-btn="false"
+                    :class="{'mobile-menu__through': isBannerThrough}"
+                    class="mobile-menu"
+                    type="fullscreen"
+    >
         <template v-slot:header>
             <template v-if="!showCategories">
                 <button
@@ -226,7 +231,7 @@
                             </v-link>
                         </li>
                     </ul>
-                    <div class="container mobile-menu__menu-socials">
+                    <div class="container mobile-menu__menu-socials" :class="{'mobile-menu__menu-socials-through': isBannerThrough}">
                         <p class="text-grey">Ежедневно с 9:00 до 21:00</p>
                         <v-link class="mobile-menu__menu-socials-phone" href="tel:+74951396428">
                             +7 495 139-64-28
@@ -311,7 +316,7 @@ import GroupList from '@components/GroupList/GroupList.vue';
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { CATEGORIES, BANNER } from '@store';
-import { HEADER_MENU, HELP_MENU, CATEGORIES_CATALOG } from '@store/getters';
+import {HEADER_MENU, HELP_MENU, CATEGORIES_CATALOG, IS_BANNER_THROUGH} from '@store/getters';
 import { SET_MENU_OPEN } from '@store/actions';
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
@@ -399,6 +404,7 @@ export default {
     },
 
     computed: {
+        ...mapGetters([IS_BANNER_THROUGH]),
         ...mapState([CATEGORIES, BANNER]),
         ...mapGetters([HEADER_MENU, HELP_MENU]),
         ...mapState(AUTH_MODULE, [HAS_SESSION]),

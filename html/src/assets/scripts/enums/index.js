@@ -333,4 +333,5 @@ export const bannerType = Object.freeze({
     MK_ITEM: 'mk_item',
     CATALOG_TOP: 'catalog_top',
     CATALOG_ITEM: 'catalog',
+    THROUGH: 'through',
 });

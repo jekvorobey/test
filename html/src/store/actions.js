@@ -15,6 +15,7 @@ import {
     SET_CATEGORIES,
     SET_MENU,
     SET_BANNER,
+    SET_BANNER_THROUGH,
     SET_FREQUENT_CATEGOIRES,
     SET_RECENTLY_VIEWED_PRODUCTS,
     SET_REDIRECTS,
@@ -29,6 +30,7 @@ export const FETCH_RECENTLY_VIEWED_PRODUCTS = 'FETCH_RECENTLY_VIEWED_PRODUCTS';
 export const FETCH_REDIRECTS = 'FETCH_REDIRECTS';
 
 export const FETCH_BANNER = 'FETCH_BANNER';
+export const FETCH_BANNER_THROUGH = 'FETCH_BANNER_THROUGH';
 export const SET_LOCALE = 'SET_LOCALE';
 export const ADD_LOCALIZATION = 'ADD_LOCALIZATION';
 export const SET_SCROLL = 'SET_SCROLL';
@@ -73,6 +75,15 @@ export default {
             commit(SET_BANNER, banner || null);
         } catch (error) {
             storeErrorHandler(FETCH_BANNER)(error);
+        }
+    },
+
+    async [FETCH_BANNER_THROUGH]({ commit }, pagePath = '/') {
+        try {
+            const bannerThrough = await getBannersByCode(bannerType.THROUGH, false, pagePath);
+            commit(SET_BANNER_THROUGH, bannerThrough);
+        } catch (error) {
+            storeErrorHandler(FETCH_BANNER_THROUGH)(error);
         }
     },
 

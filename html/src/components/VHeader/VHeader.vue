@@ -2,7 +2,8 @@
         <header class="v-header" :class="[{ sticky: isSticky }, { 'v-header--search': search }]">
             <header-top class="v-header__top" />
             <header-middle class="v-header__middle" ref="middle" />
-            <header-bottom class="v-header__bottom" ref="bottom" />
+            <banner-through/>
+            <header-bottom :class="{'v-header__bottom-through': isBannerThrough && !scrollFromTop}" class="v-header__bottom" ref="bottom" />
             <transition name="fade">
                 <mobile-menu class="v-header__modal-menu" v-if="isMenuOpen && isTabletLg" />
             </transition>
@@ -21,6 +22,7 @@ import NavPanel from '@components/NavPanel/NavPanel.vue';
 import MobileMenu from '@components/MobileMenu/MobileMenu.vue';
 import SearchPanel from '@components/SearchPanel/SearchPanel.vue';
 import CityConfirmationPanel from '@components/CityConfirmationPanel/CityConfirmationPanel.vue';
+import BannerThrough from "@components/BannerThrough/BannerThrough.vue";
 
 import { mapState, mapActions, mapGetters } from 'vuex';
 
@@ -34,6 +36,7 @@ import { NAME as SEARCH_MODULE, SEARCH } from '@store/modules/Search';
 
 import './VHeader.critical.css';
 import './VHeader.css';
+import {IS_BANNER_THROUGH} from "@store/getters";
 
 export default {
     name: 'v-header',
@@ -45,8 +48,14 @@ export default {
         SearchPanel,
         NavPanel,
         MobileMenu,
-
+        BannerThrough,
         CityConfirmationPanel,
+    },
+
+    data() {
+        return {
+            scrollFromTop: false,
+        }
     },
 
     props: {
@@ -57,6 +66,7 @@ export default {
     },
 
     computed: {
+        ...mapGetters([IS_BANNER_THROUGH]),
         ...mapState([SCROLL, IS_MENU_OPEN, IS_CITY_CONFIRMATION_OPEN]),
         ...mapState(SEARCH_MODULE, [SEARCH]),
 
@@ -68,5 +78,11 @@ export default {
             return this[SEARCH] || (this[IS_MENU_OPEN] && !this.isTabletLg);
         },
     },
+
+    mounted() {
+        window.addEventListener("scroll", () => {
+            this.scrollFromTop = window.scrollY !== 0;
+        });
+    }
 };
 </script>
