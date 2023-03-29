@@ -17,6 +17,7 @@ import {
     deleteCartPromocode,
     addCartBundle,
     deleteCartBundle,
+    checkDiplomaCode,
 } from '@api';
 
 import { SET_CART_DATA, SET_FEATURED_PRODUCTS, SET_RELATIVE_PRODUCTS, SET_STATUS, SET_LOADING_ADDING_TO_BASKET } from './mutations';
@@ -42,6 +43,8 @@ export const DELETE_PROMOCODE = 'DELETE_PROMOCODE';
 
 export const ADD_MASTERCLASS_ITEM = 'ADD_MASTERCLASS_ITEM';
 export const DELETE_MASTERCLASS_ITEM = 'DELETE_MASTERCLASS_ITEM';
+
+export const CHECK_DIPLOMA_CODE = 'CHECK_DIPLOMA_CODE';
 
 export default {
     [SET_LOAD]({ commit }, payload) {
@@ -221,6 +224,17 @@ export default {
             commit(SET_CART_DATA, data);
         } catch (error) {
             storeErrorHandler(FETCH_CART_DATA)(error);
+        }
+    },
+
+    async [CHECK_DIPLOMA_CODE]({ commit }, payload) {
+        try {
+            const data = await checkDiplomaCode(payload);
+            commit(SET_CART_DATA, data);
+        } catch (error) {
+            storeErrorHandler(CHECK_DIPLOMA_CODE)(error);
+
+            return {message: "Код диплома не прошел проверку"}
         }
     },
 };
