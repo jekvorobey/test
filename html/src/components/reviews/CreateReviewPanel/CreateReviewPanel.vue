@@ -1,13 +1,14 @@
 <template>
-    <div class="create-review-panel"ref="ratingSection">
+    <div class="create-review-panel" ref="ratingSection">
         <h2 class="create-review-panel__title">Отзывы</h2>
         <form class="create-review-panel__form" enctype="multipart/form-data" @submit.prevent="onSubmit">
-            <input type="hidden" :value="code" name="object_code" />
-            <input type="hidden" :value="type" name="object_type" />
+            <input type="hidden" :value="code" name="object_code"/>
+            <input type="hidden" :value="type" name="object_type"/>
 
             <div class="create-review-panel__form-review">
                 <div class="create-review-panel__form-rating">
-                    <span class="create-review-panel__form-rating-text"
+                    <span
+                        class="create-review-panel__form-rating-text"
                         :class="{ 'create-review-panel__form-rating-text--error': ratingError }"
                     >
                         Ваша оценка
@@ -20,7 +21,7 @@
                         name="rating"
                     >
                         <template v-slot:activeLabel>
-                            <v-svg name="star-small" width="20" height="20" />
+                            <v-svg name="star-small" width="20" height="20"/>
                         </template>
 
                         <template v-slot:inactiveLabel>
@@ -37,7 +38,8 @@
 
             <div class="create-review-panel__form-content hacker-atack-style">
                 <div class="create-review-panel__form-cell">
-                    <v-input class="create-review-panel__form-input" tag="textarea" v-model="pros" name="pros">
+                    <v-input class="create-review-panel__form-input" tag="textarea" v-model="advantages"
+                             name="advantages">
                         Достоинства
                     </v-input>
                 </div>
@@ -46,8 +48,8 @@
                     <v-input
                         class="create-review-panel__form-input"
                         tag="textarea"
-                        v-model="body"
-                        name="body"
+                        v-model="comment"
+                        name="comment"
                         :error="bodyError"
                     >
                         Комментарий
@@ -55,25 +57,27 @@
                 </div>
 
                 <div class="create-review-panel__form-cell">
-                    <v-input class="create-review-panel__form-input" tag="textarea" v-model="cons" name="cons">
+                    <v-input class="create-review-panel__form-input" tag="textarea" v-model="disadvantages"
+                             name="disadvantages">
                         Недостатки
                     </v-input>
                 </div>
 
-<!--                <div class="create-review-panel__form-cell">-->
-<!--                    <h3 class="create-review-panel__form-title">Фото и видео товара</h3>-->
+                <div class="create-review-panel__form-cell">
+                    <h3 class="create-review-panel__form-title">Фото и видео товара</h3>
 
-<!--                    <span class="create-review-panel__form-subtitle">Не более 10 файлов, jpeg, png, heic, mp4, mov</span>-->
+                    <span
+                        class="create-review-panel__form-subtitle">Не более 10 файлов, jpeg, png, heic, mp4, mov</span>
 
-<!--                    <v-file-->
-<!--                        class="create-review-panel__form-files"-->
-<!--                        @change="onFilesChanged"-->
-<!--                        :accepted-types="fileAcceptedTypes"-->
-<!--                        :max-file-size="5242880"-->
-<!--                    >-->
-<!--                        <span class="create-review-panel__form-files-desc">Выберите фото</span>-->
-<!--                    </v-file>-->
-<!--                </div>-->
+                    <v-file
+                        class="create-review-panel__form-files"
+                        @change="onFilesChanged"
+                        :accepted-types="fileAcceptedTypes"
+                        :max-file-size="5242880"
+                    >
+                        <span class="create-review-panel__form-files-desc">Выберите фото</span>
+                    </v-file>
+                </div>
 
                 <v-button class="create-review-panel__form-submit" type="submit" :disabled="isDisabled">
                     Отправить отзыв
@@ -89,8 +93,8 @@ import VButton from '@controls/VButton/VButton.vue';
 import VFile from '@controls/VFile/VFile.vue';
 import VRating from '@controls/VRating/VRating.vue';
 
-import { mimeType } from '@enums';
-import validationMixin, { required } from '@plugins/validation';
+import {mimeType} from '@enums';
+import validationMixin, {required} from '@plugins/validation';
 import '@images/sprites/star-empty-small-error.svg';
 import '@images/sprites/star-empty-small.svg';
 import '@images/sprites/star-small.svg';
@@ -112,7 +116,7 @@ export default {
             valid: (value) => value > 0,
         },
 
-        body: {
+        comment: {
             required,
         },
     },
@@ -133,19 +137,25 @@ export default {
         return {
             rating: 0,
             files: [],
-            body: null,
-            pros: null,
-            cons: null,
+            comment: null,
+            advantages: null,
+            disadvantages: null,
         };
     },
 
     computed: {
         fileAcceptedTypes() {
-            return [mimeType.image.JPEG, mimeType.image.PNG, mimeType.image.HEIC, mimeType.video.MP4, mimeType.video.MOV];
+            return [
+                mimeType.image.JPEG,
+                mimeType.image.PNG,
+                mimeType.image.HEIC,
+                mimeType.video.MP4,
+                mimeType.video.MOV,
+            ];
         },
 
         bodyError() {
-            if (this.$v.body.$dirty) return !this.$v.body.required && this.$t('validation.errors.required');
+            if (this.$v.comment.$dirty) return !this.$v.comment.required && this.$t('validation.errors.required');
         },
 
         ratingError() {
@@ -164,9 +174,9 @@ export default {
                 this.$refs.ratingSection.scrollIntoView({
                     behavior: 'smooth',
                     block: 'center',
-                    inline: 'center'
+                    inline: 'center',
                 });
-                return
+                return;
             }
 
             const formData = new FormData(e.target);

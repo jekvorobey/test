@@ -410,17 +410,18 @@
             <v-svg name="telegram-bw" width="24" height="24" />
             <v-svg name="link" width="24" height="24" /> -->
         </div>
-
-        <section class="section master-class-view__section master-class-view__review" v-if="isComplete" ref="panel">
-            <div class="container">
-                <reviews-panel
-                    :key="masterClass.code"
-                    :code="masterClass.code"
-                    :type="productType"
-                    :can-add="masterClass.canWriteReview"
-                />
-            </div>
-        </section>
+        <!-- Скрываем отзывы в мастер-классах -->
+          <!--        <section class="section master-class-view__section master-class-view__review" v-if="isComplete" ref="panel">-->
+          <!--            <div class="container">-->
+          <!--                <reviews-panel-->
+          <!--                    :key="masterClass.code"-->
+          <!--                    :code="masterClass.code"-->
+          <!--                    :type="productType"-->
+          <!--                    :can-add="masterClass.canWriteReview"-->
+          <!--                />-->
+          <!--            </div>-->
+          <!--        </section>-->
+        <!-- Скрываем отзывы в мастер-классах -->
         <section
             class="section master-class-view__section master-class-view__tickets"
             ref="panel"

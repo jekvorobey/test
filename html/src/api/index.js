@@ -1,14 +1,14 @@
 import qs from 'qs';
 import axios from 'axios';
-import { Cache } from 'axios-extensions';
+import {Cache} from 'axios-extensions';
 
-import { $http } from '@services';
-import { REQUEST_CANCEL_MESSAGE } from '@constants';
-import { interval, sortDirections } from '@enums';
-import { verificationCodeType } from '@enums/auth';
-import { cartItemTypes, productGroupSortFields } from '@enums/product';
-import { sortFields } from '@enums/catalog';
-import { getPageData } from './mock';
+import {$http} from '@services';
+import {REQUEST_CANCEL_MESSAGE} from '@constants';
+import {interval, sortDirections} from '@enums';
+import {verificationCodeType} from '@enums/auth';
+import {cartItemTypes, productGroupSortFields} from '@enums/product';
+import {sortFields} from '@enums/catalog';
+import {getPageData} from './mock';
 
 let catalogItemsCancelSource = null;
 const sessionCheckCache = new Cache({
@@ -68,14 +68,14 @@ export function loginBySocial(driver, query) {
     });
 }
 
-export function loginBySignature({ userId, signature }) {
+export function loginBySignature({userId, signature}) {
     return $http.post('/v1/auth/loginBySignature', {
         user_id: userId,
         signature,
     });
 }
 
-export function loginByToken({ token, refresh }) {
+export function loginByToken({token, refresh}) {
     return $http.post('/v1/auth/loginByToken', {
         token,
         refresh,
@@ -146,7 +146,7 @@ export function registerByPassword(password) {
     });
 }
 
-export function getSocialLink({ backUrl, driver, redirectUrl }) {
+export function getSocialLink({backUrl, driver, redirectUrl}) {
     return $http.post('/v1/auth/getSocialLink', {
         final_login_url: backUrl,
         driver,
@@ -154,7 +154,7 @@ export function getSocialLink({ backUrl, driver, redirectUrl }) {
     });
 }
 
-export function setCity({ name, fias_id, region_fias_id }) {
+export function setCity({name, fias_id, region_fias_id}) {
     return $http.put('/v1/auth/city', {
         name,
         fias_id,
@@ -240,7 +240,7 @@ export function changeProfileAvatar(formData) {
     });
 }
 
-export function changeProfilePersonal({ firstName, lastName, middleName, birthday, gender }) {
+export function changeProfilePersonal({firstName, lastName, middleName, birthday, gender}) {
     return $http.put('/v1/lk/profile/personal', {
         first_name: firstName,
         last_name: lastName,
@@ -444,11 +444,11 @@ export function getBillingOperations(pageNum, perPage) {
 }
 
 export function postCashOut(card_id, value) {
-    return $http.post('/v1/lk/bill/cash-out', { card_id, value });
+    return $http.post('/v1/lk/bill/cash-out', {card_id, value});
 }
 
 export function postCashOutRequisites(customer_id, value) {
-    return $http.post('/v1/lk/bill/cash-out-requisites', { customer_id, value });
+    return $http.post('/v1/lk/bill/cash-out-requisites', {customer_id, value});
 }
 
 export function createYaCard(card_panmask, card_synonim, card_country_code, card_type, account_number) {
@@ -506,7 +506,7 @@ export function getUnreadMesagesCount() {
     return $http.get('/v1/lk/messages/unread-count');
 }
 
-export function getSeoTags({ code }) {
+export function getSeoTags({code}) {
     return $http.get(`/v1/content/seo/${code}`);
 }
 
@@ -610,11 +610,11 @@ export function getProductsHot(badge_id, limit) {
 }
 
 export function getProducts({
-    filter,
-    orderField = sortFields.POPULARITY,
-    orderDirection = sortDirections.DESC,
-    page = 1,
-}) {
+                                filter,
+                                orderField = sortFields.POPULARITY,
+                                orderDirection = sortDirections.DESC,
+                                page = 1,
+                            }) {
     return $http.get('/v1/catalog/products', {
         params: {
             filter,
@@ -631,12 +631,12 @@ export function getProducts({
 }
 
 export function getCatalogItems({
-    filter,
-    orderField = sortFields.POPULARITY,
-    orderDirection = sortDirections.DESC,
-    page = 1,
-    pagePath,
-}) {
+                                    filter,
+                                    orderField = sortFields.POPULARITY,
+                                    orderDirection = sortDirections.DESC,
+                                    page = 1,
+                                    pagePath,
+                                }) {
     if (catalogItemsCancelSource) {
         catalogItemsCancelSource.cancel(REQUEST_CANCEL_MESSAGE);
         catalogItemsCancelSource = axios.CancelToken.source();
@@ -662,7 +662,7 @@ export function getCatalogItems({
 }
 
 export function getRecentlyViewedProducts() {
-    let timestamp = + new Date;
+    let timestamp = +new Date;
     return $http.get('/v1/catalog/recently-viewed', {
         params: {
             timestamp,
@@ -677,7 +677,7 @@ export function getRecentlyViewedProducts() {
 }
 
 export function addRecentlyViewedProducts(product_id) {
-    let timestamp = + new Date;
+    let timestamp = +new Date;
     return $http.get('/v1/catalog/add-recently-viewed', {
         params: {
             product_id,
@@ -772,7 +772,7 @@ export function getBrand(code) {
 }
 
 export function getProduct(code, offer_id, referrerCode) {
-    let timestamp = + new Date;
+    let timestamp = +new Date;
     return $http.get('/v1/catalog/product-detail', {
         params: {
             code,
@@ -928,7 +928,7 @@ export function getCheckoutData(type) {
 }
 
 export function getCheckoutReceiveMethods() {
-    return $http.get('/v1/checkout/load-receive-methods', { timeout: 60000 });
+    return $http.get('/v1/checkout/load-receive-methods', {timeout: 60000});
 }
 
 export function commitCheckoutData(type, data) {
@@ -958,7 +958,7 @@ export function setReceiveMethod(data) {
 }
 
 export function setAddress(data) {
-    return $http.post('/v1/checkout/address', data, { timeout: 60000 });
+    return $http.post('/v1/checkout/address', data, {timeout: 60000});
 }
 
 export function setPickupPoint(data) {
@@ -1069,7 +1069,7 @@ export function getFavoritesAll() {
 
 // documents
 
-export function getDocuments({ type, status }) {
+export function getDocuments({type, status}) {
     return $http.get('/v1/lk/documents', {
         params: {
             type,
@@ -1108,9 +1108,9 @@ export function getMasterclassFilters(excludedFilters) {
     });
 }
 
+// Reviews
 export function getReviews(
-    object_type,
-    object_code,
+    product_id,
     sort_field = 'created_at',
     sort_direction = 'desc',
     page = 1,
@@ -1118,8 +1118,7 @@ export function getReviews(
 ) {
     return $http.get('/v1/reviews', {
         params: {
-            object_type,
-            object_code,
+            product_id,
             sort_field,
             sort_direction,
             page,
