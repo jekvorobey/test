@@ -20,9 +20,9 @@
      &__counter {
         position: absolute;
         top: 16px;
-        right: 20px;
+        right: 15px;
         text-transform: initial;
-        min-width: 90px;
+        min-width: 95px;
       }
 }
 
