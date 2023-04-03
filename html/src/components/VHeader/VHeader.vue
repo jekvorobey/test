@@ -2,10 +2,12 @@
         <header class="v-header" :class="[{ sticky: isSticky }, { 'v-header--search': search }]">
             <header-top class="v-header__top" />
             <header-middle class="v-header__middle" ref="middle" />
-            <banner-through v-if="isBannerThrough"/>
+            <banner-through />
             <header-bottom :class="{'v-header__bottom-through': isBannerThrough && !scrollFromTop}" class="v-header__bottom" ref="bottom" />
             <transition name="fade">
-                <mobile-menu class="v-header__modal-menu" v-if="isMenuOpen && isTabletLg" />
+                <mobile-menu class="v-header__modal-menu"
+                             :class="{'mobile-menu__through': isBannerThrough && !scrollFromTop}"
+                             v-if="isMenuOpen && isTabletLg" />
             </transition>
 
             <transition name="fade" appear>
@@ -81,7 +83,8 @@ export default {
 
     mounted() {
         window.addEventListener("scroll", () => {
-            this.scrollFromTop = window.scrollY !== 0;
+            if(this.isTabletLg) this.scrollFromTop = window.scrollY >= 100;
+            else this.scrollFromTop = window.scrollY !== 0;
         });
     }
 };
