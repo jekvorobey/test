@@ -2,7 +2,7 @@
         <header class="v-header" :class="[{ sticky: isSticky }, { 'v-header--search': search }]">
             <header-top class="v-header__top" />
             <header-middle class="v-header__middle" ref="middle" />
-            <banner-through/>
+            <banner-through v-if="isBannerThrough"/>
             <header-bottom :class="{'v-header__bottom-through': isBannerThrough && !scrollFromTop}" class="v-header__bottom" ref="bottom" />
             <transition name="fade">
                 <mobile-menu class="v-header__modal-menu" v-if="isMenuOpen && isTabletLg" />
