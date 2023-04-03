@@ -1,7 +1,6 @@
 <template>
     <general-modal  :is-mobile="isTabletLg"
                     :show-close-btn="false"
-                    :class="{'mobile-menu__through': isBannerThrough}"
                     class="mobile-menu"
                     type="fullscreen"
     >
@@ -504,6 +503,6 @@ export default {
                 });
             }
         },
-    },
+    }
 };
 </script>

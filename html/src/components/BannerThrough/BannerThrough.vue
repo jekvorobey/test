@@ -1,5 +1,6 @@
 <template>
-    <div :class="{'banner-through__active': isBannerThrough}"
+    <div v-if="isBannerThrough"
+        :class="{'banner-through__active': isBannerThrough}"
          class="banner-through"
     >
         <v-slider :options="sliderOptions"
@@ -71,7 +72,7 @@
 
     const sliderOptions = {
         autoplay: {
-            delay: 2000,
+            delay: 4000,
         },
     }
 
