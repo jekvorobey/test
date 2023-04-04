@@ -276,6 +276,96 @@
                     </li>
                 </transition-group>
             </template>
+            <template v-if="filteredProducts.merchantDiploma.length > 0">
+            <div class="cart-product-panel__list-header">
+              <div class="cart-product-panel__list-header-title">Товары для прошедших обучение</div>
+              <div class="cart-product-panel__list-header-hint">
+                Для приобретения данных товаров вы должны иметь
+                сертификат о завершении обучения
+              </div>
+              <div v-if="isDiplomaStructureReady" :key="isDiplomaStructureReady">
+                <div v-if="diplomaCodes && diplomaCodes.length > 0"
+                     v-for="(item, index) in diplomaCodes"
+                     :key="item.brand"
+                     class="diploma-codes"
+                >
+                  <div class="diploma-codes__input">
+                    <span>Бренд: <strong>{{ item.brand }}</strong></span>
+                    <v-input
+                        class="checkout-product-panel__item-controls-input"
+                        placeholder="Введите код своего диплома"
+                        v-model="item.value"
+                        :error="item.error"
+                        @input="clearDiplomaError(index)"
+                    />
+                  </div>
+                  <v-button
+                      class="diploma-codes__btn"
+                      :disabled="item.value === ''"
+                      :loading="item.loading"
+                      @click="sendDiploma(item.brand, index)"
+                  >Отправить</v-button>
+                </div>
+              </div>
+            </div>
+
+            <transition-group
+                v-if="filteredProducts.merchantDiploma.length > 0"
+                class="cart-product-panel__list"
+                tag="ul"
+                name="cart-item"
+                @before-enter="onBeforeEnterItems"
+                @enter="onEnterItems"
+                @after-enter="onAfterEnterItems"
+                @leave="onLeaveItems"
+            >
+              <li
+                  class="cart-product-panel__list-item"
+                  v-for="({ p: product, count, type }, index) in filteredProducts.merchantDiploma"
+                  :key="product.id"
+              >
+                <cart-product-card
+                    v-if="type === cartItemTypes.PRODUCT"
+                    :data-index="index"
+                    :offer-id="product.id"
+                    :product-id="product.productId"
+                    :type="product.type"
+                    :name="product.name"
+                    :image="product.image"
+                    :price="product.price"
+                    :bonus="product.bonus"
+                    :old-price="product.oldPrice"
+                    :count="count"
+                    :max-count="product.stock && product.stock.qty"
+                    :href="product.url"
+                    :is-active="product.active"
+                    :user-can-buy="product.userCanBuy"
+                    show-count
+                    show-controls
+                    @toggle-favorite-item="onToggleFavorite(product)"
+                    @countChange="onAddCartItem(product.id, product.stock.storeId, $event.count)"
+                    @deleteItem="onDeleteCartItem(product.id, product.stock.storeId)"
+                />
+
+                <cart-bundle-product-card
+                    v-else-if="type === cartItemTypes.BUNDLE_PRODUCT"
+                    :bundle-id="product.id"
+                    :name="product.name"
+                    :price="product.price"
+                    :bonus="product.bonus"
+                    :old-price="product.oldPrice"
+                    :items="product.items"
+                    :count="count"
+                    :is-active="product.active"
+                    :user-can-buy="product.userCanBuy"
+                    show-count
+                    show-controls
+                    @countChange="onAddCartBundleItem(product.id, $event.count)"
+                    @deleteBundle="onDeleteCartBundleItem(product.id)"
+                />
+              </li>
+            </transition-group>
+          </template>
         </template>
     </div>
 </template>
