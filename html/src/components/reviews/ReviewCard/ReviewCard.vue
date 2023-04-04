@@ -18,13 +18,13 @@
             </div> -->
         </div>
         <div class="review-card__body">
-            <div v-if="advantage" class="review-card__body-item">
+            <div v-if="advantages" class="review-card__body-item">
                 <div class="text-bold review-card__body-item-title">Достоинства</div>
-                <div class="review-card__body-item-value">{{ advantage }}</div>
+                <div class="review-card__body-item-value">{{ advantages }}</div>
             </div>
-            <div v-if="disadvantage" class="review-card__body-item">
+            <div v-if="disadvantages" class="review-card__body-item">
                 <div class="text-bold review-card__body-item-title">Недостатки</div>
-                <div class="review-card__body-item-value">{{ disadvantage }}</div>
+                <div class="review-card__body-item-value">{{ disadvantages }}</div>
             </div>
             <div class="review-card__body-item">
                 <div class="text-bold review-card__body-item-title">Комментарий</div>
@@ -157,11 +157,11 @@ export default {
             type: Number,
         },
 
-        advantage: {
+        advantages: {
             type: String,
         },
 
-        disadvantage: {
+        disadvantages: {
             type: String,
         },
 
