@@ -483,11 +483,15 @@ export default {
             let canBe = false;
 
             if (this[HAS_SESSION] && typeof this.cartData.product !== 'undefined') {
-                this.cartData.product.items.forEach((product) => {
-                    if (product.p.isOnlyForProfessional === true && product.p.userCanBuy === true) {
-                        canBe = true;
-                    }
-                });
+              this.cartData.product.items.forEach((product) => {
+                if (product.p.isOnlyForProfessional === true &&
+                    (
+                        product.p.userCanBuy === true && !product.p.isNeedMerchantDiploma
+                        || product.p.userCanBuy === false && product.p.isNeedMerchantDiploma)
+                ) {
+                  canBe = true;
+                }
+              });
             }
 
             return canBe;
