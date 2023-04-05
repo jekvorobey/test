@@ -55,7 +55,7 @@
 
     @media (--tablet-min) {
         &__list + &__list-header {
-            padding: calc(var(--gs) * 7) 0 calc(var(--gs) * 2) 0;
+            padding: calc(var(--gs) * 5) 0 calc(var(--gs) * 2) 0;
         }
 
         &__list-header {

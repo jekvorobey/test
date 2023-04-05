@@ -53,9 +53,14 @@
 
                 <v-sticky class="cart-view__main-sticky">
                     <template v-slot:sticky>
-                        <div v-if="cartHaveProfessionalProducts && !canOrderProducts" class="cart-view__professional-text">
+                        <div v-if="cartHaveProfessionalProducts && !canOrderProducts && !userProfessionalAndOnlyDiplomasInCart" class="cart-view__professional-text">
                             В вашей корзине товары <strong>только</strong> для профессионалов.
                             Подтвердите статус, чтобы заказать профессиональные товары.
+                        </div>
+                        <div v-else-if="userProfessionalAndOnlyDiplomasInCart" class="cart-view__professional-text">
+                          В вашей корзине товары <strong>только</strong> для прошедших обучение.
+                          Чтобы заказать эти товары, добавьте
+                          номера ваших <nobr>дипломов/сертификатов</nobr> об окончании в соответствующие поля.
                         </div>
                         <div class="cart-view__main-panel">
                             <p class="text-grey cart-view__main-panel-info" v-if="attentionMessage">
@@ -144,7 +149,7 @@
                             </template>
                             <v-button
                                     class="cart-view__main-panel-submit"
-                                    v-if="!isLoad && cartHaveProfessionalProducts && !canOrderProducts"
+                                    v-if="!isLoad && cartHaveProfessionalProducts && !canOrderProducts && !userProfessionalAndOnlyDiplomasInCart"
                                     @click="loadCheckout"
                                     :disabled="isPromocodePending"
                             >
@@ -154,7 +159,7 @@
                                 class="cart-view__main-panel-submit"
                                 v-else-if="!isLoad"
                                 @click="loadCheckout"
-                                :disabled="isPromocodePending"
+                                :disabled="isPromocodePending || userProfessionalAndOnlyDiplomasInCart"
                             >
                                 Оформить заказ
                             </v-button>
@@ -289,6 +294,7 @@ import { preparePrice } from '@util';
 import '@images/sprites/check.svg';
 import '@images/sprites/cart.svg';
 import './Cart.css';
+import {IS_USER_PROFESSIONAL} from "@store/modules/Auth/getters";
 
 const CABINET_MODULE_PATH = `${PROFILE_MODULE}/${CABINET_MODULE}`;
 
@@ -371,6 +377,7 @@ export default {
     },
 
     computed: {
+        ...mapGetters(AUTH_MODULE, [IS_USER_PROFESSIONAL]),
         ...mapState(CART_MODULE, [FEATURED_PRODUCTS, CART_DATA]),
         ...mapGetters(CART_MODULE, [
             CART_ITEMS_COUNT,
@@ -480,21 +487,13 @@ export default {
         },
 
         userCanBeProfessional() {
-            let canBe = false;
+          return this[IS_USER_PROFESSIONAL];
+        },
 
-            if (this[HAS_SESSION] && typeof this.cartData.product !== 'undefined') {
-              this.cartData.product.items.forEach((product) => {
-                if (product.p.isOnlyForProfessional === true &&
-                    (
-                        product.p.userCanBuy === true && !product.p.isNeedMerchantDiploma
-                        || product.p.userCanBuy === false && product.p.isNeedMerchantDiploma)
-                ) {
-                  canBe = true;
-                }
-              });
-            }
+        userProfessionalAndOnlyDiplomasInCart() {
+          const diplomas = this.cartData.product.items.filter((product) => product.p.isNeedMerchantDiploma);
 
-            return canBe;
+          return this.userCanBeProfessional && !this.canOrderProducts && diplomas.length > 0
         },
 
         cartHaveProfessionalProducts() {
