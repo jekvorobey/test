@@ -394,6 +394,7 @@ import { NAME as FAVORITES_MODULE } from '@store/modules/Favorites';
 import { TOGGLE_FAVORITES_ITEM } from '@store/modules/Favorites/actions';
 
 import { NAME as AUTH_MODULE, HAS_SESSION } from '@store/modules/Auth';
+import {FETCH_USER} from "@store/modules/Auth/actions";
 
 import { cartItemTypes } from '@enums/product';
 import { generateProductUrl } from '@util/catalog';
@@ -492,6 +493,7 @@ export default {
     },
 
     methods: {
+        ...mapActions(AUTH_MODULE, [FETCH_USER]),
         ...mapActions(CART_MODULE, [ADD_CART_ITEM, ADD_CART_BUNDLE, DELETE_CART_ITEM, DELETE_CART_BUNDLE, CHECK_DIPLOMA_CODE]),
         ...mapActions(FAVORITES_MODULE, [TOGGLE_FAVORITES_ITEM]),
 
@@ -598,6 +600,7 @@ export default {
 
             this.diplomaCodes[index].loading = true;
             const error = await this[CHECK_DIPLOMA_CODE](payload);
+            await this[FETCH_USER]();
             this.diplomaCodes[index].value = "";
             this.diplomaCodes[index].loading = false;
 
