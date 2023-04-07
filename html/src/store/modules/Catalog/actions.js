@@ -15,9 +15,14 @@ import {
     addProfilePromopageProductById,
     deleteProfilePromopageProductById,
 } from '@api';
-import { SET_LOAD_PATH as M_SET_LOAD_PATH, APPLY_DATA, SET_PREVIOUS_CATALOG_FETCH_PAYLOAD, SET_ITEMS_REFERRER_PROMO } from './mutations';
+import {
+    SET_LOAD_PATH as M_SET_LOAD_PATH,
+    APPLY_DATA,
+    SET_PREVIOUS_CATALOG_FETCH_PAYLOAD,
+    SET_ITEMS_REFERRER_PROMO,
+} from './mutations';
 import { PREVIOUS_CATALOG_FETCH_PAYLOAD } from './index';
-import {IS_IN_PROMO, IS_GLUING_IN_PROMO} from "@store/modules/Catalog/getters";
+import { IS_IN_PROMO, IS_GLUING_IN_PROMO } from '@store/modules/Catalog/getters';
 
 function mergeFunction(objValue, srcValue) {
     if (Array.isArray(objValue)) return objValue.concat(srcValue);
@@ -150,6 +155,7 @@ export default {
             state.type !== type || state.entityCode !== entityCode || state.searchString !== searchString;
 
         let mergedCategory = filter.category;
+        let mergedBrand = filter.brand;
         let mergedfilter = filter;
 
         let based = null;
@@ -183,9 +189,12 @@ export default {
         }
 
         mergedCategory = filter.category || productGroupFilter.category || undefined;
+        mergedBrand = filter.brand || productGroupFilter.brand || undefined;
+
         mergedfilter = {
             ..._mergeWith({ ...filter }, productGroupFilter, mergeFunction),
             category: mergedCategory,
+            brand: mergedBrand,
         };
 
         if (based === productGroupBase.FILTERS) {
@@ -201,10 +210,14 @@ export default {
             data.baseCategoryCode = productGroupFilter.category || null;
             data.categoryCode = filter.category || null;
 
+            mergedfilter.brand = filter.brand || productGroupFilter.brand || undefined;
             fetchList.push({
                 action: FETCH_FILTERS,
                 payload: {
-                    appliedFilters: mergedfilter,
+                    appliedFilters: {
+                        ..._mergeWith({ ...filter }, productGroupFilter, mergeFunction),
+                        category: mergedCategory,
+                    },
                     excludedFilters,
                 },
             });
@@ -223,7 +236,11 @@ export default {
         fetchList.push({
             action: FETCH_ITEMS,
             payload: {
-                filter: mergedfilter,
+                filter: {
+                    ..._mergeWith({ ...filter }, productGroupFilter, mergeFunction),
+                    category: mergedCategory,
+                    brand: mergedBrand,
+                },
                 page,
                 orderField,
                 orderDirection,
@@ -276,12 +293,12 @@ export default {
         commit(APPLY_DATA, data);
     },
 
-    async [FETCH_ITEMS_REFERRER_PROMO]({commit}) {
+    async [FETCH_ITEMS_REFERRER_PROMO]({ commit }) {
         try {
             const data = await getProfilePromopageItemsIds();
             commit(SET_ITEMS_REFERRER_PROMO, data);
-        } catch(e) {
-            console.log(e)
+        } catch (e) {
+            console.log(e);
         }
     },
 
@@ -292,9 +309,9 @@ export default {
             if (!exists) await addProfilePromopageProductById(productId);
             else await deleteProfilePromopageProductById(productId);
 
-            await dispatch(FETCH_ITEMS_REFERRER_PROMO)
-        } catch(e) {
-            console.log(e)
+            await dispatch(FETCH_ITEMS_REFERRER_PROMO);
+        } catch (e) {
+            console.log(e);
         }
     },
 
@@ -303,17 +320,17 @@ export default {
             const gluingExists = getters[IS_GLUING_IN_PROMO](productIdList);
 
             if (!gluingExists) {
-                for(let i = 0; i < productIdList.length; i++) {
+                for (let i = 0; i < productIdList.length; i++) {
                     await addProfilePromopageProductById(productIdList[i]);
                 }
             } else {
-                for(let i = 0; i < productIdList.length; i++) {
+                for (let i = 0; i < productIdList.length; i++) {
                     await deleteProfilePromopageProductById(productIdList[i]);
                 }
             }
-            await dispatch(FETCH_ITEMS_REFERRER_PROMO)
-        } catch(e) {
-            console.log(e)
+            await dispatch(FETCH_ITEMS_REFERRER_PROMO);
+        } catch (e) {
+            console.log(e);
         }
     },
 };
